@@ -34,25 +34,26 @@ class MapPage extends Component
     world.add(tiledComponent);
 
     final npcLayer = tiledComponent.tileMap.getLayer<ObjectGroup>("NPC");
-    if (npcLayer != null && npcLayer.objects.isNotEmpty) {
-      final npc = await Flame.images.load('NPC/Alex.png');
+    if (npcLayer == null || npcLayer.objects.isEmpty) {
+      return;
+    }
 
-      for (final object in npcLayer.objects) {
-        world.add(
-          SpriteAnimationComponent(
-            size: Vector2(16, 32),
-            position: Vector2(object.x, object.y),
-            animation: SpriteAnimation.fromFrameData(
-              npc,
-              SpriteAnimationData.sequenced(
-                amount: 4,
-                stepTime: 0.25,
-                textureSize: Vector2(16, 32),
-              ),
+    final npc = await Flame.images.load('NPC/Alex.png');
+    for (final object in npcLayer.objects) {
+      world.add(
+        SpriteAnimationComponent(
+          size: Vector2(16, 32),
+          position: Vector2(object.x, object.y),
+          animation: SpriteAnimation.fromFrameData(
+            npc,
+            SpriteAnimationData.sequenced(
+              amount: 4,
+              stepTime: 0.25,
+              textureSize: Vector2(16, 32),
             ),
           ),
-        );
-      }
+        ),
+      );
     }
   }
 
@@ -62,13 +63,13 @@ class MapPage extends Component
   @override
   void onTapDown(TapDownEvent event) {
     debugPrint("onTapDown =>>>> $tileName ===> ${event.toString()}");
-    if (tileName == "map.tmx") {
-      game.router.pushReplacementNamed("map1");
-    } else if (tileName == "map1.tmx") {
-      game.router.pushReplacementNamed("map2");
-    } else {
-      game.router.pushReplacementNamed("map");
-    }
+    // if (tileName == "map.tmx") {
+    //   game.router.pushReplacementNamed("map1");
+    // } else if (tileName == "map1.tmx") {
+    //   game.router.pushReplacementNamed("map2");
+    // } else {
+    //   game.router.pushReplacementNamed("map");
+    // }
   }
 
   @override
