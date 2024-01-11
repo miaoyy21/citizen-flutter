@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#ffffff" nextlayerid="17" nextobjectid="9">
+ <tileset firstgid="1" name="Interiors" tilewidth="32" tileheight="32" tilecount="1424" columns="16">
+  <image source="../images/Interiors_free_32x32.png" width="512" height="2848"/>
+ </tileset>
+ <tileset firstgid="1425" name="Room" tilewidth="32" tileheight="32" tilecount="391" columns="17">
+  <image source="../images/Room_Builder_free_32x32.png" width="544" height="736"/>
+ </tileset>
+ <layer id="14" name="图块层 0" width="30" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE1NlY2BQHcWjeBSP4lE8ikfxKB6GeKAAAPqdbltgCQAA
+  </data>
+ </layer>
+ <layer id="15" name="图块层 4" width="30" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGL5gJTMDQxcjA0M3ENsw08YOVqC5bGhm7wTyZwHtnA3EPjSyVxRorhiNzMYHVIF2qkHt3cfEwLCfCVUemxi1wTmg+eeZCItRG9wDmn+fibAYtcE7oPnvmQiLDQSgR7hjA/QId2wA3b8wPqk0sfphAN2/MD6pNLH6CflXEFgGnAbSZ5gI09gAIbW43KsItPc2kL7DRJjGBgipxeff10D6DRNhGhsgpBaff0HgLhNxNAg4INUL+NQR8i8IvGUiTL8GqrUH4gAoDeLjUk+sfwWJoH8DsT+U7w/lEwPmsqJiWgIAlOHBnGAJAAA=
+  </data>
+ </layer>
+ <layer id="12" name="图块层 1" width="30" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE1vJysCwcgAwpaCPiYGhn4lyc0gF84B2zsdh7z6g+H4mwmLUBueA5p9nIixGDCDFD/eAYveZCIsRA0jxwzug2HsmwmLEAEr9QG78UuoHcuOXUkBu/FIKyI3fUQABp4Fhd4aJsBi1wW2g+XeYCItRG7wGmv+GibDYKKAecGAmXY8fIwODPyNl9gYQYe8FVgS+CMRxQDvjgfg8K6octTEAONCgr2AJAAA=
+  </data>
+ </layer>
+ <layer id="13" name="图块层 2" width="30" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE+2RSWpCQRCG2zeYuIxDvKO5gbmBuZO+EyhOcRfJYBwWivOw8gO7oW1cdIs8EV7BRzVF8X8NFYUi9qrijKAEb5q/6QvRgjZ0oAuf0PNv6y3Du+b9Jv8HfuEPBvAPQ6h6QtRgxHss/6Fmrt4KfGjeOXkLWMIK1rCBLdTJb8CO91561czVq2oic1KBEB74EEAIaXiCL/L78Mw7E5z21exa70F6X8jLQg7yUIBXKMKU/JnhuDSz9aob2fazHIdd06tuZNv1ctk1vepGtl0vl13Tq25k2/Vy2TW9cVbiTbyJ97G996ojN7Gp12AJAAA=
+  </data>
+ </layer>
+ <objectgroup id="16" name="NPC">
+  <object id="6" x="140.581" y="317.088">
+   <point/>
+  </object>
+  <object id="7" x="137.457" y="426.429">
+   <point/>
+  </object>
+  <object id="8" x="259.294" y="351.453">
+   <point/>
+  </object>
+ </objectgroup>
+</map>

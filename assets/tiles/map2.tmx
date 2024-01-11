@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="12" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+ <tileset firstgid="1" name="Interiors" tilewidth="32" tileheight="32" tilecount="1424" columns="16">
+  <image source="../images/Interiors_free_32x32.png" width="512" height="2848"/>
+ </tileset>
+ <tileset firstgid="1425" name="Room" tilewidth="32" tileheight="32" tilecount="391" columns="17">
+  <image source="../images/Room_Builder_free_32x32.png" width="544" height="736"/>
+ </tileset>
+ <layer id="4" name="图块层 0" width="12" height="25">
+  <data encoding="base64" compression="zstd">
+   KLUv/WCwA90AACgARwaLBgcAARNqgQruHmwwVQ1AgLsHAaljAw==
+  </data>
+ </layer>
+ <layer id="1" name="图块层 1" width="12" height="25">
+  <data encoding="base64" compression="zstd">
+   KLUv/WCwA4UHAALOJixAVTKMAca1xsBDFScrhC0TXKuAnVXlOoBG9kCfDf8DMAD//wNj8H8Tt+xtpz8+Sz3rI2SBrIp1sSwUnqBEbvACgtXAhy6kMC7wAAWwWg86kIjmzTycd+OwanB5LU/mxTCsFlIeyhs9lgphdWDzat7Jm0xeySN5IzDv5Xm8Do638TRexlaeyqN4EyfxIh7Ee+BZo6WdJZ01LeUEK6CgqCISSZNuAxCDCzsHHykGxX9s1Ew9yCt+8ZKaxF/4pDcfqQfUoB/PPQOHE3PykY63If2EJ65PWkkc0owwPWdETsaLjCbSDEqsM2XdR/+BNQ==
+  </data>
+ </layer>
+ <layer id="2" name="图块层 2" width="12" height="25">
+  <data encoding="base64" compression="zstd">
+   KLUv/WCwA2UEABJHFB+gKa0BD/+mNbCtBdtsyOHnp1pXo3BRTLRFWRVXllKmL7c8OrRyyp87J5c8cgggZZqGMbzog2yxKbbEPZ9jiO2wNVW4UhGugeAKPC7HalyMARkgQIMLYhwrRmlzBOQodLSj0BNkQA42IHQ2MQQx5lt8LVNTRl4po15pqLBiagMVEKZuMHAa7rgC
+  </data>
+ </layer>
+ <layer id="3" name="图块层 3" width="12" height="25">
+  <data encoding="base64" compression="zstd">
+   KLUv/WCwAxUDAJQDACcBAAAoAQA3AQAAOJYDAACXAwAASKYDAACnAwDQBQAAigEAAIsBmgEAAJvLAQAAzAHbAQAA3AEADyCggja2GpJUA4YsQIA1X/7MFLlYOdg4+AFJsGpUeUxKDWR4KHYF
+  </data>
+ </layer>
+ <layer id="5" name="图块层 4" width="12" height="25">
+  <data encoding="base64" compression="zstd">
+   KLUv/WCwA9UBAOgA0AU1BAAANgQARQQAAEZVBAAAVmUEAABmQVEEAAogMANMD4LT4Y5HBJgaTM1saiELTIH3ICgqzwY=
+  </data>
+ </layer>
+ <layer id="6" name="图块层 5" width="12" height="25">
+  <data encoding="base64" compression="zstd">
+   KLUv/WCwA3UCAHQCAMEEAACBBADRBAAAkQQAvgIAAL8CAM4CAADP3gIAAN8hMQQjBDMEDyBgw6TOATvxTHyZyOiIIyiLhDiYoRYJk1BHJCzGysowyEjGFQ==
+  </data>
+ </layer>
+</map>

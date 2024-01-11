@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="12" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#ffffff" nextlayerid="12" nextobjectid="6">
+ <tileset firstgid="1" name="Interiors" tilewidth="32" tileheight="32" tilecount="1424" columns="16">
+  <image source="../images/Interiors_free_32x32.png" width="512" height="2848"/>
+ </tileset>
+ <tileset firstgid="1425" name="Room" tilewidth="32" tileheight="32" tilecount="391" columns="17">
+  <image source="../images/Room_Builder_free_32x32.png" width="544" height="736"/>
+ </tileset>
+ <layer id="7" name="图块层 1" width="25" height="12">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAEzvPysAwkY04fIcMvB5oPggsYiMOvyUDH4Da0c0GwZ9ZIbiHDYJhfJh8JhTnQDExfHraQchsZigmxWwYn5524DIb3W5KwooedhAym5rxQUs7aJ12zwPxBahdIHCBlbr4IhADAJQ6fUSwBAAA
+  </data>
+ </layer>
+ <layer id="8" name="图块层 2" width="25" height="12">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE1vLyoABqlkYGGpYMMUvANUms0BoYjEI7MNiRzfQnB4sdoBAMRbxVqBYGxC349CDzY7ZQLVzkNTLMDIwyDJi1w8CU4FqpwHxdDQ7lrPgtgMd6ADN18VjBy5Aih0wsJ4EtciAFDsOjNoxagcJ4DxQ71wovojHHHxy+AAA3M++8rAEAAA=
+  </data>
+ </layer>
+ <layer id="9" name="图块层 3" width="25" height="12">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgIB6sZ2VguADErYwMDG1A3M6IqQafHDHgACuEngrUPw2Ip2MxB58cMeAiK3n6BhsAxQXML+ehcQPC66Fi1xlQaWoCUDwtA9LLgXgVEK8A4pU0sGMbkN4OxLuAeAcQ76SBHceA9HEgPgXEJ4D4JA3sAAFaxwc6OMcETBdMqGI2wDxjS2HeRAb3gObfR7PDB2i+L5l2EAIAnqMgSLAEAAA=
+  </data>
+ </layer>
+ <layer id="10" name="图块层 4" width="25" height="12">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGDpgLwvt7ThLBzuGGljIxMCwCIoXM6HKBTEzMAQCcTAzZXZsBJq7CYo3o9mRBDQ7EYiTKbSDHsAG6HZbJsLqKAE+QPN9key4SwP7YoBmxiKZ+5bGfiIWAAD6sfHAsAQAAA==
+  </data>
+ </layer>
+ <layer id="11" name="图块层 5" width="25" height="12">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGAWjYBRQC/gx0d6OODrYMVgBAESRqJmwBAAA
+  </data>
+ </layer>
+</map>
