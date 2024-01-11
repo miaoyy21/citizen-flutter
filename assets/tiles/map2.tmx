@@ -7,33 +7,33 @@
   <image source="../images/Room.png" width="544" height="736"/>
  </tileset>
  <layer id="4" name="图块层 0" width="12" height="25">
-  <data encoding="base64" compression="zstd">
-   KLUv/WCwA90AACgARwaLBgcAARNqgQruHmwwVQ1AgLsHAaljAw==
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgoD1wZyMOj6ofVY9NfTcbcXhU/dBUTwoAAIIu//SwBAAA
   </data>
  </layer>
  <layer id="1" name="图块层 1" width="12" height="25">
-  <data encoding="base64" compression="zstd">
-   KLUv/WCwA4UHAALOJixAVTKMAca1xsBDFScrhC0TXKuAnVXlOoBG9kCfDf8DMAD//wNj8H8Tt+xtpz8+Sz3rI2SBrIp1sSwUnqBEbvACgtXAhy6kMC7wAAWwWg86kIjmzTycd+OwanB5LU/mxTCsFlIeyhs9lgphdWDzat7Jm0xeySN5IzDv5Xm8Do638TRexlaeyqN4EyfxIh7Ee+BZo6WdJZ01LeUEK6CgqCISSZNuAxCDCzsHHykGxX9s1Ew9yCt+8ZKaxF/4pDcfqQfUoB/PPQOHE3PykY63If2EJ65PWkkc0owwPWdETsaLjCbSDEqsM2XdR/+BNQ==
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE+3QPU4CQRiA4VkCQ62F1tpgq43eABJBTcTEBPwp1JCoLD2K9PxIj4oXMNzAcAPkEngDbHlNdjLfrluMBR2TPMm3O+8mX/YjpZSv3QxpP9HUbkZBv59UKo8CDmDOIfMRHtFI2r7EXMYZzkV/wXyJDrqiv2W+wz2qoveZa3jFm+gznlJbnvpznmiaqONB9Lu0ezH9M00PLbRFn6XNxfQDmnf08SJ61+PS/14nIv2U+RuandKRvVawilPP9jOef7DGu/VIv4FNVDy3fUzvuv82dgKmL2rrRNv2WIfvTH+trRvRX+nw3SL+/7L/Xz/GlzAR38fdzQEL3nA3sAQAAA==
   </data>
  </layer>
  <layer id="2" name="图块层 2" width="12" height="25">
-  <data encoding="base64" compression="zstd">
-   KLUv/WCwA2UEABJHFB+gKa0BD/+mNbCtBdtsyOHnp1pXo3BRTLRFWRVXllKmL7c8OrRyyp87J5c8cgggZZqGMbzog2yxKbbEPZ9jiO2wNVW4UhGugeAKPC7HalyMARkgQIMLYhwrRmlzBOQodLSj0BNkQA42IHQ2MQQx5lt8LVNTRl4po15pqLBiagMVEKZuMHAa7rgC
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NggIAORgaGTkYGDIBLfAZQbCYJ4oMNqAPdqEGCO82Bai1IUO8OVOuBRX0GEwNDJhBnMaGKb2NmYNjOjKm+AqiuEoir0NQfA6o9jkU9vUAEkt/uMuFWBwMZSOrfoql3Z4NgYgGt1VMbLAPi5UC8AohXEqF+GxBvB+IdQLyTBuqPAfFxID4BxCeJUD+YAADmpA16sAQAAA==
   </data>
  </layer>
  <layer id="3" name="图块层 3" width="12" height="25">
-  <data encoding="base64" compression="zstd">
-   KLUv/WCwAxUDAJQDACcBAAAoAQA3AQAAOJYDAACXAwAASKYDAACnAwDQBQAAigEAAIsBmgEAAJvLAQAAzAHbAQAA3AEADyCggja2GpJUA4YsQIA1X/7MFLlYOdg4+AFJsGpUeUxKDWR4KHYF
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGLlAnZGBQYORePXmQLUWRKqfxszAMB2IPYhUvwyodjkz8W4ZSeACKwNDFzAcuxkhbGSMLI4MZgHFZkPD/jSQPsOIKY4L3AbK3yEhXYwC+gEAO0Xie7AEAAA=
   </data>
  </layer>
  <layer id="5" name="图块层 4" width="12" height="25">
-  <data encoding="base64" compression="zstd">
-   KLUv/WCwA9UBAOgA0AU1BAAANgQARQQAAEZVBAAAVmUEAABmQVEEAAogMANMD4LT4Y5HBJgaTM1saiELTIH3ICgqzwY=
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGAWjYHCDC6zE4cEATFkYGMxYiFfvClTrRoL6UKDaMBLUpwLVppGgHgYcSdQTSIYd5AAAua+gA7AEAAA=
   </data>
  </layer>
  <layer id="6" name="图块层 5" width="12" height="25">
-  <data encoding="base64" compression="zstd">
-   KLUv/WCwA3UCAHQCAMEEAACBBADRBAAAkQQAvgIAAL8CAM4CAADP3gIAAN8hMQQjBDMEDyBgw6TOATvxTHyZyOiIIyiLhDiYoRYJk1BHJCzGysowyEjGFQ==
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgwAQHWRgYGlmwSOAAF4FqJ5KgfhSMAlLAPiYGhv1MxMufA7LP41GPLn8PyL6PRz0h+aEAFEnMn4YkqlcmUb0xmeUFANYdVFiwBAAA
   </data>
  </layer>
 </map>
