@@ -7,43 +7,38 @@ class MapPage extends Component
 
   MapPage({required this.tileName, required this.tileSize});
 
+  World get world => game.world;
+
+  CameraComponent get camera => game.camera;
+
   @override
   FutureOr<void> onLoad() async {
-    debugPrint(
-        "onLoad game.world.children.length => ${game.world.children.length}");
+    debugPrint("onLoad game.world.children.length => ${world.children.length}");
 
-    if (tileName == "map.tmx") {
-      game.mainCamera.viewfinder
-        ..anchor = Anchor.topLeft
-        ..position = Vector2(200, 400);
+    final Vector2 position;
+    final reSize = (camera.viewport as FixedResolutionViewport).resolution;
+
+    // 开始计算摄像机需要移动到的位置
+    if (tileSize.x > tileSize.y) {
+      position = Vector2(0, tileSize.y - reSize.y);
+    } else {
+      position = Vector2((tileSize.x - reSize.x) / 2, tileSize.y - reSize.y);
     }
 
-    // if (tileSize.x > tileSize.y) {
-    //   game.camera.viewfinder
-    //     ..anchor = Anchor.topLeft
-    //     ..position = Vector2(
-    //         0,
-    //         tileSize.y -
-    //             (game.camera.viewport as FixedResolutionViewport).resolution.y);
-    // } else {
-    //   game.camera.viewfinder
-    //     ..anchor = Anchor.topCenter
-    //     ..position = Vector2(
-    //         tileSize.x / 2,
-    //         tileSize.y -
-    //             (game.camera.viewport as FixedResolutionViewport).resolution.y);
-    // }
+    camera.viewfinder
+      ..anchor = Anchor.topLeft
+      ..position = position;
 
     final tiledComponent =
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
-    game.world.add(tiledComponent);
+    world.add(tiledComponent);
 
     final npcLayer = tiledComponent.tileMap.getLayer<ObjectGroup>("NPC");
     if (npcLayer != null && npcLayer.objects.isNotEmpty) {
       final npc = await Flame.images.load('NPC/Alex.png');
 
       for (final object in npcLayer.objects) {
-        game.world.add(
+        world.add(
           SpriteAnimationComponent(
             size: Vector2(16, 32),
             position: Vector2(object.x, object.y),
@@ -66,7 +61,7 @@ class MapPage extends Component
 
   @override
   void onTapDown(TapDownEvent event) {
-    debugPrint("onTapDown =>>>> $tileName");
+    debugPrint("onTapDown =>>>> $tileName ===> ${event.toString()}");
     if (tileName == "map.tmx") {
       game.router.pushReplacementNamed("map1");
     } else if (tileName == "map1.tmx") {
@@ -78,9 +73,9 @@ class MapPage extends Component
 
   @override
   void onRemove() {
+    world.removeAll(world.children);
     debugPrint("onRemove =>>>> $tileName");
 
-    // game.world.removeAll(game.world.children);
     super.onRemove();
   }
 }

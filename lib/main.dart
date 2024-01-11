@@ -13,14 +13,15 @@ class CitizenGame extends FlameGame {
   late final RouterComponent router;
   late final double blockSize = 32;
 
-  final CameraComponent mainCamera = CameraComponent(
-    viewport: FixedResolutionViewport(resolution: Vector2(20 * 32, 10 * 32)),
-    viewfinder: Viewfinder(),
-  );
-
-  CitizenGame() {
-    camera = mainCamera;
-  }
+  CitizenGame()
+      : super(
+          camera: CameraComponent(
+            viewport: FixedResolutionViewport(
+              resolution: Vector2(20 * 32, 10 * 32),
+            ),
+            viewfinder: Viewfinder(),
+          ),
+        );
 
   @override
   FutureOr<void> onLoad() async {
@@ -56,35 +57,5 @@ class CitizenGame extends FlameGame {
         initialRoute: 'map',
       ),
     );
-
-    // camera.viewfinder
-    //   ..anchor = Anchor.topLeft
-    //   ..position = Vector2(0, tiledSize.y - resolutionSize.y);
-    //
-    // camera.viewport.add(TextComponent(text: "2222"));
-    //
-    // final tiledComponent =
-    //     await TiledComponent.load("map.tmx", Vector2.all(blockSize));
-    // world.add(tiledComponent);
-    //
-    // final objects = tiledComponent.tileMap.getLayer<ObjectGroup>("NPC");
-    // final npc = await Flame.images.load('NPC/Alex.png');
-    //
-    // for (final object in objects!.objects) {
-    //   world.add(
-    //     SpriteAnimationComponent(
-    //       size: Vector2(16, 32),
-    //       position: Vector2(object.x, object.y),
-    //       animation: SpriteAnimation.fromFrameData(
-    //         npc,
-    //         SpriteAnimationData.sequenced(
-    //           amount: 4,
-    //           stepTime: 0.25,
-    //           textureSize: Vector2(16, 32),
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
   }
 }
