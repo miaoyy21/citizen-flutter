@@ -2,31 +2,40 @@ import '../index.dart';
 
 class MapPage extends Component
     with TapCallbacks, HasGameReference<CitizenGame> {
-  final String name;
-  final Vector2 size;
+  final String tileName;
+  final Vector2 tileSize;
 
-  MapPage({required this.name, required this.size});
+  MapPage({required this.tileName, required this.tileSize});
 
   @override
   FutureOr<void> onLoad() async {
-    if (size.x > size.y) {
-      game.camera.viewfinder
+    debugPrint(
+        "onLoad game.world.children.length => ${game.world.children.length}");
+
+    if (tileName == "map.tmx") {
+      game.mainCamera.viewfinder
         ..anchor = Anchor.topLeft
-        ..position = Vector2(
-            0,
-            size.y -
-                (game.camera.viewport as FixedResolutionViewport).resolution.y);
-    } else {
-      game.camera.viewfinder
-        ..anchor = Anchor.topCenter
-        ..position = Vector2(
-            size.x / 2,
-            size.y -
-                (game.camera.viewport as FixedResolutionViewport).resolution.y);
+        ..position = Vector2(200, 400);
     }
 
+    // if (tileSize.x > tileSize.y) {
+    //   game.camera.viewfinder
+    //     ..anchor = Anchor.topLeft
+    //     ..position = Vector2(
+    //         0,
+    //         tileSize.y -
+    //             (game.camera.viewport as FixedResolutionViewport).resolution.y);
+    // } else {
+    //   game.camera.viewfinder
+    //     ..anchor = Anchor.topCenter
+    //     ..position = Vector2(
+    //         tileSize.x / 2,
+    //         tileSize.y -
+    //             (game.camera.viewport as FixedResolutionViewport).resolution.y);
+    // }
+
     final tiledComponent =
-        await TiledComponent.load(name, Vector2.all(game.blockSize));
+        await TiledComponent.load(tileName, Vector2.all(game.blockSize));
     game.world.add(tiledComponent);
 
     final npcLayer = tiledComponent.tileMap.getLayer<ObjectGroup>("NPC");
@@ -50,5 +59,28 @@ class MapPage extends Component
         );
       }
     }
+  }
+
+  @override
+  bool containsLocalPoint(Vector2 point) => true;
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    debugPrint("onTapDown =>>>> $tileName");
+    if (tileName == "map.tmx") {
+      game.router.pushReplacementNamed("map1");
+    } else if (tileName == "map1.tmx") {
+      game.router.pushReplacementNamed("map2");
+    } else {
+      game.router.pushReplacementNamed("map");
+    }
+  }
+
+  @override
+  void onRemove() {
+    debugPrint("onRemove =>>>> $tileName");
+
+    // game.world.removeAll(game.world.children);
+    super.onRemove();
   }
 }
