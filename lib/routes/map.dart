@@ -38,7 +38,7 @@ class MapPage extends Component
       return;
     }
 
-    final npc = await Flame.images.load('NPC/Alex.png');
+    final npc = await Flame.images.load('Adam.png');
     for (final object in npcLayer.objects) {
       world.add(
         SpriteAnimationComponent(
@@ -63,13 +63,15 @@ class MapPage extends Component
   @override
   void onTapDown(TapDownEvent event) {
     debugPrint("onTapDown =>>>> $tileName ===> ${event.toString()}");
-    // if (tileName == "map.tmx") {
-    //   game.router.pushReplacementNamed("map1");
-    // } else if (tileName == "map1.tmx") {
-    //   game.router.pushReplacementNamed("map2");
-    // } else {
-    //   game.router.pushReplacementNamed("map");
-    // }
+    if (tileName == "world.tmx") {
+      game.router.pushReplacementNamed("map1");
+    } else if (tileName == "map1.tmx") {
+      game.router.pushReplacementNamed("map2");
+    } else if (tileName == "map2.tmx") {
+      game.router.pushReplacementNamed("map3");
+    } else {
+      game.router.pushReplacementNamed("world");
+    }
   }
 
   @override

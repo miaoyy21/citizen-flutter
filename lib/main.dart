@@ -28,25 +28,32 @@ class CitizenGame extends FlameGame {
     add(
       router = RouterComponent(
         routes: {
-          'map': Route(
+          'world': Route(
             maintainState: false,
             () => MapPage(
-              tileName: "map.tmx",
-              tileSize: Vector2(30 * blockSize, 20 * blockSize),
+              tileName: "world.tmx",
+              tileSize: Vector2(51 * blockSize, 23 * blockSize),
             ),
           ),
           'map1': Route(
             maintainState: false,
             () => MapPage(
               tileName: "map1.tmx",
-              tileSize: Vector2(25 * blockSize, 12 * blockSize),
+              tileSize: Vector2(32 * blockSize, 32 * blockSize),
             ),
           ),
           'map2': Route(
             maintainState: false,
             () => MapPage.new(
               tileName: "map2.tmx",
-              tileSize: Vector2(12 * blockSize, 25 * blockSize),
+              tileSize: Vector2(32 * blockSize, 32 * blockSize),
+            ),
+          ),
+          'map3': Route(
+            maintainState: false,
+            () => MapPage.new(
+              tileName: "map3.tmx",
+              tileSize: Vector2(32 * blockSize, 34 * blockSize),
             ),
           ),
           // 'level-selector': Route(LevelSelectorPage.new),
@@ -54,7 +61,7 @@ class CitizenGame extends FlameGame {
           // 'pause': PauseRoute(),
           // 'confirm-dialog': OverlayRoute.existing(),
         },
-        initialRoute: 'map',
+        initialRoute: 'world',
       ),
     );
   }
