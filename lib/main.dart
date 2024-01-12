@@ -44,14 +44,14 @@ class CitizenGame extends FlameGame {
           ),
           'map2': Route(
             maintainState: false,
-            () => MapPage.new(
+            () => MapPage(
               tileName: "map2.tmx",
               tileSize: Vector2(32 * blockSize, 32 * blockSize),
             ),
           ),
           'map3': Route(
             maintainState: false,
-            () => MapPage.new(
+            () => MapPage(
               tileName: "map3.tmx",
               tileSize: Vector2(32 * blockSize, 34 * blockSize),
             ),
