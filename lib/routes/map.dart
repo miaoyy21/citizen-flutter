@@ -25,10 +25,9 @@ class MapPage extends Component
       position = Vector2((tileSize.x - reSize.x) / 2, tileSize.y - reSize.y);
     }
 
-    // camera.viewfinder
-    //   ..anchor = Anchor.topLeft
-    //   ..position = position;
-    camera.viewfinder.anchor = Anchor.topLeft;
+    camera.viewfinder
+      ..anchor = Anchor.topLeft
+      ..position = position;
 
     final tiledComponent =
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
