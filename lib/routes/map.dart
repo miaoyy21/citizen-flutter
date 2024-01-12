@@ -19,15 +19,16 @@ class MapPage extends Component
     final reSize = (camera.viewport as FixedResolutionViewport).resolution;
 
     // 开始计算摄像机需要移动到的位置
-    if (tileSize.x > tileSize.y) {
+    if (tileSize.x > 1.2 * tileSize.y) {
       position = Vector2(0, tileSize.y - reSize.y);
     } else {
       position = Vector2((tileSize.x - reSize.x) / 2, tileSize.y - reSize.y);
     }
 
-    camera.viewfinder
-      ..anchor = Anchor.topLeft
-      ..position = position;
+    // camera.viewfinder
+    //   ..anchor = Anchor.topLeft
+    //   ..position = position;
+    camera.viewfinder.anchor = Anchor.topLeft;
 
     final tiledComponent =
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
