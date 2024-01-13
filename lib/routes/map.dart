@@ -1,3 +1,5 @@
+import 'package:citizen/npc/npc.dart';
+
 import '../index.dart';
 
 class MapPage extends Component
@@ -33,24 +35,27 @@ class MapPage extends Component
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
     world.add(tiledComponent);
 
-    final npcLayer = tiledComponent.tileMap.getLayer<ObjectGroup>("NPC");
-    if (npcLayer == null || npcLayer.objects.isEmpty) {
-      return;
-    }
+    final sNPC = <NPC>[
+      NPC("1", "Adam", "Adam", Vector2(16, 32), ["未来一定属于你", "社会需要你这样的人才"])
+        ..position = Vector2(325, 275),
+      NPC("2", "Bob", "Bob", Vector2(16, 32), ["未来一定属于你", "社会需要你这样的人才"])
+        ..position = Vector2(100, 150),
+    ];
 
-    final npcSize = Vector2(16, 32);
-    final npc = await Flame.images.load('Adam.png');
-    for (final object in npcLayer.objects) {
+    for (var npc in sNPC) {
+      final image = await Flame.images.load("NPC/${npc.protoId}.png");
+      debugPrint("${npc.position}");
+
       world.add(
         SpriteAnimationComponent(
-          size: npcSize,
-          position: Vector2(object.x - npcSize.x, object.y - npcSize.y),
+          size: npc.size,
+          position: npc.position,
           animation: SpriteAnimation.fromFrameData(
-            npc,
+            image,
             SpriteAnimationData.sequenced(
-              amount: 4,
+              amount: 2,
               stepTime: 0.25,
-              textureSize: npcSize,
+              textureSize: npc.size,
             ),
           ),
         ),
@@ -64,15 +69,15 @@ class MapPage extends Component
   @override
   void onTapDown(TapDownEvent event) {
     debugPrint("onTapDown =>>>> $tileName ===> ${event.toString()}");
-    if (tileName == "world.tmx") {
-      game.router.pushReplacementNamed("map1");
-    } else if (tileName == "map1.tmx") {
-      game.router.pushReplacementNamed("map2");
-    } else if (tileName == "map2.tmx") {
-      game.router.pushReplacementNamed("map3");
-    } else {
-      game.router.pushReplacementNamed("world");
-    }
+    // if (tileName == "world.tmx") {
+    //   game.router.pushReplacementNamed("map1");
+    // } else if (tileName == "map1.tmx") {
+    //   game.router.pushReplacementNamed("map2");
+    // } else if (tileName == "map2.tmx") {
+    //   game.router.pushReplacementNamed("map3");
+    // } else {
+    //   game.router.pushReplacementNamed("world");
+    // }
   }
 
   @override

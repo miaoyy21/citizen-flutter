@@ -21,10 +21,10 @@
   </data>
  </layer>
  <objectgroup id="11" name="NPC">
-  <object id="18" x="113.333" y="351.333">
+  <object id="18" name="Bob" x="108" y="293.333">
    <point/>
   </object>
-  <object id="19" x="143.333" y="350.667">
+  <object id="19" name="Adam" x="244" y="299.333">
    <point/>
   </object>
  </objectgroup>
