@@ -1,5 +1,3 @@
-import 'package:citizen/npc/npc.dart';
-
 import '../index.dart';
 
 class MapPage extends Component
@@ -36,9 +34,11 @@ class MapPage extends Component
     world.add(tiledComponent);
 
     final sNPC = <NPC>[
-      NPC("1", "Adam", "Adam", Vector2(16, 32), ["未来一定属于你", "社会需要你这样的人才"])
+      NPC("1", "Adam", "Adam", Vector2(16, 32), Direction.left,
+          ["未来一定属于你", "社会需要你这样的人才"])
         ..position = Vector2(325, 275),
-      NPC("2", "Bob", "Bob", Vector2(16, 32), ["未来一定属于你", "社会需要你这样的人才"])
+      NPC("2", "Bob", "Bob", Vector2(16, 32), Direction.right,
+          ["未来一定属于你", "社会需要你这样的人才"])
         ..position = Vector2(100, 150),
     ];
 
@@ -53,7 +53,7 @@ class MapPage extends Component
           animation: SpriteAnimation.fromFrameData(
             image,
             SpriteAnimationData.sequenced(
-              amount: 2,
+              amount: 4,
               stepTime: 0.25,
               textureSize: npc.size,
             ),

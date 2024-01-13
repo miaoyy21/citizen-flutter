@@ -20,3 +20,4 @@ export 'package:flutter/material.dart'
 
 export 'main.dart' show CitizenGame;
 export 'routes/map.dart';
+export 'npc/index.dart';
