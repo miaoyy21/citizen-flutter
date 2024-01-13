@@ -17,15 +17,10 @@ class MapPage extends Component
 
     late Vector2 position = Vector2.zero();
     final reSize = (camera.viewport as FixedResolutionViewport).resolution;
-    final xSize =
-        (camera.viewport as FixedResolutionViewport).localToGlobal(reSize);
 
     // 开始计算摄像机需要移动到的位置
-    debugPrint("Tile Size is $tileSize");
-    debugPrint("Resolution Size is $reSize, X Size is $xSize");
     if (tileSize.x > tileSize.y) {
-      // position = Vector2(0, tileSize.y - reSize.y);
-      position.y = xSize.y;
+      position = Vector2(0, tileSize.y - reSize.y);
     } else {
       position = Vector2((tileSize.x - reSize.x) / 2, tileSize.y - reSize.y);
     }
@@ -33,7 +28,6 @@ class MapPage extends Component
     camera.viewfinder
       ..anchor = Anchor.topLeft
       ..position = position;
-    debugPrint("View Finder Position is ${camera.viewfinder.position}");
 
     final tiledComponent =
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
@@ -44,18 +38,19 @@ class MapPage extends Component
       return;
     }
 
+    final npcSize = Vector2(16, 32);
     final npc = await Flame.images.load('Adam.png');
     for (final object in npcLayer.objects) {
       world.add(
         SpriteAnimationComponent(
-          size: Vector2(16, 32),
-          position: Vector2(object.x, object.y),
+          size: npcSize,
+          position: Vector2(object.x - npcSize.x, object.y - npcSize.y),
           animation: SpriteAnimation.fromFrameData(
             npc,
             SpriteAnimationData.sequenced(
               amount: 4,
               stepTime: 0.25,
-              textureSize: Vector2(16, 32),
+              textureSize: npcSize,
             ),
           ),
         ),

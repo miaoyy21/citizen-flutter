@@ -32,28 +32,29 @@ class CitizenGame extends FlameGame {
             maintainState: false,
             () => MapPage(
               tileName: "world.tmx",
-              tileSize: Vector2(51 * blockSize, 23 * blockSize),
+              tileSize: Vector2(25 * blockSize, 12 * blockSize),
             ),
           ),
           'map1': Route(
             maintainState: false,
             () => MapPage(
               tileName: "map1.tmx",
-              tileSize: Vector2(32 * blockSize, 32 * blockSize),
+              tileSize: Vector2(16 * blockSize, 16 * blockSize),
             ),
           ),
           'map2': Route(
             maintainState: false,
             () => MapPage(
               tileName: "map2.tmx",
-              tileSize: Vector2(32 * blockSize, 32 * blockSize),
+              tileSize: Vector2(16 * blockSize, 16 * blockSize),
             ),
           ),
           'map3': Route(
             maintainState: false,
             () => MapPage(
               tileName: "map3.tmx",
-              tileSize: Vector2(32 * blockSize, 34 * blockSize),
+              destTileSize: Vector2.all(blockSize),
+              tileSize: Vector2(16 * blockSize, 17 * blockSize),
             ),
           ),
           // 'level-selector': Route(LevelSelectorPage.new),
