@@ -1,2 +1,2 @@
 export 'npc.dart';
-export 'look.dart';
+export 'direction.dart';

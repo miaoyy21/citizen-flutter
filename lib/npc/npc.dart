@@ -1,4 +1,4 @@
-import 'package:citizen/npc/look.dart';
+import 'package:citizen/npc/direction.dart';
 
 import '../index.dart';
 

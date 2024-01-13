@@ -44,7 +44,6 @@ class MapPage extends Component
 
     for (var npc in sNPC) {
       final image = await Flame.images.load("NPC/${npc.protoId}.png");
-      debugPrint("${npc.position}");
 
       world.add(
         SpriteAnimationComponent(
