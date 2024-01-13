@@ -4,7 +4,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Flame.device.setLandscape();
-  // Flame.device.fullScreen();
+  Flame.device.fullScreen();
 
   runApp(GameWidget(game: CitizenGame()));
 }

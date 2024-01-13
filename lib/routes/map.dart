@@ -15,12 +15,17 @@ class MapPage extends Component
   FutureOr<void> onLoad() async {
     debugPrint("onLoad game.world.children.length => ${world.children.length}");
 
-    final Vector2 position;
+    late Vector2 position = Vector2.zero();
     final reSize = (camera.viewport as FixedResolutionViewport).resolution;
+    final xSize =
+        (camera.viewport as FixedResolutionViewport).localToGlobal(reSize);
 
     // 开始计算摄像机需要移动到的位置
-    if (tileSize.x > 1.2 * tileSize.y) {
-      position = Vector2(0, tileSize.y - reSize.y);
+    debugPrint("Tile Size is $tileSize");
+    debugPrint("Resolution Size is $reSize, X Size is $xSize");
+    if (tileSize.x > tileSize.y) {
+      // position = Vector2(0, tileSize.y - reSize.y);
+      position.y = xSize.y;
     } else {
       position = Vector2((tileSize.x - reSize.x) / 2, tileSize.y - reSize.y);
     }
@@ -28,6 +33,7 @@ class MapPage extends Component
     camera.viewfinder
       ..anchor = Anchor.topLeft
       ..position = position;
+    debugPrint("View Finder Position is ${camera.viewfinder.position}");
 
     final tiledComponent =
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
