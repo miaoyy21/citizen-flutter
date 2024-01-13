@@ -53,7 +53,6 @@ class CitizenGame extends FlameGame {
             maintainState: false,
             () => MapPage(
               tileName: "map3.tmx",
-              destTileSize: Vector2.all(blockSize),
               tileSize: Vector2(16 * blockSize, 17 * blockSize),
             ),
           ),
