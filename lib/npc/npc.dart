@@ -1,5 +1,3 @@
-import 'package:citizen/npc/direction.dart';
-
 import '../index.dart';
 
 class NPC {
