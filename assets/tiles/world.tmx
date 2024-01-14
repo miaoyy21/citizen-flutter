@@ -20,12 +20,4 @@
    H4sIAAAAAAAAEw3DBXAQBAAAwI0ajB7baNgYDMZGiYSUSEindEsIiKB0h6g00t2ponSnAtKhNEgqjXQ3/N1/YEBAQDzjm8CEJjLIxCYx2KQmM7kpTGkqUxtiGkMNM9y0pjO9GcxoJjObxaxGGGk2o8xuDqPNaS5jzG2sceYxr/nMbwE/sKAfWsjCFrGoH1nM4pawpKX82NJ+YhnLWs7yfmoFK1rJylaxqtWsbg1rWsvafmYd61rP+jawoY1sbBOb2szmtvBzW9rK1rbxC9vazvZ+aQe/sqOd/Npv7GwXu9rN7vawp73sbR/72s/+DnCgg/zWwX7n9/7gEIc6zOGOcKSjHO2PjnGs4xzvBCc6yclOcarTnO4MZzrL2c5xrvOc7wIXusjF/uTP/uISf/U3l7rM5a5wpatc7RrXus71bnCjm9zsFre6zd/9w+3ucKd/usvd7nGv+9zvAQ96yMP+5d8e8ajHPO4JT3rK057xH896zvNe8KKX/Nf/vOwVr3rN697wprf839ve8a73vO8DH/rIxz7xqc987gtf+srXvvGt7wwIxHjGN4EJTWSQiU1isElNZnJTmNJUpjbENIYaZrhpTWd6M5jRTGY2i1mNMNJsRpndHEab01zGmNtY43wP3S6dcrAEAAA=
   </data>
  </layer>
- <objectgroup id="11" name="NPC">
-  <object id="18" name="Bob" x="108" y="293.333">
-   <point/>
-  </object>
-  <object id="19" name="Adam" x="244" y="299.333">
-   <point/>
-  </object>
- </objectgroup>
 </map>

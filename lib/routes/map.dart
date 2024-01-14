@@ -11,6 +11,9 @@ class MapPage extends Component
 
   CameraComponent get camera => game.camera;
 
+  late final JoystickPlayer player;
+  late final JoystickComponent joystick;
+
   @override
   FutureOr<void> onLoad() async {
     debugPrint("onLoad game.world.children.length => ${world.children.length}");
@@ -60,6 +63,29 @@ class MapPage extends Component
         ),
       );
     }
+
+    joystick = JoystickComponent(
+      knob: CircleComponent(
+        radius: 24,
+        paint: BasicPalette.black.withAlpha(192).paint(),
+      ),
+      background: CircleComponent(
+        radius: 64,
+        paint: BasicPalette.white.withAlpha(64).paint(),
+      ),
+      margin: const EdgeInsets.only(left: 32, bottom: 120),
+    );
+
+    player = JoystickPlayer(joystick);
+    player.position = Vector2(150, 150);
+
+    world.add(player);
+    camera.viewport.add(joystick);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
   }
 
   @override
