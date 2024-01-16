@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../index.dart';
 
 class JoystickPlayer extends SpriteComponent
@@ -5,7 +7,7 @@ class JoystickPlayer extends SpriteComponent
   final JoystickComponent joystick;
 
   JoystickPlayer(this.joystick)
-      : super(size: Vector2.all(56), anchor: Anchor.center);
+      : super(size: Vector2(16, 32), anchor: Anchor.center);
 
   double maxSpeed = 128;
   late final Vector2 _lastSize = size.clone();
@@ -35,7 +37,21 @@ class JoystickPlayer extends SpriteComponent
       _lastSize.setFrom(size);
       _lastTransform.setFrom(transform);
       position.add(joystick.relativeDelta * maxSpeed * dt);
-      angle = joystick.delta.screenAngle();
+
+      final sAngle = joystick.delta.screenAngle();
+      if (sAngle > -pi / 4 && sAngle <= pi / 4) {
+        // Top
+        sprite = _frames[1].sprite;
+      } else if (sAngle > pi / 4 && sAngle <= pi * 3 / 4) {
+        // Right
+        sprite = _frames[0].sprite;
+      } else if (sAngle < -pi * 3 / 4 || sAngle >= pi * 3 / 4) {
+        // Bottom
+        sprite = _frames[3].sprite;
+      } else if (sAngle < -pi / 4 && sAngle >= -pi * 3 / 4) {
+        // Left
+        sprite = _frames[2].sprite;
+      }
     }
   }
 
