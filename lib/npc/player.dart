@@ -18,7 +18,7 @@ class JoystickPlayer extends SpriteComponent
   @override
   Future<void> onLoad() async {
     final image = await Flame.images.load("Hero.png");
-    _frames = await SpriteAnimation.fromFrameData(
+    _frames = SpriteAnimation.fromFrameData(
       image,
       SpriteAnimationData.sequenced(
         amount: 4,
