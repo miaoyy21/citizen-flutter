@@ -67,7 +67,7 @@ class MapPage extends Component
     joystick = JoystickComponent(
       knob: CircleComponent(
         radius: 24,
-        paint: BasicPalette.black.withAlpha(192).paint(),
+        paint: BasicPalette.black.withAlpha(128).paint(),
       ),
       background: CircleComponent(
         radius: 64,
