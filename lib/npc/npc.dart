@@ -1,23 +1,31 @@
 import '../index.dart';
 
-class NPC {
+class NPC extends SpriteComponent with HasGameReference<CitizenGame> {
   final String id; // ID
   final String protoId; // 对应的资源ID
   final String name; // 名称
-  final Vector2 size; // 对应的资源图片尺寸
   final Direction direction; // 方向 上下左右
   final List<String> tags; // 口头禅
 
-  NPC(this.id, this.protoId, this.name, this.size, this.direction, this.tags);
+  NPC(this.id, this.protoId, this.name, this.direction, this.tags,
+      {super.size, super.position});
 
-  // 所在位置，默认为(0,0)
-  Vector2 _position = Vector2.zero();
+  late SpriteAnimation animation;
 
-  Vector2 get position => _position;
+  @override
+  Future<void> onLoad() async {
+    final image = await Flame.images.load("NPC/$protoId.png");
 
-  set position(Vector2 value) {
-    _position = value;
+    animation = SpriteAnimation.fromFrameData(
+      image,
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        stepTime: 0.25,
+        textureSize: size,
+      ),
+    );
+    add(RectangleHitbox()..debugMode = true);
+
+    sprite = animation.frames.first.sprite;
   }
-
-// TODO 获取对应的资源动画
 }

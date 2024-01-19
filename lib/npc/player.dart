@@ -3,17 +3,18 @@ import 'dart:math';
 import '../index.dart';
 
 class JoystickPlayer extends SpriteComponent
-    with HasGameReference, CollisionCallbacks {
+    with HasGameReference<CitizenGame>, CollisionCallbacks {
   final JoystickComponent joystick;
+  final double maxSpeed;
 
-  JoystickPlayer(this.joystick)
+  JoystickPlayer(this.joystick, this.maxSpeed, {super.position})
       : super(size: Vector2(16, 32), anchor: Anchor.center);
 
-  double maxSpeed = 64;
+  static const double stepTime = 0.125;
+  late Direction direction = Direction.right;
 
-  Direction direction = Direction.right;
-
-  late Map<Direction, SpriteAnimation> animations;
+  late Map<Direction, Map<Animation, SpriteAnimation>> animations;
+  late double onTime = 0;
 
   @override
   Future<void> onLoad() async {
@@ -21,59 +22,72 @@ class JoystickPlayer extends SpriteComponent
     final spriteSheet = SpriteSheet(image: image, srcSize: size);
 
     animations = {
-      Direction.left:
-          spriteSheet.createAnimation(row: 2, stepTime: 0.25, from: 0, to: 6),
-      Direction.left:
-      spriteSheet.createAnimation(row: 2, stepTime: 0.25, from: 0, to: 6),
-      Direction.left:
-      spriteSheet.createAnimation(row: 2, stepTime: 0.25, from: 0, to: 6),
-      Direction.left:
-      spriteSheet.createAnimation(row: 2, stepTime: 0.25, from: 0, to: 6),
+      Direction.left: {
+        Animation.idle: spriteSheet.createAnimation(
+            row: 1, stepTime: stepTime, from: 12, to: 17),
+        Animation.run: spriteSheet.createAnimation(
+            row: 2, stepTime: stepTime, from: 12, to: 17),
+      },
+      Direction.up: {
+        Animation.idle: spriteSheet.createAnimation(
+            row: 1, stepTime: stepTime, from: 6, to: 11),
+        Animation.run: spriteSheet.createAnimation(
+            row: 2, stepTime: stepTime, from: 6, to: 11)
+      },
+      Direction.right: {
+        Animation.idle: spriteSheet.createAnimation(
+            row: 1, stepTime: stepTime, from: 0, to: 5),
+        Animation.run: spriteSheet.createAnimation(
+            row: 2, stepTime: stepTime, from: 0, to: 5)
+      },
+      Direction.down: {
+        Animation.idle: spriteSheet.createAnimation(
+            row: 1, stepTime: stepTime, from: 18, to: 23),
+        Animation.run: spriteSheet.createAnimation(
+            row: 2, stepTime: stepTime, from: 18, to: 23)
+      },
     };
 
-    // _frames = SpriteAnimation.fromFrameData(
-    //   image,
-    //   SpriteAnimationData.sequenced(
-    //     amount: 4,
-    //     stepTime: 0.25,
-    //     textureSize: size,
-    //   ),
-    // ).frames;
-
-    // sprite = _frames[0].sprite;
-    sprite = spriteAnimation.frames[0].sprite;
-    add(RectangleHitbox());
+    sprite = animations[direction]?[Animation.idle]?.frames[0].sprite;
+    add(RectangleHitbox()..debugMode = true);
   }
 
   @override
   void update(double dt) {
-    if (!joystick.delta.isZero() && activeCollisions.isEmpty) {
-      position.add(joystick.relativeDelta * maxSpeed * dt);
-
-      debugPrint("joystick.direction ${joystick.direction}");
-
-      nn++;
-      if (joystick.isDragged) {
-        sprite = spriteAnimation.frames[(nn ~/ 10) % 6].sprite;
-      } else {
-        sprite = spriteAnimation.frames[5].sprite;
-      }
-
-      final sAngle = joystick.delta.screenAngle();
-      if (sAngle > -pi / 4 && sAngle <= pi / 4) {
-        // Top
-        // sprite = _frames[1].sprite;
-      } else if (sAngle > pi / 4 && sAngle <= pi * 3 / 4) {
-        // Right
-        // sprite = _frames[0].sprite;
-      } else if (sAngle < -pi * 3 / 4 || sAngle >= pi * 3 / 4) {
-        // Bottom
-        // sprite = _frames[3].sprite;
-      } else if (sAngle < -pi / 4 && sAngle >= -pi * 3 / 4) {
-        // Left
-        // sprite = _frames[2].sprite;
-      }
+    var animation = Animation.run;
+    final preDirection = direction;
+    switch (joystick.direction) {
+      case JoystickDirection.left:
+      case JoystickDirection.upLeft:
+      case JoystickDirection.downLeft:
+        direction = Direction.left;
+        break;
+      case JoystickDirection.up:
+        direction = Direction.up;
+        break;
+      case JoystickDirection.right:
+      case JoystickDirection.upRight:
+      case JoystickDirection.downRight:
+        direction = Direction.right;
+        break;
+      case JoystickDirection.down:
+        direction = Direction.down;
+        break;
+      default:
+        animation = Animation.idle;
     }
+
+    // 延续前序动画
+    if (preDirection == direction) {
+      onTime = onTime + dt;
+    } else {
+      onTime = 0;
+    }
+
+    final frames = animations[direction]?[animation]?.frames;
+    sprite = frames?[(onTime ~/ stepTime) % frames.length].sprite;
+
+    position.add(joystick.relativeDelta * maxSpeed * dt);
   }
 
   @override
@@ -83,6 +97,13 @@ class JoystickPlayer extends SpriteComponent
   ) {
     super.onCollisionStart(intersectionPoints, other);
 
-    debugPrint("onCollisionStart");
+    debugPrint("Player onCollisionStart ${(other as NPC).id}");
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+
+    debugPrint("Player onCollisionEnd ${(other as NPC).id}");
   }
 }

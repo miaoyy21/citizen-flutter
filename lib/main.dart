@@ -9,7 +9,7 @@ void main() async {
   runApp(GameWidget(game: CitizenGame()));
 }
 
-class CitizenGame extends FlameGame {
+class CitizenGame extends FlameGame with HasCollisionDetection {
   late final RouterComponent router;
   late final double blockSize = 32;
 

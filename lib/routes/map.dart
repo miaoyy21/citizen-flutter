@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../index.dart';
 
 class MapPage extends Component
@@ -37,31 +39,26 @@ class MapPage extends Component
     world.add(tiledComponent);
 
     final sNPC = <NPC>[
-      NPC("1", "Adam", "Adam", Vector2(16, 32), Direction.left,
-          ["未来一定属于你", "社会需要你这样的人才"])
-        ..position = Vector2(325, 275),
-      NPC("2", "Bob", "Bob", Vector2(16, 32), Direction.right,
-          ["未来一定属于你", "社会需要你这样的人才"])
-        ..position = Vector2(100, 150),
+      NPC(
+          "1",
+          "Adam",
+          "Adam",
+          size: Vector2(16, 32),
+          position: Vector2(325, 275),
+          Direction.left,
+          ["未来一定属于你", "社会需要你这样的人才"]),
+      NPC(
+          "2",
+          "Bob",
+          "Bob",
+          size: Vector2(16, 32),
+          position: Vector2(100, 150),
+          Direction.right,
+          ["未来一定属于你", "社会需要你这样的人才"]),
     ];
 
     for (var npc in sNPC) {
-      final image = await Flame.images.load("NPC/${npc.protoId}.png");
-
-      world.add(
-        SpriteAnimationComponent(
-          size: npc.size,
-          position: npc.position,
-          animation: SpriteAnimation.fromFrameData(
-            image,
-            SpriteAnimationData.sequenced(
-              amount: 4,
-              stepTime: 0.25,
-              textureSize: npc.size,
-            ),
-          ),
-        ),
-      );
+      world.add(npc);
     }
 
     joystick = JoystickComponent(
@@ -76,16 +73,10 @@ class MapPage extends Component
       margin: const EdgeInsets.only(left: 32, bottom: 120),
     );
 
-    player = JoystickPlayer(joystick);
-    player.position = Vector2(150, 150);
+    player = JoystickPlayer(joystick, 50, position: Vector2(150, 150));
 
     world.add(player);
     camera.viewport.add(joystick);
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
   }
 
   @override
@@ -111,5 +102,38 @@ class MapPage extends Component
     debugPrint("onRemove =>>>> $tileName");
 
     super.onRemove();
+  }
+}
+
+class NPCComponent extends SpriteComponent with HasGameReference<CitizenGame> {
+  final NPC npc;
+  final Image image;
+
+  NPCComponent(this.npc, this.image, {super.position})
+      : super(size: Vector2.all(30), anchor: Anchor.center);
+
+  late SpriteAnimation animation;
+
+  @override
+  Future<void> onLoad() async {
+    size = npc.size;
+    position = npc.position;
+
+    animation = SpriteAnimation.fromFrameData(
+      image,
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        stepTime: 0.25,
+        textureSize: npc.size,
+      ),
+    );
+    add(RectangleHitbox()..debugMode = true);
+
+    sprite = animation.frames.first.sprite;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
   }
 }
