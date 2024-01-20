@@ -82,6 +82,15 @@ class MapPage extends Component
   void update(double dt) {
     super.update(dt);
 
+    // if (camera.canSee(player)) {
+    //   camera.stop();
+    //   // camera.moveTo(Vector2(0, tileSize.y));
+    //   debugPrint("camera can see player");
+    // } else {
+    //   // camera.viewfinder.position = player.position;
+    //   camera.moveTo(player.position);
+    //   debugPrint("camera NOT can see player");
+    // }
     // final reSize = (camera.viewport as FixedResolutionViewport).resolution;
     // if (player.position.x >= )
     // debugPrint("Fixed Resolution Viewport is $reSize");
