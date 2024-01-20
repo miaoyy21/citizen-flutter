@@ -1,6 +1,6 @@
 import '../index.dart';
 
-class NPC extends SpriteComponent with HasGameReference<CitizenGame> {
+class NPC extends SpriteAnimationComponent with HasGameReference<CitizenGame> {
   final String id; // ID
   final String protoId; // 对应的资源ID
   final String name; // 名称
@@ -9,8 +9,6 @@ class NPC extends SpriteComponent with HasGameReference<CitizenGame> {
 
   NPC(this.id, this.protoId, this.name, this.direction, this.tags,
       {super.size, super.position});
-
-  late SpriteAnimation animation;
 
   @override
   Future<void> onLoad() async {
@@ -25,7 +23,5 @@ class NPC extends SpriteComponent with HasGameReference<CitizenGame> {
       ),
     );
     add(RectangleHitbox()..debugMode = true);
-
-    sprite = animation.frames.first.sprite;
   }
 }
