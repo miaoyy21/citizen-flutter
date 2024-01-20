@@ -13,15 +13,10 @@ class NPC extends SpriteAnimationComponent with HasGameReference<CitizenGame> {
   @override
   Future<void> onLoad() async {
     final image = await Flame.images.load("NPC/$protoId.png");
+    final spriteSheet = SpriteSheet(image: image, srcSize: size);
 
-    animation = SpriteAnimation.fromFrameData(
-      image,
-      SpriteAnimationData.sequenced(
-        amount: 4,
-        stepTime: 0.25,
-        textureSize: size,
-      ),
-    );
+    animation =
+        spriteSheet.createAnimation(row: 1, stepTime: 0.25, from: 18, to: 23);
     add(RectangleHitbox()..debugMode = true);
   }
 }
