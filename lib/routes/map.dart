@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import '../index.dart';
 
 class MapPage extends Component
@@ -76,25 +74,9 @@ class MapPage extends Component
     player = JoystickPlayer(joystick, 50, position: Vector2(150, 150));
     world.add(player);
     camera.viewport.add(joystick);
-  }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-    // if (camera.canSee(player)) {
-    //   camera.stop();
-    //   // camera.moveTo(Vector2(0, tileSize.y));
-    //   debugPrint("camera can see player");
-    // } else {
-    //   // camera.viewfinder.position = player.position;
-    //   camera.moveTo(player.position);
-    //   debugPrint("camera NOT can see player");
-    // }
-    // final reSize = (camera.viewport as FixedResolutionViewport).resolution;
-    // if (player.position.x >= )
-    // debugPrint("Fixed Resolution Viewport is $reSize");
-    // camera.moveTo(this);
+    // camera.setBounds(Rectangle.fromLTRB(-100, -100, 200, 200));
+    // camera.follow(player);
   }
 
   @override
@@ -120,38 +102,5 @@ class MapPage extends Component
     debugPrint("onRemove =>>>> $tileName");
 
     super.onRemove();
-  }
-}
-
-class NPCComponent extends SpriteComponent with HasGameReference<CitizenGame> {
-  final NPC npc;
-  final Image image;
-
-  NPCComponent(this.npc, this.image, {super.position})
-      : super(size: Vector2.all(30), anchor: Anchor.center);
-
-  late SpriteAnimation animation;
-
-  @override
-  Future<void> onLoad() async {
-    size = npc.size;
-    position = npc.position;
-
-    animation = SpriteAnimation.fromFrameData(
-      image,
-      SpriteAnimationData.sequenced(
-        amount: 4,
-        stepTime: 0.25,
-        textureSize: npc.size,
-      ),
-    );
-    add(RectangleHitbox()..debugMode = true);
-
-    sprite = animation.frames.first.sprite;
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
   }
 }
