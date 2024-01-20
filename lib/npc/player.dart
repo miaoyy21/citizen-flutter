@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flame/src/experimental/geometry/shapes/shape.dart';
+
 import '../index.dart';
 
 class JoystickPlayer extends SpriteComponent
@@ -88,6 +90,8 @@ class JoystickPlayer extends SpriteComponent
     sprite = frames?[(onTime ~/ stepTime) % frames.length].sprite;
 
     position.add(joystick.relativeDelta * maxSpeed * dt);
+
+    game.camera.follow(this);
   }
 
   @override

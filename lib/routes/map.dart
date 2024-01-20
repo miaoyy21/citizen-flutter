@@ -75,6 +75,7 @@ class MapPage extends Component
 
     player = JoystickPlayer(joystick, 50, position: Vector2(150, 150));
 
+
     world.add(player);
     camera.viewport.add(joystick);
   }
