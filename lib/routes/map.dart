@@ -74,10 +74,18 @@ class MapPage extends Component
     );
 
     player = JoystickPlayer(joystick, 50, position: Vector2(150, 150));
-
-
     world.add(player);
     camera.viewport.add(joystick);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    // final reSize = (camera.viewport as FixedResolutionViewport).resolution;
+    // if (player.position.x >= )
+    // debugPrint("Fixed Resolution Viewport is $reSize");
+    // camera.moveTo(this);
   }
 
   @override

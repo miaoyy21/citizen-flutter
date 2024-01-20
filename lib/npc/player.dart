@@ -90,8 +90,6 @@ class JoystickPlayer extends SpriteComponent
     sprite = frames?[(onTime ~/ stepTime) % frames.length].sprite;
 
     position.add(joystick.relativeDelta * maxSpeed * dt);
-
-    game.camera.follow(this);
   }
 
   @override
