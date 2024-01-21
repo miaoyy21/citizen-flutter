@@ -71,11 +71,22 @@ class MapPage extends Component
       margin: const EdgeInsets.only(left: 32, bottom: 120),
     );
 
-    player = JoystickPlayer(joystick, 50, position: Vector2(150, 150));
+    player = JoystickPlayer(joystick, 150, position: Vector2(150, 150));
     world.add(player);
     camera.viewport.add(joystick);
 
-    // camera.setBounds(Rectangle.fromLTRB(-100, -100, 200, 200));
+    camera.follow(player);
+  }
+
+  @override
+  void update(double dt) {
+    if (joystick.isDragged) {
+      final reSize = (camera.viewport as FixedResolutionViewport).resolution;
+      debugPrint("World Size is $tileSize");
+      debugPrint("Viewport Size is $reSize");
+      debugPrint("Viewfinder Position is ${camera.viewfinder.position}");
+    }
+    // camera.stop();
     // camera.follow(player);
   }
 
@@ -84,7 +95,7 @@ class MapPage extends Component
 
   @override
   void onTapDown(TapDownEvent event) {
-    debugPrint("onTapDown =>>>> $tileName ===> ${event.toString()}");
+    debugPrint("onTapDown > $tileName > ${event.localPosition}");
     // if (tileName == "world.tmx") {
     //   game.router.pushReplacementNamed("map1");
     // } else if (tileName == "map1.tmx") {
