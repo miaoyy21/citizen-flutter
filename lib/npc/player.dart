@@ -1,7 +1,3 @@
-import 'dart:math';
-
-import 'package:flame/src/experimental/geometry/shapes/shape.dart';
-
 import '../index.dart';
 
 class JoystickPlayer extends SpriteComponent

@@ -1,5 +1,5 @@
 import '../index.dart';
-import 'camera.dart';
+import 'view.dart';
 
 class MapPage extends Component
     with TapCallbacks, HasGameReference<CitizenGame> {
@@ -10,11 +10,8 @@ class MapPage extends Component
 
   World get world => game.world;
 
-  CameraComponent get camera => game.camera;
-
-  late final JoystickPlayer player;
   late final JoystickComponent joystick;
-  late final CameraView view;
+  late final ViewComponent view;
 
   @override
   FutureOr<void> onLoad() async {
@@ -59,19 +56,15 @@ class MapPage extends Component
       margin: const EdgeInsets.only(left: 32, bottom: 120),
     );
 
-    player = JoystickPlayer(joystick, 150, position: Vector2(150, 150));
+    final player = JoystickPlayer(joystick, 100, position: Vector2(150, 150));
     world.add(player);
-    camera.viewport.add(joystick);
 
-    camera.viewfinder.anchor = Anchor.center;
-    view = CameraView(camera, player, tileSize);
-    view.refresh();
+    view = ViewComponent(player, tileSize);
+    world.add(view);
   }
 
   @override
-  void update(double dt) {
-    if (joystick.isDragged) view.refresh();
-  }
+  void update(double dt) {}
 
   @override
   bool containsLocalPoint(Vector2 point) => true;
