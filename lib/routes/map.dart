@@ -18,20 +18,6 @@ class MapPage extends Component
   FutureOr<void> onLoad() async {
     debugPrint("onLoad game.world.children.length => ${world.children.length}");
 
-    late Vector2 position = Vector2.zero();
-    final reSize = (camera.viewport as FixedResolutionViewport).resolution;
-
-    // 开始计算摄像机需要移动到的位置
-    if (tileSize.x > tileSize.y) {
-      position = Vector2(0, tileSize.y - reSize.y);
-    } else {
-      position = Vector2((tileSize.x - reSize.x) / 2, tileSize.y - reSize.y);
-    }
-
-    camera.viewfinder
-      ..anchor = Anchor.topLeft
-      ..position = position;
-
     final tiledComponent =
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
     world.add(tiledComponent);
@@ -75,19 +61,71 @@ class MapPage extends Component
     world.add(player);
     camera.viewport.add(joystick);
 
-    camera.follow(player);
+    camera.viewfinder.anchor = Anchor.center;
+    // camera.moveTo(Vector2(tileSize.x / 2, tileSize.y / 2));
   }
 
   @override
   void update(double dt) {
     if (joystick.isDragged) {
       final reSize = (camera.viewport as FixedResolutionViewport).resolution;
+
+      // final p0 = camera.viewfinder.position;
+      final p0 = player.position;
+
+      final x1 = tileSize.x / 2 - (tileSize.x - reSize.x) / 2;
+      final x2 = tileSize.x / 2 + (tileSize.x - reSize.x) / 2;
+      final y1 = tileSize.y / 2 - (tileSize.y - reSize.y) / 2;
+      final y2 = tileSize.y / 2 + (tileSize.y - reSize.y) / 2;
+      if (p0.x < x1 || p0.x > x2 || p0.y < y1 || p0.y > y2) {
+        if (p0.x < x1) {
+          if (p0.y < y1) {
+            camera.moveTo(Vector2(x1, y1));
+          } else if (p0.y >= y1 && p0.y <= y2) {
+            camera.moveTo(Vector2(x1, p0.y));
+          } else {
+            camera.moveTo(Vector2(x1, y2));
+          }
+        }
+
+        if (p0.x > x2) {
+          if (p0.y < y1) {
+            camera.moveTo(Vector2(x2, y1));
+          } else if (p0.y >= y1 && p0.y <= y2) {
+            camera.moveTo(Vector2(x2, p0.y));
+          } else {
+            camera.moveTo(Vector2(x2, y2));
+          }
+        }
+
+        if (p0.y < y1) {
+          if (p0.x < x1) {
+            camera.moveTo(Vector2(x1, y1));
+          } else if (p0.x >= x1 && p0.x <= x2) {
+            camera.moveTo(Vector2(p0.x, y1));
+          } else {
+            camera.moveTo(Vector2(x2, y1));
+          }
+        }
+
+        if (p0.y > y2) {
+          if (p0.x < x1) {
+            camera.moveTo(Vector2(x1, y2));
+          } else if (p0.x >= x1 && p0.x <= x2) {
+            camera.moveTo(Vector2(p0.x, y2));
+          } else {
+            camera.moveTo(Vector2(x2, y2));
+          }
+        }
+      } else {
+        camera.follow(player);
+      }
+
       debugPrint("World Size is $tileSize");
       debugPrint("Viewport Size is $reSize");
       debugPrint("Viewfinder Position is ${camera.viewfinder.position}");
+      debugPrint("Position P0 is $p0");
     }
-    // camera.stop();
-    // camera.follow(player);
   }
 
   @override
