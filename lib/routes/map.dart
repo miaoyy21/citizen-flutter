@@ -1,4 +1,5 @@
 import '../index.dart';
+import 'camera.dart';
 
 class MapPage extends Component
     with TapCallbacks, HasGameReference<CitizenGame> {
@@ -13,6 +14,7 @@ class MapPage extends Component
 
   late final JoystickPlayer player;
   late final JoystickComponent joystick;
+  late final CameraView view;
 
   @override
   FutureOr<void> onLoad() async {
@@ -62,70 +64,13 @@ class MapPage extends Component
     camera.viewport.add(joystick);
 
     camera.viewfinder.anchor = Anchor.center;
-    // camera.moveTo(Vector2(tileSize.x / 2, tileSize.y / 2));
+    view = CameraView(camera, player, tileSize);
+    view.refresh();
   }
 
   @override
   void update(double dt) {
-    if (joystick.isDragged) {
-      final reSize = (camera.viewport as FixedResolutionViewport).resolution;
-
-      // final p0 = camera.viewfinder.position;
-      final p0 = player.position;
-
-      final x1 = tileSize.x / 2 - (tileSize.x - reSize.x) / 2;
-      final x2 = tileSize.x / 2 + (tileSize.x - reSize.x) / 2;
-      final y1 = tileSize.y / 2 - (tileSize.y - reSize.y) / 2;
-      final y2 = tileSize.y / 2 + (tileSize.y - reSize.y) / 2;
-      if (p0.x < x1 || p0.x > x2 || p0.y < y1 || p0.y > y2) {
-        if (p0.x < x1) {
-          if (p0.y < y1) {
-            camera.moveTo(Vector2(x1, y1));
-          } else if (p0.y >= y1 && p0.y <= y2) {
-            camera.moveTo(Vector2(x1, p0.y));
-          } else {
-            camera.moveTo(Vector2(x1, y2));
-          }
-        }
-
-        if (p0.x > x2) {
-          if (p0.y < y1) {
-            camera.moveTo(Vector2(x2, y1));
-          } else if (p0.y >= y1 && p0.y <= y2) {
-            camera.moveTo(Vector2(x2, p0.y));
-          } else {
-            camera.moveTo(Vector2(x2, y2));
-          }
-        }
-
-        if (p0.y < y1) {
-          if (p0.x < x1) {
-            camera.moveTo(Vector2(x1, y1));
-          } else if (p0.x >= x1 && p0.x <= x2) {
-            camera.moveTo(Vector2(p0.x, y1));
-          } else {
-            camera.moveTo(Vector2(x2, y1));
-          }
-        }
-
-        if (p0.y > y2) {
-          if (p0.x < x1) {
-            camera.moveTo(Vector2(x1, y2));
-          } else if (p0.x >= x1 && p0.x <= x2) {
-            camera.moveTo(Vector2(p0.x, y2));
-          } else {
-            camera.moveTo(Vector2(x2, y2));
-          }
-        }
-      } else {
-        camera.follow(player);
-      }
-
-      debugPrint("World Size is $tileSize");
-      debugPrint("Viewport Size is $reSize");
-      debugPrint("Viewfinder Position is ${camera.viewfinder.position}");
-      debugPrint("Position P0 is $p0");
-    }
+    if (joystick.isDragged) view.refresh();
   }
 
   @override
