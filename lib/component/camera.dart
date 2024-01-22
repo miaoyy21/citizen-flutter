@@ -1,10 +1,10 @@
 import '../index.dart';
 
-class ViewComponent extends Component with HasGameReference<CitizenGame> {
+class PlayerCamera extends Component with HasGameReference<CitizenGame> {
   final JoystickPlayer player;
   final Vector2 tileSize;
 
-  ViewComponent(this.player, this.tileSize);
+  PlayerCamera(this.player, this.tileSize);
 
   CameraComponent get camera => game.camera;
 

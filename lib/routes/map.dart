@@ -1,5 +1,5 @@
 import '../index.dart';
-import 'view.dart';
+import '../component/camera.dart';
 
 class MapPage extends Component
     with TapCallbacks, HasGameReference<CitizenGame> {
@@ -10,9 +10,6 @@ class MapPage extends Component
 
   World get world => game.world;
 
-  late final JoystickComponent joystick;
-  late final ViewComponent view;
-
   @override
   FutureOr<void> onLoad() async {
     debugPrint("onLoad game.world.children.length => ${world.children.length}");
@@ -21,7 +18,7 @@ class MapPage extends Component
         await TiledComponent.load(tileName, Vector2.all(game.blockSize));
     world.add(tiledComponent);
 
-    final sNPC = <NPC>[
+    world.addAll(<NPC>[
       NPC(
           "1",
           "Adam",
@@ -38,13 +35,9 @@ class MapPage extends Component
           position: Vector2(100, 150),
           Direction.right,
           ["未来一定属于你", "社会需要你这样的人才"]),
-    ];
+    ]);
 
-    for (var npc in sNPC) {
-      world.add(npc);
-    }
-
-    joystick = JoystickComponent(
+    final joystick = JoystickComponent(
       knob: CircleComponent(
         radius: 24,
         paint: BasicPalette.black.withAlpha(128).paint(),
@@ -53,14 +46,14 @@ class MapPage extends Component
         radius: 64,
         paint: BasicPalette.white.withAlpha(64).paint(),
       ),
-      margin: const EdgeInsets.only(left: 32, bottom: 120),
+      margin: const EdgeInsets.only(left: 32, bottom: 128),
     );
 
     final player = JoystickPlayer(joystick, 100, position: Vector2(150, 150));
     world.add(player);
 
-    view = ViewComponent(player, tileSize);
-    world.add(view);
+    final camera = PlayerCamera(player, tileSize);
+    world.add(camera);
   }
 
   @override
