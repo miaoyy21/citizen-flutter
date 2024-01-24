@@ -75,12 +75,4 @@ class MapPage extends Component
     //   game.router.pushReplacementNamed("world");
     // }
   }
-
-  @override
-  void onRemove() {
-    world.removeAll(world.children);
-    debugPrint("onRemove =>>>> $tileName");
-
-    super.onRemove();
-  }
 }
