@@ -79,7 +79,7 @@ class MapPage extends Component
   @override
   void onRemove() {
     world.removeAll(world.children);
-    debugPrint("onRemove =>>> $tileName");
+    debugPrint("onRemove >>> $tileName");
 
     super.onRemove();
   }
