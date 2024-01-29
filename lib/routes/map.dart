@@ -1,5 +1,4 @@
 import '../index.dart';
-import '../component/camera.dart';
 
 class MapPage extends Component
     with TapCallbacks, HasGameReference<CitizenGame> {
