@@ -9,7 +9,7 @@ void main() async {
   runApp(GameWidget(game: CitizenGame()));
 }
 
-class CitizenGame extends FlameGame with HasCollisionDetection {
+class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   late final RouterComponent router;
   late final double blockSize = 32;
 
@@ -28,11 +28,11 @@ class CitizenGame extends FlameGame with HasCollisionDetection {
     add(
       router = RouterComponent(
         routes: {
-          'Stage1': Route(
+          'stage1': Route(
             maintainState: false,
             () => MapPage(
-              tileName: "world.tmx",
-              tileSize: Vector2(80 * blockSize, 50 * blockSize),
+              "stage1",
+              size: Vector2(80 * blockSize, 50 * blockSize),
             ),
           ),
           // 'level-selector': Route(LevelSelectorPage.new),
@@ -40,8 +40,43 @@ class CitizenGame extends FlameGame with HasCollisionDetection {
           // 'pause': PauseRoute(),
           // 'confirm-dialog': OverlayRoute.existing(),
         },
-        initialRoute: 'Stage1',
+        initialRoute: 'stage1',
       ),
     );
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+      RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    debugPrint("$event");
+
+    final key = findByKey(ComponentKey.named("stage1"));
+    debugPrint("Key is $key");
+
+    if (event is KeyDownEvent) {
+      debugPrint("KeyDownEvent");
+    } else if (event is KeyUpEvent) {
+      debugPrint("KeyUpEvent");
+    }
+
+    if (event.logicalKey == LogicalKeyboardKey.keyA) {
+      debugPrint("Key A Down");
+    }
+
+    // Avoiding repeat event as we are interested only in
+    // key up and key down event.
+    // if (event is! KeyRepeatEvent) {
+    //   if (event.logicalKey == LogicalKeyboardKey.keyA) {
+    //     _direction.x += isKeyDown ? -1 : 1;
+    //   } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
+    //     _direction.x += isKeyDown ? 1 : -1;
+    //   } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
+    //     _direction.y += isKeyDown ? -1 : 1;
+    //   } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
+    //     _direction.y += isKeyDown ? 1 : -1;
+    //   }
+    // }
+
+    return super.onKeyEvent(event, keysPressed);
   }
 }

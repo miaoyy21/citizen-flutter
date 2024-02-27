@@ -2,10 +2,11 @@ import '../index.dart';
 
 class MapPage extends Component
     with TapCallbacks, HasGameReference<CitizenGame> {
-  final String tileName;
-  final Vector2 tileSize;
+  final String name;
+  final Vector2 size;
 
-  MapPage({required this.tileName, required this.tileSize});
+  MapPage(this.name, {required this.size})
+      : super(key: ComponentKey.named(name));
 
   World get world => game.world;
 
@@ -17,10 +18,6 @@ class MapPage extends Component
     world.add(SpriteComponent.fromImage(await Flame.images.load("stage1.png"),
         anchor: Anchor.bottomLeft));
 
-    // final tiledComponent =
-    //     await TiledComponent.load(tileName, Vector2.all(game.blockSize));
-    // world.add(tiledComponent);
-    //
     final joystick = JoystickComponent(
       knob: CircleComponent(
         radius: 24,
@@ -36,7 +33,7 @@ class MapPage extends Component
     final player = JoystickPlayer(joystick, position: Vector2(32, -16 + 5));
     world.add(player);
 
-    final camera = PlayerCamera(player, tileSize);
+    final camera = PlayerCamera(player);
     world.add(camera);
   }
 
@@ -48,13 +45,13 @@ class MapPage extends Component
 
   @override
   void onTapDown(TapDownEvent event) {
-    debugPrint("onTapDown > $tileName > ${event.localPosition}");
+    // debugPrint("onTapDown > $tileName > ${event.localPosition}");
   }
 
   @override
   void onRemove() {
     world.removeAll(world.children);
-    debugPrint("onRemove >>> $tileName");
+    // debugPrint("onRemove >>> $tileName");
 
     super.onRemove();
   }

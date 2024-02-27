@@ -22,7 +22,7 @@ export 'package:flutter/material.dart'
         Animation,
         Image,
         Route;
-
+export 'package:flutter/services.dart';
 export 'main.dart' show CitizenGame;
 export 'routes/map.dart';
 export 'component/index.dart';
