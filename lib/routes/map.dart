@@ -11,31 +11,16 @@ class MapPage extends Component
 
   @override
   FutureOr<void> onLoad() async {
+    world.add(SpriteComponent.fromImage(await Flame.images.load("129.png"),
+        anchor: Anchor.bottomLeft));
     debugPrint("onLoad game.world.children.length => ${world.children.length}");
+    world.add(SpriteComponent.fromImage(await Flame.images.load("stage1.png"),
+        anchor: Anchor.bottomLeft));
 
-    final tiledComponent =
-        await TiledComponent.load(tileName, Vector2.all(game.blockSize));
-    world.add(tiledComponent);
-
-    world.addAll(<NPC>[
-      NPC(
-          "1",
-          "Adam",
-          "Adam",
-          size: Vector2(16, 32),
-          position: Vector2(325, 275),
-          Direction.left,
-          ["未来一定属于你", "社会需要你这样的人才"]),
-      NPC(
-          "2",
-          "Bob",
-          "Bob",
-          size: Vector2(16, 32),
-          position: Vector2(100, 150),
-          Direction.right,
-          ["未来一定属于你", "社会需要你这样的人才"]),
-    ]);
-
+    // final tiledComponent =
+    //     await TiledComponent.load(tileName, Vector2.all(game.blockSize));
+    // world.add(tiledComponent);
+    //
     final joystick = JoystickComponent(
       knob: CircleComponent(
         radius: 24,
@@ -48,7 +33,7 @@ class MapPage extends Component
       margin: const EdgeInsets.only(left: 32, bottom: 128),
     );
 
-    final player = JoystickPlayer(joystick, 100, position: Vector2(150, 150));
+    final player = JoystickPlayer(joystick, position: Vector2(32, -16 + 5));
     world.add(player);
 
     final camera = PlayerCamera(player, tileSize);
@@ -64,15 +49,6 @@ class MapPage extends Component
   @override
   void onTapDown(TapDownEvent event) {
     debugPrint("onTapDown > $tileName > ${event.localPosition}");
-    // if (tileName == "world.tmx") {
-    //   game.router.pushReplacementNamed("map1");
-    // } else if (tileName == "map1.tmx") {
-    //   game.router.pushReplacementNamed("map2");
-    // } else if (tileName == "map2.tmx") {
-    //   game.router.pushReplacementNamed("map3");
-    // } else {
-    //   game.router.pushReplacementNamed("world");
-    // }
   }
 
   @override

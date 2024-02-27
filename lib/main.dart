@@ -17,7 +17,7 @@ class CitizenGame extends FlameGame with HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              resolution: Vector2(20 * 32, 10 * 32),
+              resolution: Vector2(22.5 * 32, 16 * 32),
             ),
             viewfinder: Viewfinder(),
           ),
@@ -28,32 +28,11 @@ class CitizenGame extends FlameGame with HasCollisionDetection {
     add(
       router = RouterComponent(
         routes: {
-          'world': Route(
+          'Stage1': Route(
             maintainState: false,
             () => MapPage(
               tileName: "world.tmx",
-              tileSize: Vector2(25 * blockSize, 12 * blockSize),
-            ),
-          ),
-          'map1': Route(
-            maintainState: false,
-            () => MapPage(
-              tileName: "map1.tmx",
-              tileSize: Vector2(16 * blockSize, 16 * blockSize),
-            ),
-          ),
-          'map2': Route(
-            maintainState: false,
-            () => MapPage(
-              tileName: "map2.tmx",
-              tileSize: Vector2(16 * blockSize, 16 * blockSize),
-            ),
-          ),
-          'map3': Route(
-            maintainState: false,
-            () => MapPage(
-              tileName: "map3.tmx",
-              tileSize: Vector2(16 * blockSize, 17 * blockSize),
+              tileSize: Vector2(80 * blockSize, 50 * blockSize),
             ),
           ),
           // 'level-selector': Route(LevelSelectorPage.new),
@@ -61,7 +40,7 @@ class CitizenGame extends FlameGame with HasCollisionDetection {
           // 'pause': PauseRoute(),
           // 'confirm-dialog': OverlayRoute.existing(),
         },
-        initialRoute: 'world',
+        initialRoute: 'Stage1',
       ),
     );
   }
