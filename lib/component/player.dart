@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../index.dart';
 
 class Player extends SpriteComponent
@@ -28,18 +30,27 @@ class Player extends SpriteComponent
   late List<Sprite?> squatLeft;
   late List<Sprite?> squatRight;
 
+  // 手脚攻击
+  late List<Sprite?> handFootLeft;
+  late List<Sprite?> handFootRight;
+
   late double onTime = 0;
 
+  static const int designFPS = 12;
   List<Sprite?> frames = [];
 
   @override
   Future<void> onLoad() async {
+    final l4 = List.generate(4, (i) => i + 1);
     final l6 = List.generate(6, (i) => i + 1);
     final l12 = List.generate(12, (i) => i + 1);
+    final l57 = List.generate(57, (i) => i + 1); // 4个动作
     final idleFiles = l6.map((i) => "2001_$i.png").toList();
     final walkFiles = l6.map((i) => "2002_$i.png").toList();
     final runFiles = l6.map((i) => "2003_$i.png").toList();
+    final handFootFiles = l57.map((i) => "2004_$i.png").toList();
     final jumpFiles = l12.map((i) => "2005_$i.png").toList();
+    final squatFiles = l4.map((i) => "2006_$i.png").toList();
 
     idleLeft = (await Flame.images.loadAll(idleFiles))
         .map((img) => SpriteComponent.fromImage(img).sprite)
@@ -59,21 +70,29 @@ class Player extends SpriteComponent
     runRight = (await Flame.images.loadAll(runFiles))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
+    handFootLeft = (await Flame.images.loadAll(handFootFiles))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    handFootRight = (await Flame.images.loadAll(handFootFiles))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
     jumpLeft = (await Flame.images.loadAll(jumpFiles))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
     jumpRight = (await Flame.images.loadAll(jumpFiles))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-
-    final squat = await Flame.images.load("2006_2.png");
-    squatLeft = [SpriteComponent.fromImage(squat).sprite];
-    squatRight = [SpriteComponent.fromImage(squat).sprite];
+    squatLeft = (await Flame.images.loadAll(squatFiles.sublist(1, 2)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatRight = (await Flame.images.loadAll(squatFiles.sublist(1, 2)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
 
     // 初始帧为向右站立
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
-    frames = idleRight;
+    resetFrames(idleRight);
   }
 
   bool repeat = false;
@@ -82,7 +101,13 @@ class Player extends SpriteComponent
     repeat = false;
   }
 
-  action(AnimationEvent event, Direction newDirection) {
+  resetFrames(List<Sprite?> newFrames) {
+    frames.clear();
+    frames.addAll(newFrames);
+  }
+
+  // 按方向键产生的角色动作
+  arrowAnimation(AnimationEvent event, Direction newDirection) {
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       if (event == AnimationEvent.run) {
         if (animation != Animation.walkLeft &&
@@ -103,42 +128,94 @@ class Player extends SpriteComponent
     if (event == AnimationEvent.walk) {
       if (direction == Direction.left) {
         animation = Animation.walkLeft;
-        frames = walkLeft;
+        resetFrames(walkLeft);
       } else {
         animation = Animation.walkRight;
-        frames = walkRight;
+        resetFrames(walkRight);
       }
     } else if (event == AnimationEvent.run) {
       if (direction == Direction.left) {
         animation = Animation.runLeft;
-        frames = runLeft;
+        resetFrames(runLeft);
       } else {
         animation = Animation.runRight;
-        frames = runRight;
+        resetFrames(runRight);
       }
     } else if (event == AnimationEvent.jump) {
       if (direction == Direction.left) {
         animation = Animation.jumpLeft;
-        frames = jumpLeft;
+        resetFrames(jumpLeft);
       } else {
         animation = Animation.jumpRight;
-        frames = jumpRight;
+        resetFrames(jumpRight);
       }
     } else if (event == AnimationEvent.squat) {
       if (direction == Direction.left) {
         animation = Animation.squatLeft;
-        frames = squatLeft;
+        resetFrames(squatLeft);
       } else {
         animation = Animation.squatRight;
-        frames = squatRight;
+        resetFrames(squatRight);
       }
     }
+  }
+
+  // 按快捷键产生的角色动作，包括手拳、脚、投掷
+  shortcutSpecialEvent(ShortcutAnimationEvent event) {
+    if (animation != Animation.idleLeft && animation != Animation.idleRight) {
+      // 是否可以将跳跃改为跳跃用手或用脚攻击
+      if (animation == Animation.jumpLeft || animation == Animation.jumpRight) {
+        final index = (onTime * designFPS).floor();
+        if (index <= 5) {
+          // 随机1个动作
+          final List<Sprite?> switchFrames;
+          if (event == ShortcutAnimationEvent.hand) {
+            if (Random.secure().nextBool()) {
+              if (direction == Direction.left) {
+                switchFrames = handFootLeft.sublist(6, 13);
+              } else {
+                switchFrames = handFootRight.sublist(6, 13);
+              }
+            } else {
+              if (direction == Direction.left) {
+                switchFrames = handFootLeft.sublist(33, 43);
+              } else {
+                switchFrames = handFootRight.sublist(33, 43);
+              }
+            }
+          } else {
+            if (Random.secure().nextBool()) {
+              if (direction == Direction.left) {
+                switchFrames = handFootLeft.sublist(19, 27);
+              } else {
+                switchFrames = handFootRight.sublist(19, 27);
+              }
+            } else {
+              if (direction == Direction.left) {
+                switchFrames = handFootLeft.sublist(49, 57);
+              } else {
+                switchFrames = handFootRight.sublist(49, 57);
+              }
+            }
+          }
+
+          repeat = false;
+          animation = Animation.attack;
+          frames.removeRange(6, 12);
+          frames.addAll(switchFrames);
+        }
+      }
+
+      return;
+    }
+
+    // 站立攻击
   }
 
   @override
   void update(double dt) {
     onTime = onTime + dt;
-    final index = (onTime * 12).floor();
+    final index = (onTime * designFPS).floor();
     sprite = frames[index];
 
     // 如果是最后一帧，并且不再重复（动作已完成），切换到空闲状态
@@ -147,88 +224,15 @@ class Player extends SpriteComponent
       if (!repeat) {
         if (direction == Direction.left) {
           animation = Animation.idleLeft;
-          frames = idleLeft;
+          resetFrames(idleLeft);
         } else if (direction == Direction.right) {
           animation = Animation.idleRight;
-          frames = idleRight;
+          resetFrames(idleRight);
         }
       }
     }
 
-    // if (index + 1 == frames.length&&) {
-    //   onTime = 0;
-    //   if (direction == Direction.left) {
-    //     animation = Animation.idleLeft;
-    //
-    //     frames.clear();
-    //     frames.addAll(idleLeft);
-    //   } else {
-    //     animation = Animation.idleRight;
-    //
-    //     frames.clear();
-    //     frames.addAll(idleRight);
-    //   }
-    // }
-
-    // final direction_ = joystick.direction;
-    // if (direction_ == direction) {
-    //   onTime = onTime + dt;
-    // } else {
-    //   onTime = 0;
-    // }
-    //
-    // // 移动速度及使用的动画帧
-    // int speed = 0;
-    // List<Sprite?> frames;
-    // switch (joystick.direction) {
-    //   case JoystickDirection.left:
-    //     speed = -50;
-    //     frames = walkLeft;
-    //     break;
-    //   case JoystickDirection.upLeft:
-    //     speed = -75;
-    //     frames = jump;
-    //     break;
-    //   case JoystickDirection.downLeft:
-    //     frames = defenseLeft;
-    //     break;
-    //   case JoystickDirection.up:
-    //     frames = jump;
-    //     break;
-    //   case JoystickDirection.right:
-    //     speed = 50;
-    //     frames = walkRight;
-    //     break;
-    //   case JoystickDirection.upRight:
-    //     speed = 75;
-    //     frames = jump;
-    //     break;
-    //   case JoystickDirection.downRight:
-    //     frames = defenseRight;
-    //     break;
-    //   case JoystickDirection.down:
-    //     frames = squat;
-    //     break;
-    //   default:
-    //     frames = idle;
-    // }
-    //
-    // // 超过3秒行走，转为跑
-    // if (onTime > 3) {
-    //   if (direction_ == JoystickDirection.left) {
-    //     speed = -100;
-    //     frames = runLeft;
-    //   } else if (direction_ == JoystickDirection.right) {
-    //     speed = 100;
-    //     frames = runRight;
-    //   }
-    // }
-    //
-    // sprite = frames[(onTime ~/ 0.08) % frames.length];
-    // direction = direction_;
-    //
-    // // 水平方向移动
-    // position.add(Vector2(speed * dt, 0));
+    // 水平移动
   }
 
   @override

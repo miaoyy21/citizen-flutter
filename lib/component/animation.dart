@@ -16,4 +16,8 @@ enum Animation {
   jumpRight, // 向右，原地向上跳跃
   squatLeft, // 向左，原地蹲下
   squatRight, // 向右，原地蹲下
+
+  attack,
 }
+
+enum ShortcutAnimationEvent { hand, foot }

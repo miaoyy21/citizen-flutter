@@ -19,7 +19,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              resolution: Vector2(22.5 * 32, 16 * 32)..scale(2),
+              resolution: Vector2(22.5 * 32, 16 * 32),
             ),
             viewfinder: Viewfinder(),
           ),
@@ -61,25 +61,33 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
         keyStore.add(event, currentTime());
         if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
           debugPrint("向下蹲");
-          player.action(AnimationEvent.squat, Direction.repeat);
+          player.arrowAnimation(AnimationEvent.squat, Direction.repeat);
         } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左奔跑");
-          player.action(AnimationEvent.run, Direction.left);
+          player.arrowAnimation(AnimationEvent.run, Direction.left);
         } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowRight)) {
           debugPrint("向右奔跑");
-          player.action(AnimationEvent.run, Direction.right);
+          player.arrowAnimation(AnimationEvent.run, Direction.right);
         } else if (keyStore.isKey(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左走路");
-          player.action(AnimationEvent.walk, Direction.left);
+          player.arrowAnimation(AnimationEvent.walk, Direction.left);
         } else if (keyStore.isKey(LogicalKeyboardKey.arrowRight)) {
           debugPrint("向右走路");
-          player.action(AnimationEvent.walk, Direction.right);
+          player.arrowAnimation(AnimationEvent.walk, Direction.right);
         } else if (keyStore.isKey(LogicalKeyboardKey.arrowUp)) {
           debugPrint("向上跳");
-          player.action(AnimationEvent.jump, Direction.repeat);
+          player.arrowAnimation(AnimationEvent.jump, Direction.repeat);
+        } else {
+          if (keyStore.isKey(LogicalKeyboardKey.digit1)) {
+            debugPrint("使用【手】攻击");
+            player.shortcutSpecialEvent(ShortcutAnimationEvent.hand);
+          } else if (keyStore.isKey(LogicalKeyboardKey.digit2)) {
+            debugPrint("使用【脚】攻击");
+            player.shortcutSpecialEvent(ShortcutAnimationEvent.foot);
+          }
         }
       } else if (event is RawKeyUpEvent) {
-        debugPrint("完成动作");
+        debugPrint("<已完成>");
         player.finished();
       }
     }
