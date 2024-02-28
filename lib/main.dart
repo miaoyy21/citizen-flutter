@@ -52,19 +52,13 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   KeyEventResult onKeyEvent(
       RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    // 按键
-    // debugPrint("$event");
-
-    // final key = findByKey(ComponentKey.named("player"));
-    // debugPrint("Key is $key，${currentTime()}");
+    final player = findByKey(ComponentKey.named("player"));
 
     // 当人面向右
     // 右右   快速向前
     // 左左   快速后退
 
     if (keyStore.add(event, currentTime())) {
-      debugPrint(
-          "keyStore.keys Size is ${keyStore.keys.length} with ${keyStore.keys.map((k) => "${k.repeat} , ${k.key} , ${k.time}")} && ");
       if (keyStore.isTwice(LogicalKeyboardKey.arrowRight)) {
         debugPrint("快速向前跳");
       }
