@@ -10,6 +10,9 @@ class Player extends SpriteComponent
   late Direction direction = Direction.right;
   late Animation animation = Animation.idleRight;
 
+  static const int speed = 100;
+  static const int designFPS = 12;
+
   // 空闲
   late List<Sprite?> idleLeft;
   late List<Sprite?> idleRight;
@@ -43,8 +46,7 @@ class Player extends SpriteComponent
   late List<Sprite?> jumpFoot2Right;
 
   late double onTime = 0;
-
-  static const int designFPS = 12;
+  late double speedRate = 0;
   List<Sprite?> frames = [];
 
   @override
@@ -52,7 +54,7 @@ class Player extends SpriteComponent
     final s8001 =
         List.generate(41, (i) => i + 1).map((i) => "8001_$i.png").toList();
     final s9101 =
-        List.generate(12, (i) => i + 1).map((i) => "9101_$i.png").toList();
+        List.generate(11, (i) => i + 1).map((i) => "9101_$i.png").toList();
     final s9201 =
         List.generate(6, (i) => i + 1).map((i) => "9201_$i.png").toList();
     final s9301 =
@@ -64,10 +66,10 @@ class Player extends SpriteComponent
     idleRight = (await Flame.images.loadAll(s9101.sublist(0, 6)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    walkLeft = (await Flame.images.loadAll(s9101.sublist(6, 12)))
+    walkLeft = (await Flame.images.loadAll(s9101.sublist(6, 11)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    walkRight = (await Flame.images.loadAll(s9101.sublist(6, 12)))
+    walkRight = (await Flame.images.loadAll(s9101.sublist(6, 11)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
     runLeft = (await Flame.images.loadAll(s9201))
@@ -154,21 +156,26 @@ class Player extends SpriteComponent
     repeat = true;
     if (event == AnimationEvent.walk) {
       if (direction == Direction.left) {
+        speedRate = -1.0;
         animation = Animation.walkLeft;
         resetFrames(walkLeft);
       } else {
+        speedRate = 1.0;
         animation = Animation.walkRight;
         resetFrames(walkRight);
       }
     } else if (event == AnimationEvent.run) {
       if (direction == Direction.left) {
+        speedRate = -2.0;
         animation = Animation.runLeft;
         resetFrames(runLeft);
       } else {
+        speedRate = 2.0;
         animation = Animation.runRight;
         resetFrames(runRight);
       }
     } else if (event == AnimationEvent.jump) {
+      speedRate = 0;
       if (direction == Direction.left) {
         animation = Animation.jumpLeft;
         resetFrames(jumpLeft);
@@ -177,6 +184,7 @@ class Player extends SpriteComponent
         resetFrames(jumpRight);
       }
     } else if (event == AnimationEvent.squat) {
+      speedRate = 0;
       if (direction == Direction.left) {
         animation = Animation.squatLeft;
         resetFrames(squatLeft);
@@ -189,6 +197,7 @@ class Player extends SpriteComponent
 
   // 按快捷键产生的角色动作，包括手拳、脚、投掷
   shortcutSpecialEvent(ShortcutAnimationEvent event) {
+    speedRate = 0;
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       // 是否可以将跳跃改为跳跃用手或用脚攻击
       if (animation == Animation.jumpLeft || animation == Animation.jumpRight) {
@@ -249,6 +258,7 @@ class Player extends SpriteComponent
     if (index + 1 == frames.length) {
       onTime = 0;
       if (!repeat) {
+        speedRate = 0;
         if (direction == Direction.left) {
           animation = Animation.idleLeft;
           resetFrames(idleLeft);
@@ -260,6 +270,7 @@ class Player extends SpriteComponent
     }
 
     // 水平移动
+    position.add(Vector2(dt * 100 * speedRate, 0));
   }
 
   @override
