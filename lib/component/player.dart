@@ -30,9 +30,17 @@ class Player extends SpriteComponent
   late List<Sprite?> squatLeft;
   late List<Sprite?> squatRight;
 
-  // 手脚攻击
-  late List<Sprite?> handFootLeft;
-  late List<Sprite?> handFootRight;
+  // 跳起手攻击
+  late List<Sprite?> jumpHand1Left;
+  late List<Sprite?> jumpHand1Right;
+  late List<Sprite?> jumpHand2Left;
+  late List<Sprite?> jumpHand2Right;
+
+  // 跳起脚攻击
+  late List<Sprite?> jumpFoot1Left;
+  late List<Sprite?> jumpFoot1Right;
+  late List<Sprite?> jumpFoot2Left;
+  late List<Sprite?> jumpFoot2Right;
 
   late double onTime = 0;
 
@@ -41,51 +49,70 @@ class Player extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    final l4 = List.generate(4, (i) => i + 1);
-    final l6 = List.generate(6, (i) => i + 1);
-    final l12 = List.generate(12, (i) => i + 1);
-    final l57 = List.generate(57, (i) => i + 1); // 4个动作
-    final idleFiles = l6.map((i) => "2001_$i.png").toList();
-    final walkFiles = l6.map((i) => "2002_$i.png").toList();
-    final runFiles = l6.map((i) => "2003_$i.png").toList();
-    final handFootFiles = l57.map((i) => "2004_$i.png").toList();
-    final jumpFiles = l12.map((i) => "2005_$i.png").toList();
-    final squatFiles = l4.map((i) => "2006_$i.png").toList();
+    final s8001 =
+        List.generate(41, (i) => i + 1).map((i) => "8001_$i.png").toList();
+    final s9101 =
+        List.generate(12, (i) => i + 1).map((i) => "9101_$i.png").toList();
+    final s9201 =
+        List.generate(6, (i) => i + 1).map((i) => "9201_$i.png").toList();
+    final s9301 =
+        List.generate(2, (i) => i + 1).map((i) => "9301_$i.png").toList();
 
-    idleLeft = (await Flame.images.loadAll(idleFiles))
+    idleLeft = (await Flame.images.loadAll(s9101.sublist(0, 6)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    idleRight = (await Flame.images.loadAll(idleFiles))
+    idleRight = (await Flame.images.loadAll(s9101.sublist(0, 6)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    walkLeft = (await Flame.images.loadAll(walkFiles))
+    walkLeft = (await Flame.images.loadAll(s9101.sublist(6, 12)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    walkRight = (await Flame.images.loadAll(walkFiles))
+    walkRight = (await Flame.images.loadAll(s9101.sublist(6, 12)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    runLeft = (await Flame.images.loadAll(runFiles))
+    runLeft = (await Flame.images.loadAll(s9201))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    runRight = (await Flame.images.loadAll(runFiles))
+    runRight = (await Flame.images.loadAll(s9201))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    handFootLeft = (await Flame.images.loadAll(handFootFiles))
+
+    jumpHand1Left = (await Flame.images.loadAll(s8001.sublist(10, 17)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    handFootRight = (await Flame.images.loadAll(handFootFiles))
+    jumpHand1Right = (await Flame.images.loadAll(s8001.sublist(10, 17)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    jumpLeft = (await Flame.images.loadAll(jumpFiles))
+    jumpHand2Left = (await Flame.images.loadAll(s8001.sublist(25, 34)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    jumpRight = (await Flame.images.loadAll(jumpFiles))
+    jumpHand2Right = (await Flame.images.loadAll(s8001.sublist(25, 34)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatLeft = (await Flame.images.loadAll(squatFiles.sublist(1, 2)))
+
+    jumpFoot1Left = (await Flame.images.loadAll(s8001.sublist(17, 25)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatRight = (await Flame.images.loadAll(squatFiles.sublist(1, 2)))
+    jumpFoot1Right = (await Flame.images.loadAll(s8001.sublist(17, 25)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    jumpFoot2Left = (await Flame.images.loadAll(s8001.sublist(34, 41)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    jumpFoot2Right = (await Flame.images.loadAll(s8001.sublist(34, 41)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+
+    jumpLeft = (await Flame.images.loadAll(s8001.sublist(0, 10)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    jumpRight = (await Flame.images.loadAll(s8001.sublist(0, 10)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatLeft = (await Flame.images.loadAll(s9301.sublist(0, 1)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatRight = (await Flame.images.loadAll(s9301.sublist(1, 2)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
@@ -166,42 +193,42 @@ class Player extends SpriteComponent
       // 是否可以将跳跃改为跳跃用手或用脚攻击
       if (animation == Animation.jumpLeft || animation == Animation.jumpRight) {
         final index = (onTime * designFPS).floor();
-        if (index <= 5) {
+        if (index <= 4) {
           // 随机1个动作
           final List<Sprite?> switchFrames;
           if (event == ShortcutAnimationEvent.hand) {
             if (Random.secure().nextBool()) {
               if (direction == Direction.left) {
-                switchFrames = handFootLeft.sublist(6, 13);
+                switchFrames = jumpHand1Left;
               } else {
-                switchFrames = handFootRight.sublist(6, 13);
+                switchFrames = jumpHand1Right;
               }
             } else {
               if (direction == Direction.left) {
-                switchFrames = handFootLeft.sublist(33, 43);
+                switchFrames = jumpHand2Left;
               } else {
-                switchFrames = handFootRight.sublist(33, 43);
+                switchFrames = jumpHand2Right;
               }
             }
           } else {
             if (Random.secure().nextBool()) {
               if (direction == Direction.left) {
-                switchFrames = handFootLeft.sublist(19, 27);
+                switchFrames = jumpFoot1Left;
               } else {
-                switchFrames = handFootRight.sublist(19, 27);
+                switchFrames = jumpFoot1Right;
               }
             } else {
               if (direction == Direction.left) {
-                switchFrames = handFootLeft.sublist(49, 57);
+                switchFrames = jumpFoot2Left;
               } else {
-                switchFrames = handFootRight.sublist(49, 57);
+                switchFrames = jumpFoot2Right;
               }
             }
           }
 
           repeat = false;
           animation = Animation.attack;
-          frames.removeRange(6, 12);
+          frames.removeRange(5, 10);
           frames.addAll(switchFrames);
         }
       }
