@@ -16,19 +16,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     world.add(SpriteComponent.fromImage(await Flame.images.load("stage1.png"),
         anchor: Anchor.bottomLeft));
 
-    final joystick = JoystickComponent(
-      knob: CircleComponent(
-        radius: 24,
-        paint: BasicPalette.black.withAlpha(128).paint(),
-      ),
-      background: CircleComponent(
-        radius: 64,
-        paint: BasicPalette.white.withAlpha(64).paint(),
-      ),
-      margin: const EdgeInsets.only(left: 32, bottom: 128),
-    );
-
-    final player = JoystickPlayer(joystick, position: Vector2(32, -16 + 5));
+    final player = Player(position: Vector2(32, -16 + 5));
     world.add(player);
 
     final camera = PlayerCamera(player);

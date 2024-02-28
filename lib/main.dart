@@ -27,6 +27,8 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
 
   @override
   FutureOr<void> onLoad() async {
+    debugMode = true;
+
     add(
       router = RouterComponent(
         routes: {
@@ -52,27 +54,29 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   KeyEventResult onKeyEvent(
       RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final player = findByKey(ComponentKey.named("player"));
+    final player = findByKey<Player>(ComponentKey.named("player"));
 
-    // 当人面向右
-    // 右右   快速向前
-    // 左左   快速后退
-
-    if (keyStore.add(event, currentTime())) {
-      if (keyStore.isTwice(LogicalKeyboardKey.arrowRight)) {
-        debugPrint("快速向前跳");
-      }
-
-      if (keyStore.isTwice(LogicalKeyboardKey.arrowLeft)) {
-        debugPrint("快速向后跳");
-      }
-
-      if (keyStore.isRepeat(LogicalKeyboardKey.arrowRight)) {
-        debugPrint("向前奔跑");
-      }
-
-      if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
-        debugPrint("向后奔跑");
+    if (player != null) {
+      if (event is RawKeyDownEvent) {
+        keyStore.add(event, currentTime());
+        if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
+          debugPrint("向左奔跑");
+          player.action(AnimationEvent.run, Direction.left);
+        } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowRight)) {
+          debugPrint("向右奔跑");
+          player.action(AnimationEvent.run, Direction.right);
+        } else if (keyStore.isKey(LogicalKeyboardKey.arrowLeft)) {
+          debugPrint("向左走路");
+          player.action(AnimationEvent.walk, Direction.left);
+        } else if (keyStore.isKey(LogicalKeyboardKey.arrowRight)) {
+          debugPrint("向右走路");
+          player.action(AnimationEvent.walk, Direction.right);
+        } else if (keyStore.isKey(LogicalKeyboardKey.arrowUp)) {
+          debugPrint("向上跳");
+          player.action(AnimationEvent.jump, Direction.repeat);
+        }
+      } else if (event is RawKeyUpEvent) {
+        player.finished();
       }
     }
 

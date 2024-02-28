@@ -1,7 +1,7 @@
 import '../index.dart';
 
 class PlayerCamera extends Component with HasGameReference<CitizenGame> {
-  final JoystickPlayer player;
+  final Player player;
 
   PlayerCamera(this.player);
 
@@ -9,8 +9,6 @@ class PlayerCamera extends Component with HasGameReference<CitizenGame> {
 
   @override
   FutureOr<void> onLoad() {
-    camera.viewport.add(player.joystick);
-
     camera.viewfinder.anchor = Anchor.bottomLeft;
     camera.follow(player);
   }
