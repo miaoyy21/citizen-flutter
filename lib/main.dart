@@ -19,7 +19,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              resolution: Vector2(22.5 * 32, 16 * 32),
+              resolution: Vector2(22.5 * 32, 16 * 32)..scale(2),
             ),
             viewfinder: Viewfinder(),
           ),
@@ -59,7 +59,10 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     if (player != null) {
       if (event is RawKeyDownEvent) {
         keyStore.add(event, currentTime());
-        if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
+        if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
+          debugPrint("向下蹲");
+          player.action(AnimationEvent.squat, Direction.repeat);
+        } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左奔跑");
           player.action(AnimationEvent.run, Direction.left);
         } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowRight)) {
@@ -76,6 +79,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
           player.action(AnimationEvent.jump, Direction.repeat);
         }
       } else if (event is RawKeyUpEvent) {
+        debugPrint("完成动作");
         player.finished();
       }
     }

@@ -8,17 +8,25 @@ class Player extends SpriteComponent
   late Direction direction = Direction.right;
   late Animation animation = Animation.idleRight;
 
+  // 空闲
   late List<Sprite?> idleLeft;
   late List<Sprite?> idleRight;
 
+  // 走路
   late List<Sprite?> walkLeft;
   late List<Sprite?> walkRight;
 
+  // 奔跑
   late List<Sprite?> runLeft;
   late List<Sprite?> runRight;
 
+  // 跳跃
   late List<Sprite?> jumpLeft;
   late List<Sprite?> jumpRight;
+
+  // 蹲
+  late List<Sprite?> squatLeft;
+  late List<Sprite?> squatRight;
 
   late double onTime = 0;
 
@@ -57,6 +65,10 @@ class Player extends SpriteComponent
     jumpRight = (await Flame.images.loadAll(jumpFiles))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
+
+    final squat = await Flame.images.load("2006_2.png");
+    squatLeft = [SpriteComponent.fromImage(squat).sprite];
+    squatRight = [SpriteComponent.fromImage(squat).sprite];
 
     // 初始帧为向右站立
     final empty = await Flame.images.load("empty.png");
@@ -112,6 +124,14 @@ class Player extends SpriteComponent
         animation = Animation.jumpRight;
         frames = jumpRight;
       }
+    } else if (event == AnimationEvent.squat) {
+      if (direction == Direction.left) {
+        animation = Animation.squatLeft;
+        frames = squatLeft;
+      } else {
+        animation = Animation.squatRight;
+        frames = squatRight;
+      }
     }
   }
 
@@ -121,10 +141,9 @@ class Player extends SpriteComponent
     final index = (onTime * 12).floor();
     sprite = frames[index];
 
-    // 是否是最后1帧
+    // 如果是最后一帧，并且不再重复（动作已完成），切换到空闲状态
     if (index + 1 == frames.length) {
       onTime = 0;
-
       if (!repeat) {
         if (direction == Direction.left) {
           animation = Animation.idleLeft;
