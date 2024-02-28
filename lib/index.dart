@@ -24,5 +24,5 @@ export 'package:flutter/material.dart'
         Route;
 export 'package:flutter/services.dart';
 export 'main.dart' show CitizenGame;
-export 'routes/map.dart';
+export 'routes/stage.dart';
 export 'component/index.dart';

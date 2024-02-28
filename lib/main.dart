@@ -1,3 +1,5 @@
+import 'package:citizen/skill/index.dart';
+
 import 'index.dart';
 
 void main() async {
@@ -30,7 +32,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
         routes: {
           'stage1': Route(
             maintainState: false,
-            () => MapPage(
+            () => Stage(
               "stage1",
               size: Vector2(80 * blockSize, 50 * blockSize),
             ),
@@ -45,37 +47,40 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     );
   }
 
+  final KeyStore keyStore = KeyStore();
+
   @override
   KeyEventResult onKeyEvent(
       RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    debugPrint("$event");
+    // 按键
+    // debugPrint("$event");
 
-    final key = findByKey(ComponentKey.named("stage1"));
-    debugPrint("Key is $key");
+    // final key = findByKey(ComponentKey.named("player"));
+    // debugPrint("Key is $key，${currentTime()}");
 
-    if (event is KeyDownEvent) {
-      debugPrint("KeyDownEvent");
-    } else if (event is KeyUpEvent) {
-      debugPrint("KeyUpEvent");
+    // 当人面向右
+    // 右右   快速向前
+    // 左左   快速后退
+
+    if (keyStore.add(event, currentTime())) {
+      debugPrint(
+          "keyStore.keys Size is ${keyStore.keys.length} with ${keyStore.keys.map((k) => "${k.repeat} , ${k.key} , ${k.time}")} && ");
+      if (keyStore.isTwice(LogicalKeyboardKey.arrowRight)) {
+        debugPrint("快速向前跳");
+      }
+
+      if (keyStore.isTwice(LogicalKeyboardKey.arrowLeft)) {
+        debugPrint("快速向后跳");
+      }
+
+      if (keyStore.isRepeat(LogicalKeyboardKey.arrowRight)) {
+        debugPrint("向前奔跑");
+      }
+
+      if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
+        debugPrint("向后奔跑");
+      }
     }
-
-    if (event.logicalKey == LogicalKeyboardKey.keyA) {
-      debugPrint("Key A Down");
-    }
-
-    // Avoiding repeat event as we are interested only in
-    // key up and key down event.
-    // if (event is! KeyRepeatEvent) {
-    //   if (event.logicalKey == LogicalKeyboardKey.keyA) {
-    //     _direction.x += isKeyDown ? -1 : 1;
-    //   } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
-    //     _direction.x += isKeyDown ? 1 : -1;
-    //   } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
-    //     _direction.y += isKeyDown ? -1 : 1;
-    //   } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
-    //     _direction.y += isKeyDown ? 1 : -1;
-    //   }
-    // }
 
     return super.onKeyEvent(event, keysPressed);
   }

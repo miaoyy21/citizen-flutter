@@ -7,7 +7,7 @@ class JoystickPlayer extends SpriteComponent
   final JoystickComponent joystick;
 
   JoystickPlayer(this.joystick, {super.position})
-      : super(anchor: Anchor.bottomLeft);
+      : super(anchor: Anchor.bottomLeft, key: ComponentKey.named("player"));
 
   late List<Sprite?> idle;
   late List<Sprite?> walkLeft;

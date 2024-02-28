@@ -1,12 +1,10 @@
 import '../index.dart';
 
-class MapPage extends Component
-    with TapCallbacks, HasGameReference<CitizenGame> {
+class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
   final String name;
   final Vector2 size;
 
-  MapPage(this.name, {required this.size})
-      : super(key: ComponentKey.named(name));
+  Stage(this.name, {required this.size}) : super(key: ComponentKey.named(name));
 
   World get world => game.world;
 
