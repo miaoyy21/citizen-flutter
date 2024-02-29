@@ -154,7 +154,7 @@ class Player extends SpriteComponent
         if (animation != Animation.runLeft && animation != Animation.runRight) {
           return;
         }
-      } else if (event == AnimationEvent.squatDown) {
+      } else if (event == AnimationEvent.squat) {
         // 允许由跑转为蹲
         if (animation != Animation.runLeft && animation != Animation.runRight) {
           return;
@@ -199,14 +199,14 @@ class Player extends SpriteComponent
         animation = Animation.jumpRight;
         resetFrames(jumpRight);
       }
-    } else if (event == AnimationEvent.squatDown) {
+    } else if (event == AnimationEvent.squat) {
       speed = 0;
       debugPrint("正在向下蹲00000");
       if (direction == Direction.left) {
-        animation = Animation.squattingLeft;
+        animation = Animation.squatDownLeft;
         resetFrames(squatLeft);
       } else {
-        animation = Animation.squattingRight;
+        animation = Animation.squatDownRight;
         resetFrames(squatRight);
       }
     }
@@ -273,18 +273,18 @@ class Player extends SpriteComponent
     // 如果是最后一帧，并且不再重复（动作已完成），切换到空闲状态
     if (index + 1 == frames.length) {
       onTime = 0;
-      if (animation == Animation.squattingLeft) {
+      if (animation == Animation.squatDownLeft) {
         animation = Animation.squatLeft;
         resetFrames(squatLeft.getRange(1, 2).toList());
-      } else if (animation == Animation.squattingRight) {
+      } else if (animation == Animation.squatDownRight) {
         animation = Animation.squatRight;
         resetFrames(squatRight.getRange(1, 2).toList());
       } else if (!repeat) {
         if (animation == Animation.squatLeft) {
-          animation = Animation.squattedLeft;
+          animation = Animation.squatUpLeft;
           resetFrames(squatLeft..reverse);
         } else if (animation == Animation.squatRight) {
-          animation = Animation.squattedRight;
+          animation = Animation.squatUpRight;
           resetFrames(squatRight..reverse);
         } else {
           speed = 0;

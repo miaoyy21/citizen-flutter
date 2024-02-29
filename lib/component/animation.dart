@@ -2,7 +2,7 @@
 enum Direction { left, right, repeat } // repeat 重复上一次方向
 
 // 键盘事件
-enum AnimationEvent { walk, run, jump, squatDown }
+enum AnimationEvent { walk, run, jump, squat }
 
 // 动作
 enum Animation {
@@ -15,12 +15,12 @@ enum Animation {
   jumpLeft, // 向左，原地向上跳跃
   jumpRight, // 向右，原地向上跳跃
 
-  squattingLeft, // 向左，正在向下蹲
-  squattingRight, // 向右，正在向下蹲
+  squatDownLeft, // 向左，正在向下蹲
+  squatDownRight, // 向右，正在向下蹲
   squatLeft, // 向左，保持原地蹲下
   squatRight, // 向右，保持原地蹲下
-  squattedLeft, // 向左，正在站起来
-  squattedRight, // 向右，正在站起来
+  squatUpLeft, // 向左，正在站起来
+  squatUpRight, // 向右，正在站起来
 
   attack,
 }
