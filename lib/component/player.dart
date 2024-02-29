@@ -62,8 +62,6 @@ class Player extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    await AnimationStore().load();
-
     final s6001 =
         List.generate(20, (i) => i + 1).map((i) => "6001_$i.png").toList();
     final s8001 =
