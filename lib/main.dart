@@ -63,10 +63,10 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
         if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
           debugPrint("向下蹲");
           player.arrowAnimation(AnimationEvent.squat, Direction.repeat, 0);
-        } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
+        } else if (keyStore.isLastRepeat(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左奔跑");
           player.arrowAnimation(AnimationEvent.run, Direction.left, -200);
-        } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowRight)) {
+        } else if (keyStore.isLastRepeat(LogicalKeyboardKey.arrowRight)) {
           debugPrint("向右奔跑");
           player.arrowAnimation(AnimationEvent.run, Direction.right, 200);
         } else if (keyStore.isKey(LogicalKeyboardKey.arrowLeft)) {
@@ -76,13 +76,12 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
           debugPrint("向右走路");
           player.arrowAnimation(AnimationEvent.walk, Direction.right, 100);
         } else {
-          debugPrint(
-              "${keyStore.keys.map((e) => "${e.key.debugName} ${e.repeat}")}");
-          final double newSpeed = keyStore.isSpeed(LogicalKeyboardKey.arrowLeft)
-              ? -200
-              : keyStore.isSpeed(LogicalKeyboardKey.arrowRight)
-                  ? 200
-                  : 0;
+          final double newSpeed =
+              keyStore.isAnyRepeat(LogicalKeyboardKey.arrowLeft)
+                  ? -200
+                  : keyStore.isAnyRepeat(LogicalKeyboardKey.arrowRight)
+                      ? 200
+                      : 0;
 
           if (keyStore.isKey(LogicalKeyboardKey.arrowUp)) {
             debugPrint("向上跳");

@@ -49,19 +49,18 @@ class KeyStore {
   }
 
   // 是否连续按键不放【优先级中等】
-  bool isRepeat(LogicalKeyboardKey key) {
+  bool isLastRepeat(LogicalKeyboardKey key) {
     if (keys.isEmpty) return false;
 
     return keys.last.key == key && keys.last.repeat;
   }
 
   // 是否连续按键不放【优先级中等】
-  bool isSpeed(LogicalKeyboardKey key) {
+  bool isAnyRepeat(LogicalKeyboardKey key) {
     if (keys.isEmpty) return false;
 
     return keys.any((ele) => ele.key == key && ele.repeat);
   }
-
 
   // 是否连续按下2次按键【优先级最高】
   bool isTwice(LogicalKeyboardKey key) {

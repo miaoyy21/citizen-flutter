@@ -30,21 +30,33 @@ class Player extends SpriteComponent
   late List<Sprite?> jumpLeft;
   late List<Sprite?> jumpRight;
 
-  // 蹲下
-  late List<Sprite?> squatLeft;
-  late List<Sprite?> squatRight;
-
-  // 跳起手攻击
+  // 跳跃用手攻击
   late List<Sprite?> jumpHand1Left;
   late List<Sprite?> jumpHand1Right;
   late List<Sprite?> jumpHand2Left;
   late List<Sprite?> jumpHand2Right;
 
-  // 跳起脚攻击
+  // 跳跃用脚攻击
   late List<Sprite?> jumpFoot1Left;
   late List<Sprite?> jumpFoot1Right;
   late List<Sprite?> jumpFoot2Left;
   late List<Sprite?> jumpFoot2Right;
+
+  // 蹲下
+  late List<Sprite?> squatLeft;
+  late List<Sprite?> squatRight;
+
+  // 蹲下用手攻击
+  late List<Sprite?> squatHand1Left;
+  late List<Sprite?> squatHand1Right;
+  late List<Sprite?> squatHand2Left;
+  late List<Sprite?> squatHand2Right;
+
+  // 蹲下用脚攻击
+  late List<Sprite?> squatFoot1Left;
+  late List<Sprite?> squatFoot1Right;
+  late List<Sprite?> squatFoot2Left;
+  late List<Sprite?> squatFoot2Right;
 
   late double speed = 0; // 初始速度
   late double onTime = 0;
@@ -52,6 +64,8 @@ class Player extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
+    final s6001 =
+        List.generate(18, (i) => i + 1).map((i) => "8001_$i.png").toList();
     final s8001 =
         List.generate(41, (i) => i + 1).map((i) => "8001_$i.png").toList();
     final s9101 =
@@ -77,6 +91,13 @@ class Player extends SpriteComponent
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
     runRight = (await Flame.images.loadAll(s9201))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+
+    jumpLeft = (await Flame.images.loadAll(s8001.sublist(0, 10)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    jumpRight = (await Flame.images.loadAll(s8001.sublist(0, 10)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
@@ -106,16 +127,36 @@ class Player extends SpriteComponent
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
-    jumpLeft = (await Flame.images.loadAll(s8001.sublist(0, 10)))
-        .map((img) => SpriteComponent.fromImage(img).sprite)
-        .toList();
-    jumpRight = (await Flame.images.loadAll(s8001.sublist(0, 10)))
-        .map((img) => SpriteComponent.fromImage(img).sprite)
-        .toList();
     squatLeft = (await Flame.images.loadAll(s9301.sublist(0, 2)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
     squatRight = (await Flame.images.loadAll(s9301.sublist(2, 4)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+
+    squatHand1Left = (await Flame.images.loadAll(s8001.sublist(0, 3)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatHand1Right = (await Flame.images.loadAll(s8001.sublist(0, 3)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatHand2Left = (await Flame.images.loadAll(s8001.sublist(6, 12)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatHand2Right = (await Flame.images.loadAll(s8001.sublist(6, 12)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+
+    squatFoot1Left = (await Flame.images.loadAll(s8001.sublist(3, 6)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatFoot1Right = (await Flame.images.loadAll(s8001.sublist(3, 6)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatFoot2Left = (await Flame.images.loadAll(s8001.sublist(12, 18)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squatFoot2Right = (await Flame.images.loadAll(s8001.sublist(12, 18)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
@@ -213,7 +254,6 @@ class Player extends SpriteComponent
   // 按快捷键产生的角色动作，包括手拳、脚、投掷
   shortcutSpecialEvent(ShortcutAnimationEvent event, double newSpeed) {
     // 站立攻击
-    debugPrint("event is $event, isRepeat $newSpeed");
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       // 是否可以将跳跃改为跳跃用手或用脚攻击
       if (animation == Animation.jumpLeft || animation == Animation.jumpRight) {
