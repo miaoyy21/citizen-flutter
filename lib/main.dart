@@ -62,29 +62,42 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       if (event is RawKeyDownEvent) {
         if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
           debugPrint("向下蹲");
-          player.arrowAnimation(AnimationEvent.squat, Direction.repeat);
+          player.arrowAnimation(AnimationEvent.squat, Direction.repeat, 0);
         } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左奔跑");
-          player.arrowAnimation(AnimationEvent.run, Direction.left);
+          player.arrowAnimation(AnimationEvent.run, Direction.left, -200);
         } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowRight)) {
           debugPrint("向右奔跑");
-          player.arrowAnimation(AnimationEvent.run, Direction.right);
+          player.arrowAnimation(AnimationEvent.run, Direction.right, 200);
         } else if (keyStore.isKey(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左走路");
-          player.arrowAnimation(AnimationEvent.walk, Direction.left);
+          player.arrowAnimation(AnimationEvent.walk, Direction.left, -100);
         } else if (keyStore.isKey(LogicalKeyboardKey.arrowRight)) {
           debugPrint("向右走路");
-          player.arrowAnimation(AnimationEvent.walk, Direction.right);
-        } else if (keyStore.isKey(LogicalKeyboardKey.arrowUp)) {
-          debugPrint("向上跳");
-          player.arrowAnimation(AnimationEvent.jump, Direction.repeat);
+          player.arrowAnimation(AnimationEvent.walk, Direction.right, 100);
         } else {
-          if (keyStore.isKey(LogicalKeyboardKey.digit1)) {
-            debugPrint("使用【手】攻击");
-            player.shortcutSpecialEvent(ShortcutAnimationEvent.hand);
-          } else if (keyStore.isKey(LogicalKeyboardKey.digit2)) {
-            debugPrint("使用【脚】攻击");
-            player.shortcutSpecialEvent(ShortcutAnimationEvent.foot);
+          debugPrint(
+              "${keyStore.keys.map((e) => "${e.key.debugName} ${e.repeat}")}");
+          final double newSpeed = keyStore.isSpeed(LogicalKeyboardKey.arrowLeft)
+              ? -200
+              : keyStore.isSpeed(LogicalKeyboardKey.arrowRight)
+                  ? 200
+                  : 0;
+
+          if (keyStore.isKey(LogicalKeyboardKey.arrowUp)) {
+            debugPrint("向上跳");
+            player.arrowAnimation(
+                AnimationEvent.jump, Direction.repeat, newSpeed);
+          } else {
+            if (keyStore.isKey(LogicalKeyboardKey.digit1)) {
+              debugPrint("使用【手】攻击");
+              player.shortcutSpecialEvent(
+                  ShortcutAnimationEvent.hand, newSpeed);
+            } else if (keyStore.isKey(LogicalKeyboardKey.digit2)) {
+              debugPrint("使用【脚】攻击");
+              player.shortcutSpecialEvent(
+                  ShortcutAnimationEvent.foot, newSpeed);
+            }
           }
         }
       } else if (event is RawKeyUpEvent) {

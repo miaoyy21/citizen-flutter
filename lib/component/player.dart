@@ -141,7 +141,9 @@ class Player extends SpriteComponent
       Duration.microsecondsPerSecond;
 
   // 按方向键产生的角色动作
-  arrowAnimation(AnimationEvent event, Direction newDirection) {
+  arrowAnimation(
+      AnimationEvent event, Direction newDirection, double newSpeed) {
+    debugPrint("000000: Event is $event && New Speed is $newSpeed");
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       if (event == AnimationEvent.run) {
         // 允许由走转为跑
@@ -164,34 +166,31 @@ class Player extends SpriteComponent
       }
     }
 
+    debugPrint("111111: Event is $event && New Speed is $newSpeed");
     if (newDirection != Direction.repeat) {
       direction = newDirection;
     }
 
     onTime = 0;
     repeat = true;
+    speed = newSpeed;
     if (event == AnimationEvent.walk) {
       if (direction == Direction.left) {
-        speed = -100;
         animation = Animation.walkLeft;
         resetFrames(walkLeft);
       } else {
-        speed = 100;
         animation = Animation.walkRight;
         resetFrames(walkRight);
       }
     } else if (event == AnimationEvent.run) {
       if (direction == Direction.left) {
-        speed = -200;
         animation = Animation.runLeft;
         resetFrames(runLeft);
       } else {
-        speed = 200;
         animation = Animation.runRight;
         resetFrames(runRight);
       }
     } else if (event == AnimationEvent.jump) {
-      speed = 0;
       if (direction == Direction.left) {
         animation = Animation.jumpLeft;
         resetFrames(jumpLeft);
@@ -200,7 +199,6 @@ class Player extends SpriteComponent
         resetFrames(jumpRight);
       }
     } else if (event == AnimationEvent.squat) {
-      speed = 0;
       debugPrint("正在向下蹲00000");
       if (direction == Direction.left) {
         animation = Animation.squatDownLeft;
@@ -213,7 +211,9 @@ class Player extends SpriteComponent
   }
 
   // 按快捷键产生的角色动作，包括手拳、脚、投掷
-  shortcutSpecialEvent(ShortcutAnimationEvent event) {
+  shortcutSpecialEvent(ShortcutAnimationEvent event, double newSpeed) {
+    // 站立攻击
+    debugPrint("event is $event, isRepeat $newSpeed");
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       // 是否可以将跳跃改为跳跃用手或用脚攻击
       if (animation == Animation.jumpLeft || animation == Animation.jumpRight) {
@@ -260,8 +260,6 @@ class Player extends SpriteComponent
 
       return;
     }
-
-    // 站立攻击
   }
 
   @override

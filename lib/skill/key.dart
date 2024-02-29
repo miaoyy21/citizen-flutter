@@ -38,13 +38,6 @@ class KeyStore {
       return true;
     }
 
-    // 超过0.5秒
-    if (time - keys.last.end >= 0.5) {
-      keys.clear();
-    } else if (keys.last.repeat) {
-      keys.clear();
-    }
-
     keys.add(key);
   }
 
@@ -55,12 +48,20 @@ class KeyStore {
     return keys.last.key == key;
   }
 
-  // 是否连续按键不放，超过1秒才会认为按住不放【优先级中等】
+  // 是否连续按键不放【优先级中等】
   bool isRepeat(LogicalKeyboardKey key) {
     if (keys.isEmpty) return false;
 
     return keys.last.key == key && keys.last.repeat;
   }
+
+  // 是否连续按键不放【优先级中等】
+  bool isSpeed(LogicalKeyboardKey key) {
+    if (keys.isEmpty) return false;
+
+    return keys.any((ele) => ele.key == key && ele.repeat);
+  }
+
 
   // 是否连续按下2次按键【优先级最高】
   bool isTwice(LogicalKeyboardKey key) {
