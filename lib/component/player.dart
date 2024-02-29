@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/extensions.dart';
-
 import '../index.dart';
 
 class Player extends SpriteComponent
@@ -64,8 +62,10 @@ class Player extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
+    await AnimationStore().load();
+
     final s6001 =
-        List.generate(18, (i) => i + 1).map((i) => "8001_$i.png").toList();
+        List.generate(20, (i) => i + 1).map((i) => "6001_$i.png").toList();
     final s8001 =
         List.generate(41, (i) => i + 1).map((i) => "8001_$i.png").toList();
     final s9101 =
@@ -134,29 +134,29 @@ class Player extends SpriteComponent
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
-    squatHand1Left = (await Flame.images.loadAll(s8001.sublist(0, 3)))
+    squatHand1Left = (await Flame.images.loadAll(s6001.sublist(0, 4)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatHand1Right = (await Flame.images.loadAll(s8001.sublist(0, 3)))
+    squatHand1Right = (await Flame.images.loadAll(s6001.sublist(0, 4)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatHand2Left = (await Flame.images.loadAll(s8001.sublist(6, 12)))
+    squatHand2Left = (await Flame.images.loadAll(s6001.sublist(8, 14)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatHand2Right = (await Flame.images.loadAll(s8001.sublist(6, 12)))
+    squatHand2Right = (await Flame.images.loadAll(s6001.sublist(8, 14)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
-    squatFoot1Left = (await Flame.images.loadAll(s8001.sublist(3, 6)))
+    squatFoot1Left = (await Flame.images.loadAll(s6001.sublist(4, 8)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatFoot1Right = (await Flame.images.loadAll(s8001.sublist(3, 6)))
+    squatFoot1Right = (await Flame.images.loadAll(s6001.sublist(4, 8)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatFoot2Left = (await Flame.images.loadAll(s8001.sublist(12, 18)))
+    squatFoot2Left = (await Flame.images.loadAll(s6001.sublist(14, 20)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatFoot2Right = (await Flame.images.loadAll(s8001.sublist(12, 18)))
+    squatFoot2Right = (await Flame.images.loadAll(s6001.sublist(14, 20)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
@@ -184,7 +184,6 @@ class Player extends SpriteComponent
   // 按方向键产生的角色动作
   arrowAnimation(
       AnimationEvent event, Direction newDirection, double newSpeed) {
-    debugPrint("000000: Event is $event && New Speed is $newSpeed");
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       if (event == AnimationEvent.run) {
         // 允许由走转为跑
@@ -207,7 +206,6 @@ class Player extends SpriteComponent
       }
     }
 
-    debugPrint("111111: Event is $event && New Speed is $newSpeed");
     if (newDirection != Direction.repeat) {
       direction = newDirection;
     }
@@ -253,7 +251,6 @@ class Player extends SpriteComponent
 
   // 按快捷键产生的角色动作，包括手拳、脚、投掷
   shortcutSpecialEvent(ShortcutAnimationEvent event, double newSpeed) {
-    // 站立攻击
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       // 是否可以将跳跃改为跳跃用手或用脚攻击
       if (animation == Animation.jumpLeft || animation == Animation.jumpRight) {
@@ -295,6 +292,40 @@ class Player extends SpriteComponent
           animation = Animation.attack;
           frames.removeRange(5, 10);
           frames.addAll(switchFrames);
+        }
+      } else if (animation == Animation.squatLeft ||
+          animation == Animation.squatRight) {
+        debugPrint("${animation.name}");
+        repeat = false;
+        animation = Animation.attack;
+        if (event == ShortcutAnimationEvent.hand) {
+          if (Random.secure().nextBool()) {
+            if (direction == Direction.left) {
+              resetFrames(squatHand1Left);
+            } else {
+              resetFrames(squatHand1Right);
+            }
+          } else {
+            if (direction == Direction.left) {
+              resetFrames(squatHand2Left);
+            } else {
+              resetFrames(squatHand2Right);
+            }
+          }
+        } else {
+          if (Random.secure().nextBool()) {
+            if (direction == Direction.left) {
+              resetFrames(squatFoot1Left);
+            } else {
+              resetFrames(squatFoot1Right);
+            }
+          } else {
+            if (direction == Direction.left) {
+              resetFrames(squatFoot2Left);
+            } else {
+              resetFrames(squatFoot2Right);
+            }
+          }
         }
       }
 
