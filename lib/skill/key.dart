@@ -15,6 +15,10 @@ class KeyStore {
   KeyStore();
 
   add(RawKeyEvent event, double time) {
+    if (event is! RawKeyDownEvent) {
+      return;
+    }
+
     final key = LocalGameKey(event.logicalKey, event.repeat, time, time);
     if (event.repeat) {
       if (keys.isNotEmpty) {

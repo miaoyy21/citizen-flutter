@@ -57,14 +57,12 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     final player = findByKey<Player>(ComponentKey.named("player"));
 
     if (player != null) {
+      keyStore.add(event, currentTime());
+
       if (event is RawKeyDownEvent) {
-        keyStore.add(event, currentTime());
-        if (keyStore.isRepeat(LogicalKeyboardKey.arrowDown)) {
-          debugPrint("保持蹲下");
-          player.arrowAnimation(AnimationEvent.squatted, Direction.repeat);
-        } else if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
-          debugPrint("正在向下蹲");
-          player.arrowAnimation(AnimationEvent.squatting, Direction.repeat);
+        if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
+          debugPrint("向下蹲");
+          player.arrowAnimation(AnimationEvent.squatDown, Direction.repeat);
         } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左奔跑");
           player.arrowAnimation(AnimationEvent.run, Direction.left);
@@ -90,8 +88,16 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
           }
         }
       } else if (event is RawKeyUpEvent) {
-        debugPrint("<已完成>");
-        player.finished();
+        if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+            event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          if (keyStore.isKey(LogicalKeyboardKey.arrowUp) ||
+              keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
+          } else {
+            player.finished();
+          }
+        } else {
+          player.finished();
+        }
       }
     }
 

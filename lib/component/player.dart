@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flame/extensions.dart';
+
 import '../index.dart';
 
 class Player extends SpriteComponent
@@ -28,13 +30,9 @@ class Player extends SpriteComponent
   late List<Sprite?> jumpLeft;
   late List<Sprite?> jumpRight;
 
-  // 蹲【过程】
-  late List<Sprite?> squattingLeft;
-  late List<Sprite?> squattingRight;
-
-  // 蹲【保持】
-  late List<Sprite?> squattedLeft;
-  late List<Sprite?> squattedRight;
+  // 蹲下
+  late List<Sprite?> squatLeft;
+  late List<Sprite?> squatRight;
 
   // 跳起手攻击
   late List<Sprite?> jumpHand1Left;
@@ -114,16 +112,10 @@ class Player extends SpriteComponent
     jumpRight = (await Flame.images.loadAll(s8001.sublist(0, 10)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squattingLeft = (await Flame.images.loadAll(s9301.sublist(0, 2)))
+    squatLeft = (await Flame.images.loadAll(s9301.sublist(0, 2)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squattingRight = (await Flame.images.loadAll(s9301.sublist(2, 4)))
-        .map((img) => SpriteComponent.fromImage(img).sprite)
-        .toList();
-    squattedLeft = (await Flame.images.loadAll(s9301.sublist(1, 2)))
-        .map((img) => SpriteComponent.fromImage(img).sprite)
-        .toList();
-    squattedRight = (await Flame.images.loadAll(s9301.sublist(3, 4)))
+    squatRight = (await Flame.images.loadAll(s9301.sublist(2, 4)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
@@ -162,7 +154,7 @@ class Player extends SpriteComponent
         if (animation != Animation.runLeft && animation != Animation.runRight) {
           return;
         }
-      } else if (event == AnimationEvent.squatted) {
+      } else if (event == AnimationEvent.squatDown) {
         // 允许由跑转为蹲
         if (animation != Animation.runLeft && animation != Animation.runRight) {
           return;
@@ -207,23 +199,15 @@ class Player extends SpriteComponent
         animation = Animation.jumpRight;
         resetFrames(jumpRight);
       }
-    } else if (event == AnimationEvent.squatting) {
+    } else if (event == AnimationEvent.squatDown) {
       speed = 0;
+      debugPrint("正在向下蹲00000");
       if (direction == Direction.left) {
         animation = Animation.squattingLeft;
-        resetFrames(squattingLeft);
+        resetFrames(squatLeft);
       } else {
         animation = Animation.squattingRight;
-        resetFrames(squattingRight);
-      }
-    } else if (event == AnimationEvent.squatted) {
-      speed = 0;
-      if (direction == Direction.left) {
-        animation = Animation.squattedLeft;
-        resetFrames(squattedLeft);
-      } else {
-        animation = Animation.squattedRight;
-        resetFrames(squattedRight);
+        resetFrames(squatRight);
       }
     }
   }
@@ -289,14 +273,28 @@ class Player extends SpriteComponent
     // 如果是最后一帧，并且不再重复（动作已完成），切换到空闲状态
     if (index + 1 == frames.length) {
       onTime = 0;
-      if (!repeat) {
-        speed = 0;
-        if (direction == Direction.left) {
-          animation = Animation.idleLeft;
-          resetFrames(idleLeft);
-        } else if (direction == Direction.right) {
-          animation = Animation.idleRight;
-          resetFrames(idleRight);
+      if (animation == Animation.squattingLeft) {
+        animation = Animation.squatLeft;
+        resetFrames(squatLeft.getRange(1, 2).toList());
+      } else if (animation == Animation.squattingRight) {
+        animation = Animation.squatRight;
+        resetFrames(squatRight.getRange(1, 2).toList());
+      } else if (!repeat) {
+        if (animation == Animation.squatLeft) {
+          animation = Animation.squattedLeft;
+          resetFrames(squatLeft..reverse);
+        } else if (animation == Animation.squatRight) {
+          animation = Animation.squattedRight;
+          resetFrames(squatRight..reverse);
+        } else {
+          speed = 0;
+          if (direction == Direction.left) {
+            animation = Animation.idleLeft;
+            resetFrames(idleLeft);
+          } else if (direction == Direction.right) {
+            animation = Animation.idleRight;
+            resetFrames(idleRight);
+          }
         }
       }
     }
