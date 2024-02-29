@@ -55,9 +55,7 @@ class KeyStore {
   bool isRepeat(LogicalKeyboardKey key) {
     if (keys.isEmpty) return false;
 
-    return keys.last.key == key &&
-        keys.last.repeat &&
-        keys.last.end - keys.last.start > 1;
+    return keys.last.key == key && keys.last.repeat;
   }
 
   // 是否连续按下2次按键【优先级最高】

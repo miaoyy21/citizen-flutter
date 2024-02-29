@@ -59,9 +59,12 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     if (player != null) {
       if (event is RawKeyDownEvent) {
         keyStore.add(event, currentTime());
-        if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
-          debugPrint("向下蹲");
-          player.arrowAnimation(AnimationEvent.squat, Direction.repeat);
+        if (keyStore.isRepeat(LogicalKeyboardKey.arrowDown)) {
+          debugPrint("保持蹲下");
+          player.arrowAnimation(AnimationEvent.squatted, Direction.repeat);
+        } else if (keyStore.isKey(LogicalKeyboardKey.arrowDown)) {
+          debugPrint("正在向下蹲");
+          player.arrowAnimation(AnimationEvent.squatting, Direction.repeat);
         } else if (keyStore.isRepeat(LogicalKeyboardKey.arrowLeft)) {
           debugPrint("向左奔跑");
           player.arrowAnimation(AnimationEvent.run, Direction.left);

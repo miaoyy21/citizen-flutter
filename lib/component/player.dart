@@ -10,7 +10,6 @@ class Player extends SpriteComponent
   late Direction direction = Direction.right;
   late Animation animation = Animation.idleRight;
 
-  static const int speed = 100;
   static const int designFPS = 12;
 
   // 空闲
@@ -29,9 +28,13 @@ class Player extends SpriteComponent
   late List<Sprite?> jumpLeft;
   late List<Sprite?> jumpRight;
 
-  // 蹲
-  late List<Sprite?> squatLeft;
-  late List<Sprite?> squatRight;
+  // 蹲【过程】
+  late List<Sprite?> squattingLeft;
+  late List<Sprite?> squattingRight;
+
+  // 蹲【保持】
+  late List<Sprite?> squattedLeft;
+  late List<Sprite?> squattedRight;
 
   // 跳起手攻击
   late List<Sprite?> jumpHand1Left;
@@ -45,8 +48,8 @@ class Player extends SpriteComponent
   late List<Sprite?> jumpFoot2Left;
   late List<Sprite?> jumpFoot2Right;
 
+  late double speed = 0; // 初始速度
   late double onTime = 0;
-  late double speedRate = 0;
   List<Sprite?> frames = [];
 
   @override
@@ -56,9 +59,9 @@ class Player extends SpriteComponent
     final s9101 =
         List.generate(11, (i) => i + 1).map((i) => "9101_$i.png").toList();
     final s9201 =
-        List.generate(6, (i) => i + 1).map((i) => "9201_$i.png").toList();
+        List.generate(7, (i) => i + 1).map((i) => "9202_$i.png").toList();
     final s9301 =
-        List.generate(2, (i) => i + 1).map((i) => "9301_$i.png").toList();
+        List.generate(4, (i) => i + 1).map((i) => "9301_$i.png").toList();
 
     idleLeft = (await Flame.images.loadAll(s9101.sublist(0, 6)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
@@ -111,10 +114,16 @@ class Player extends SpriteComponent
     jumpRight = (await Flame.images.loadAll(s8001.sublist(0, 10)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatLeft = (await Flame.images.loadAll(s9301.sublist(0, 1)))
+    squattingLeft = (await Flame.images.loadAll(s9301.sublist(0, 2)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
-    squatRight = (await Flame.images.loadAll(s9301.sublist(1, 2)))
+    squattingRight = (await Flame.images.loadAll(s9301.sublist(2, 4)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squattedLeft = (await Flame.images.loadAll(s9301.sublist(1, 2)))
+        .map((img) => SpriteComponent.fromImage(img).sprite)
+        .toList();
+    squattedRight = (await Flame.images.loadAll(s9301.sublist(3, 4)))
         .map((img) => SpriteComponent.fromImage(img).sprite)
         .toList();
 
@@ -135,12 +144,27 @@ class Player extends SpriteComponent
     frames.addAll(newFrames);
   }
 
+  double get currentTime =>
+      DateTime.now().microsecondsSinceEpoch.toDouble() /
+      Duration.microsecondsPerSecond;
+
   // 按方向键产生的角色动作
   arrowAnimation(AnimationEvent event, Direction newDirection) {
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       if (event == AnimationEvent.run) {
+        // 允许由走转为跑
         if (animation != Animation.walkLeft &&
             animation != Animation.walkRight) {
+          return;
+        }
+      } else if (event == AnimationEvent.jump) {
+        // 允许由跑转为跳
+        if (animation != Animation.runLeft && animation != Animation.runRight) {
+          return;
+        }
+      } else if (event == AnimationEvent.squatted) {
+        // 允许由跑转为蹲
+        if (animation != Animation.runLeft && animation != Animation.runRight) {
           return;
         }
       } else {
@@ -156,26 +180,26 @@ class Player extends SpriteComponent
     repeat = true;
     if (event == AnimationEvent.walk) {
       if (direction == Direction.left) {
-        speedRate = -1.0;
+        speed = -100;
         animation = Animation.walkLeft;
         resetFrames(walkLeft);
       } else {
-        speedRate = 1.0;
+        speed = 100;
         animation = Animation.walkRight;
         resetFrames(walkRight);
       }
     } else if (event == AnimationEvent.run) {
       if (direction == Direction.left) {
-        speedRate = -2.0;
+        speed = -200;
         animation = Animation.runLeft;
         resetFrames(runLeft);
       } else {
-        speedRate = 2.0;
+        speed = 200;
         animation = Animation.runRight;
         resetFrames(runRight);
       }
     } else if (event == AnimationEvent.jump) {
-      speedRate = 0;
+      speed = 0;
       if (direction == Direction.left) {
         animation = Animation.jumpLeft;
         resetFrames(jumpLeft);
@@ -183,21 +207,29 @@ class Player extends SpriteComponent
         animation = Animation.jumpRight;
         resetFrames(jumpRight);
       }
-    } else if (event == AnimationEvent.squat) {
-      speedRate = 0;
+    } else if (event == AnimationEvent.squatting) {
+      speed = 0;
       if (direction == Direction.left) {
-        animation = Animation.squatLeft;
-        resetFrames(squatLeft);
+        animation = Animation.squattingLeft;
+        resetFrames(squattingLeft);
       } else {
-        animation = Animation.squatRight;
-        resetFrames(squatRight);
+        animation = Animation.squattingRight;
+        resetFrames(squattingRight);
+      }
+    } else if (event == AnimationEvent.squatted) {
+      speed = 0;
+      if (direction == Direction.left) {
+        animation = Animation.squattedLeft;
+        resetFrames(squattedLeft);
+      } else {
+        animation = Animation.squattedRight;
+        resetFrames(squattedRight);
       }
     }
   }
 
   // 按快捷键产生的角色动作，包括手拳、脚、投掷
   shortcutSpecialEvent(ShortcutAnimationEvent event) {
-    speedRate = 0;
     if (animation != Animation.idleLeft && animation != Animation.idleRight) {
       // 是否可以将跳跃改为跳跃用手或用脚攻击
       if (animation == Animation.jumpLeft || animation == Animation.jumpRight) {
@@ -258,7 +290,7 @@ class Player extends SpriteComponent
     if (index + 1 == frames.length) {
       onTime = 0;
       if (!repeat) {
-        speedRate = 0;
+        speed = 0;
         if (direction == Direction.left) {
           animation = Animation.idleLeft;
           resetFrames(idleLeft);
@@ -270,7 +302,7 @@ class Player extends SpriteComponent
     }
 
     // 水平移动
-    position.add(Vector2(dt * 100 * speedRate, 0));
+    position.add(Vector2(speed * dt, 0));
   }
 
   @override
