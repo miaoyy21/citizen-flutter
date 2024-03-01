@@ -57,15 +57,11 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     if (player != null) {
       if (event is RawKeyDownEvent) {
         KeyStore().add(event);
-
-        if (KeyStore().isRepeat(LogicalKeyboardKey.arrowRight)) {}
-
-        debugPrint(
-            "RawKeyDownEvent => [${KeyStore().keys.map((e) => "$e").join(", ")}]");
       } else if (event is RawKeyUpEvent) {
-        debugPrint(
-            "RawKeyUpEvent =>  [${KeyStore().keys.map((e) => "$e").join(", ")}]");
+        KeyStore().removeRepeat(event.logicalKey);
       }
+
+      debugPrint("RawKeyEvent => ${KeyStore().showKeys}");
     }
 
     return super.onKeyEvent(event, keysPressed);
