@@ -10,9 +10,13 @@ class LocalGameKey {
 }
 
 class KeyStore {
-  final List<LocalGameKey> keys = [];
+  static final KeyStore _instance = KeyStore._internal();
 
-  KeyStore();
+  factory KeyStore() => _instance;
+
+  KeyStore._internal();
+
+  final List<LocalGameKey> keys = [];
 
   add(RawKeyEvent event, double time) {
     if (event is! RawKeyDownEvent) {

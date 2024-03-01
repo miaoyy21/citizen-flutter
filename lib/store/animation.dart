@@ -118,7 +118,33 @@ class AnimationData {
   String toString() => "{width:$width}, height:$height, frames:$frames}";
 }
 
-class AnimationStore {
+enum StickDirection { left, right, repeat }
+
+enum StickAnimationEvent {
+  idle,
+  walk,
+  run,
+  runHandAttack,
+  runFootAttack,
+  jumpUp,
+  jumpDown,
+  jumpHandAttack,
+  jumpFootAttack,
+  squatHalf,
+  squat,
+  squatHandAttack,
+  squatFootAttack,
+}
+
+class StickAnimation {
+  final String name;
+  final int start;
+  final int end;
+
+  StickAnimation(this.name, this.start, this.end);
+}
+
+final class AnimationStore {
   static final AnimationStore _instance = AnimationStore._internal();
 
   factory AnimationStore() => _instance;
@@ -126,28 +152,133 @@ class AnimationStore {
   AnimationStore._internal();
 
   late Map<String, AnimationData> data = {};
-  late Map<String, List<Sprite?>> frames = {};
+  late Map<String, List<Sprite?>> leftFrames = {};
+  late Map<String, List<Sprite?>> rightFrames = {};
 
-  // TODO 可将动画编号 6001，变成 6001_1（向左）和 6001_2（向右） 两个动画
+  late Map<StickAnimationEvent, List<StickAnimation>> animations = {};
+
   load() async {
-    // 解析动画配置文件
+// 解析动画配置文件
     final js = await rootBundle.loadString('assets/animations.json');
     data = (json.decode(js) as Map)
         .map((k, v) => MapEntry(k, AnimationData.fromJson(v)));
 
-    // 生成动画序列帧
+// 生成动画序列帧
     data
         .map((k, v) =>
             MapEntry(k, v.frames.map((f) => "${k}_${f.sequence}.png").toList()))
         .forEach(
       (k, fs) async {
-        frames[k] = (await Flame.images.loadAll(fs))
+        final frames = (await Flame.images.loadAll(fs))
             .map((img) => SpriteComponent.fromImage(img).sprite)
             .toList();
+
+// TODO 变成 6001_1（向左）和 6001_2（向右） 两个动画
+// if (k.endsWith("_1")) {
+//   leftFrames[k.substring(k.length - 2)] = frames;
+// } else if (k.endsWith("_1")) {
+//   rightFrames[k.substring(k.length - 2)] = frames;
+// } else {
+//   assert(false);
+// }
+        leftFrames[k.substring(k.length - 2)] = frames;
+        rightFrames[k.substring(k.length - 2)] = frames;
       },
     );
 
     debugPrint("animations is ${data["6001"]}");
-    debugPrint("animations is ${frames["6001"]?.length}");
+    debugPrint("animations is ${leftFrames["6001"]?.length}");
+
+// 基础动画
+    animations = {
+      StickAnimationEvent.idle: [StickAnimation("9101", 0, 6)],
+      StickAnimationEvent.walk: [StickAnimation("9101", 6, 11)],
+      StickAnimationEvent.run: [StickAnimation("9202", 0, 7)],
+      StickAnimationEvent.jumpUp: [StickAnimation("8001", 0, 5)],
+      StickAnimationEvent.jumpDown: [StickAnimation("8001", 5, 10)],
+      StickAnimationEvent.jumpHandAttack: [
+        StickAnimation("8001", 10, 17),
+        StickAnimation("8001", 25, 34),
+      ],
+      StickAnimationEvent.jumpFootAttack: [
+        StickAnimation("8001", 17, 25),
+        StickAnimation("8001", 34, 41),
+      ],
+      StickAnimationEvent.squatHalf: [StickAnimation("9301", 0, 1)],
+      StickAnimationEvent.squat: [StickAnimation("9301", 1, 2)],
+      StickAnimationEvent.squatHandAttack: [
+        StickAnimation("6001", 0, 4),
+        StickAnimation("6001", 8, 14),
+      ],
+      StickAnimationEvent.squatFootAttack: [
+        StickAnimation("6001", 4, 8),
+        StickAnimation("6001", 14, 20),
+      ],
+    };
   }
+
+  final Map<StickAnimationEvent, StickAnimationEvent Function()> onContinue = {
+    StickAnimationEvent.idle: () {
+      if (KeyStore().isLastRepeat(LogicalKeyboardKey.arrowLeft) ||
+          KeyStore().isLastRepeat(LogicalKeyboardKey.arrowRight)) {
+        if (KeyStore().isKey(LogicalKeyboardKey.arrowLeft)) {}
+        return StickAnimationEvent.walk;
+      }
+
+      if (KeyStore().isKey(LogicalKeyboardKey.arrowLeft) ||
+          KeyStore().isKey(LogicalKeyboardKey.arrowRight)) {
+        if (KeyStore().isKey(LogicalKeyboardKey.arrowLeft)) {}
+        return StickAnimationEvent.walk;
+      }
+
+      return StickAnimationEvent.idle;
+    },
+  };
+
+  final Map<StickAnimationEvent, StickAnimationEvent Function()> onFinish = {
+    StickAnimationEvent.walk: () {
+      if (KeyStore().isKey(LogicalKeyboardKey.arrowLeft) ||
+          KeyStore().isKey(LogicalKeyboardKey.arrowRight)) {
+        return StickAnimationEvent.walk;
+      }
+
+      return StickAnimationEvent.idle;
+    },
+    StickAnimationEvent.run: () {
+      if (KeyStore().isLastRepeat(LogicalKeyboardKey.arrowLeft) ||
+          KeyStore().isLastRepeat(LogicalKeyboardKey.arrowRight)) {
+        return StickAnimationEvent.run;
+      }
+
+      return StickAnimationEvent.idle;
+    },
+    StickAnimationEvent.jumpUp: () {
+      if (KeyStore().isAnyRepeat(LogicalKeyboardKey.digit1)) {
+        return StickAnimationEvent.jumpHandAttack;
+      } else if (KeyStore().isAnyRepeat(LogicalKeyboardKey.digit2)) {
+        return StickAnimationEvent.jumpFootAttack;
+      }
+
+      return StickAnimationEvent.jumpDown;
+    },
+    StickAnimationEvent.jumpDown: () => StickAnimationEvent.idle,
+    StickAnimationEvent.jumpHandAttack: () => StickAnimationEvent.idle,
+    StickAnimationEvent.jumpFootAttack: () => StickAnimationEvent.idle,
+    StickAnimationEvent.squatHalf: () {
+      if (KeyStore().isAnyRepeat(LogicalKeyboardKey.arrowDown)) {
+        return StickAnimationEvent.squat;
+      }
+
+      return StickAnimationEvent.idle;
+    },
+    StickAnimationEvent.squat: () {
+      if (KeyStore().isAnyRepeat(LogicalKeyboardKey.arrowDown)) {
+        return StickAnimationEvent.squat;
+      }
+
+      return StickAnimationEvent.squatHalf;
+    },
+    StickAnimationEvent.squatHandAttack: () => StickAnimationEvent.squat,
+    StickAnimationEvent.squatFootAttack: () => StickAnimationEvent.squat,
+  };
 }
