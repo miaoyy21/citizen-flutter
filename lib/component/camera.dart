@@ -14,7 +14,7 @@ class Camera extends Component with HasGameReference<CitizenGame> {
     camera.moveTo(Vector2(0, 0));
   }
 
-  late double dx = 0;
+  final double speed = 500;
 
   @override
   void update(double dt) {
@@ -25,7 +25,16 @@ class Camera extends Component with HasGameReference<CitizenGame> {
     final viewportSize =
         (camera.viewport as FixedResolutionViewport).resolution;
 
-    final p0 = player.position;
+    final p0 = player.position.clone();
+
+    final first = player.aniFrames.framesData.first;
+    final last = player.aniFrames.framesData.last;
+    final dx = (last.position.x - first.position.x) *
+        player.onTime /
+        (player.aniFrames.frames.length / player.designFPS);
+    if (dx > 20) {
+      p0.add(Vector2(dx, 0));
+    }
 
     // 左下角
     final p1 = Vector2(viewportSize.x / 2, -viewportSize.y / 2);
@@ -38,34 +47,35 @@ class Camera extends Component with HasGameReference<CitizenGame> {
     if (p0.x < p1.x) {
       if (p0.y > p1.y) {
         // 左下
-        camera.moveTo(Vector2(0, 0));
+        camera.moveTo(Vector2(0, 0), speed: speed);
       } else if (p0.y < p1.y && p0.y > p2.y) {
         // 左中
-        camera.moveTo(Vector2(0, p0.y));
+        camera.moveTo(Vector2(0, p0.y), speed: speed);
       } else if (p0.y < p2.y) {
         // 左上
-        camera.moveTo(Vector2(0, p2.y));
+        camera.moveTo(Vector2(0, p2.y), speed: speed);
       }
     } else if (p0.x > p2.x) {
       if (p0.y > p1.y) {
         // 右下
-        camera.moveTo(Vector2(mapSize.x - viewportSize.x, 0));
+        camera.moveTo(Vector2(mapSize.x - viewportSize.x, 0), speed: speed);
       } else if (p0.y < p1.y && p0.y > p2.y) {
         // 右中
-        camera.moveTo(Vector2(mapSize.x - viewportSize.x, p0.y));
+        camera.moveTo(Vector2(mapSize.x - viewportSize.x, p0.y), speed: speed);
       } else if (p0.y < p2.y) {
         // 右上
-        camera.moveTo(Vector2(mapSize.x - viewportSize.x, p2.y));
+        camera.moveTo(Vector2(mapSize.x - viewportSize.x, p2.y), speed: speed);
       }
     } else if (p0.x > p1.x && p0.x < p2.x && p0.y > p1.y) {
       // 底中
-      camera.moveTo(Vector2(p0.x - viewportSize.x / 2, 0));
+      camera.moveTo(Vector2(p0.x - viewportSize.x / 2, 0), speed: speed);
     } else if (p0.x > p1.x && p0.x < p2.x && p0.y < p2.y) {
       // 顶中
-      camera.moveTo(Vector2(p0.x - viewportSize.x / 2, p2.y));
+      camera.moveTo(Vector2(p0.x - viewportSize.x / 2, p2.y), speed: speed);
     } else {
       camera.moveTo(
-          Vector2(p0.x - viewportSize.x / 2, p0.y + viewportSize.y / 2));
+          Vector2(p0.x - viewportSize.x / 2, p0.y + viewportSize.y / 2),
+          speed: speed);
     }
   }
 }

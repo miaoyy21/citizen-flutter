@@ -5,7 +5,7 @@ class Player extends SpriteComponent
   Player({super.position})
       : super(anchor: Anchor.bottomLeft, key: ComponentKey.named("Player"));
 
-  static const int designFPS = 12;
+  final double designFPS = 12;
 
   late double speed = 0; // 初始速度
   late double onTime = 0;
