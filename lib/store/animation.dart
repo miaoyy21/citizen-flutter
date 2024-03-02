@@ -175,10 +175,16 @@ final class AnimationStore {
     ],
     StickAnimationEvent.jumpFootAttack: [
       StickAnimation("8001", 17, 25),
-      StickAnimation("8001", 34, 41),
+      StickAnimation("8001", 34, 42),
     ],
-    StickAnimationEvent.squatHalf: [StickAnimation("9301", 0, 1)],
-    StickAnimationEvent.squat: [StickAnimation("9301", 1, 2)],
+    StickAnimationEvent.squatHalf: [
+      StickAnimation("9301", 0, 1),
+      StickAnimation("9301", 2, 3),
+    ],
+    StickAnimationEvent.squat: [
+      StickAnimation("9301", 1, 2),
+      StickAnimation("9301", 3, 4),
+    ],
     StickAnimationEvent.squatHandAttack: [
       StickAnimation("6001", 0, 4),
       StickAnimation("6001", 8, 14),
@@ -227,52 +233,6 @@ final class AnimationStore {
       _rightFrames[k] = fs;
     }
     debugPrint("animations is ${data["6001"]}");
+    debugPrint("animations is ${data["6001"]}");
   }
-
-// final Map<StickAnimationEvent, StickAnimationEvent Function()> onFinish = {
-//   StickAnimationEvent.walk: () {
-//     if (KeyStore().isRepeat()LogicalKeyboardKey.arrowLeft) ||
-//         KeyStore().isKey(LogicalKeyboardKey.arrowRight)) {
-//       return StickAnimationEvent.walk;
-//     }
-//
-//     return StickAnimationEvent.idle;
-//   },
-//   StickAnimationEvent.run: () {
-//     if (KeyStore().isLastRepeat(LogicalKeyboardKey.arrowLeft) ||
-//         KeyStore().isLastRepeat(LogicalKeyboardKey.arrowRight)) {
-//       return StickAnimationEvent.run;
-//     }
-//
-//     return StickAnimationEvent.idle;
-//   },
-//   StickAnimationEvent.jumpUp: () {
-//     if (KeyStore().isAnyRepeat(LogicalKeyboardKey.digit1)) {
-//       return StickAnimationEvent.jumpHandAttack;
-//     } else if (KeyStore().isAnyRepeat(LogicalKeyboardKey.digit2)) {
-//       return StickAnimationEvent.jumpFootAttack;
-//     }
-//
-//     return StickAnimationEvent.jumpDown;
-//   },
-//   StickAnimationEvent.jumpDown: () => StickAnimationEvent.idle,
-//   StickAnimationEvent.jumpHandAttack: () => StickAnimationEvent.idle,
-//   StickAnimationEvent.jumpFootAttack: () => StickAnimationEvent.idle,
-//   StickAnimationEvent.squatHalf: () {
-//     if (KeyStore().isAnyRepeat(LogicalKeyboardKey.arrowDown)) {
-//       return StickAnimationEvent.squat;
-//     }
-//
-//     return StickAnimationEvent.idle;
-//   },
-//   StickAnimationEvent.squat: () {
-//     if (KeyStore().isAnyRepeat(LogicalKeyboardKey.arrowDown)) {
-//       return StickAnimationEvent.squat;
-//     }
-//
-//     return StickAnimationEvent.squatHalf;
-//   },
-//   StickAnimationEvent.squatHandAttack: () => StickAnimationEvent.squat,
-//   StickAnimationEvent.squatFootAttack: () => StickAnimationEvent.squat,
-// };
 }

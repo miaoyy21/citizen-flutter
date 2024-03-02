@@ -155,10 +155,11 @@ class Player extends SpriteComponent
     onTime = onTime + dt;
 
     final index = (onTime * designFPS).floor();
-    sprite = frames[index];
+    if (index < frames.length) {
+      sprite = frames[index];
+    } else {
+      sprite = frames.last;
 
-    // 动作结束
-    if (((onTime + dt * 5) * designFPS).floor() >= frames.length) {
       onTime = 0;
       if (event == StickAnimationEvent.jumpUp) {
         if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
