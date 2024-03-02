@@ -149,6 +149,7 @@ class AnimationFrames {
       required this.frames,
       required this.framesData});
 
-  String identity() =>
-      "${name}_${framesData.first.sequence}_${framesData.last.sequence}";
+  @override
+  String toString() =>
+      "$name[${framesData.first.sequence},${framesData.last.sequence}]";
 }

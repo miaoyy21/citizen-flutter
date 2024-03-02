@@ -56,12 +56,12 @@ class Player extends SpriteComponent
     }
   }
 
-  late double dx = 0;
+  late int dx = 0;
 
   AnimationFrames get aniFrames => _aniFrames;
 
   set aniFrames(AnimationFrames newFrames) {
-    if (newFrames.identity() == _aniFrames.identity()) {
+    if ("$newFrames" == "$_aniFrames") {
       return;
     }
 
@@ -72,12 +72,13 @@ class Player extends SpriteComponent
         : index;
     final frame = _aniFrames.framesData[index];
 
-    final x1 = frame.position.x.toDouble();
-    final x2 = _aniFrames.framesData.first.position.x.toDouble();
+    final x1 = frame.position.x;
+    final x2 = _aniFrames.framesData.first.position.x;
+    if (x1 - x2 > 20) {
+      dx = x1 - x2;
+      debugPrint("$_aniFrames -> $newFrames : $dx");
+    }
 
-    dx = x1 - x2;
-    debugPrint(
-        "identity ${_aniFrames.identity()} -> ${newFrames.identity()} Delta X1 = $dx");
     _aniFrames = newFrames;
   }
 
