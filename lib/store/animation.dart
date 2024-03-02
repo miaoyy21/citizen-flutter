@@ -58,13 +58,13 @@ final class AnimationStore {
       StickAnimation("7002", 8, 21),
     ],
     StickAnimationEvent.jumpUp: [StickAnimation("8001", 0, 5)],
-    StickAnimationEvent.jumpDown: [StickAnimation("8001", 5, 10)],
+    StickAnimationEvent.jumpDown: [StickAnimation("8001", 5, 11)],
     StickAnimationEvent.jumpHandAttack: [
-      StickAnimation("8001", 10, 17),
-      StickAnimation("8001", 25, 34),
+      StickAnimation("8001", 11, 19),
+      StickAnimation("8001", 26, 34),
     ],
     StickAnimationEvent.jumpFootAttack: [
-      StickAnimation("8001", 17, 25),
+      StickAnimation("8001", 19, 26),
       StickAnimation("8001", 34, 42),
     ],
     StickAnimationEvent.squatHalf: [StickAnimation("9301", 0, 1)],
@@ -93,6 +93,7 @@ final class AnimationStore {
       name: animation.name,
       width: data.width,
       height: data.height,
+      size: data.size,
       frames: (direction == StickDirection.left
               ? _leftFrames[animation.name]
               : _rightFrames[animation.name])!

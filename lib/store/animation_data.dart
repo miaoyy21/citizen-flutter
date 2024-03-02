@@ -133,6 +133,7 @@ class AnimationFrames {
   final String name;
   final int width;
   final int height;
+  final ImageRectangle size;
 
   final List<Sprite?> frames;
   final List<AnimationFrameData> framesData;
@@ -141,6 +142,10 @@ class AnimationFrames {
       {required this.name,
       required this.width,
       required this.height,
+      required this.size,
       required this.frames,
       required this.framesData});
+
+  String identity() =>
+      "${name}_${framesData.first.sequence}_${framesData.last.sequence}";
 }

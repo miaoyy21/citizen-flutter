@@ -9,7 +9,7 @@ class Player extends SpriteComponent
 
   late double speed = 0; // 初始速度
   late double onTime = 0;
-  late AnimationFrames aniFrames;
+  late AnimationFrames _aniFrames;
 
   late StickDirection direction = StickDirection.right;
   late StickAnimationEvent event = StickAnimationEvent.idle;
@@ -19,6 +19,8 @@ class Player extends SpriteComponent
     // 初始帧为向右站立
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
+
+    _aniFrames = AnimationStore().getFrames(event, direction);
   }
 
   onChange() {
@@ -28,46 +30,56 @@ class Player extends SpriteComponent
       speed = -200;
       event = StickAnimationEvent.run;
       direction = StickDirection.left;
-
-      debugPrint("向左跑");
     } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowRight)) {
       // 向右跑
       speed = 200;
       event = StickAnimationEvent.run;
       direction = StickDirection.right;
-
-      debugPrint("向右跑");
     } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowLeft)) {
       // 向左走
       speed = -100;
       event = StickAnimationEvent.walk;
       direction = StickDirection.left;
-
-      debugPrint("向左走");
     } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowRight)) {
       // 向右走
       speed = 100;
       event = StickAnimationEvent.walk;
       direction = StickDirection.right;
-
-      debugPrint("向右走");
     } else if (KeyStore().isDown(LogicalKeyboardKey.arrowUp)) {
       // 向上跳
       speed = 0;
       event = StickAnimationEvent.jumpUp;
-
-      debugPrint("向上跳");
     } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowDown)) {
       // 向下蹲
       speed = 0;
       event = StickAnimationEvent.squatHalf;
-
-      debugPrint("向下蹲");
     }
+  }
+
+  AnimationFrames get aniFrames => _aniFrames;
+
+  set aniFrames(AnimationFrames newFrames) {
+    if (newFrames.identity() == _aniFrames.identity()) {
+      return;
+    }
+
+    // 变化前帧的位置
+    final frame = _aniFrames.framesData[(onTime * designFPS).floor()];
+
+    final x1 = frame.position.x.toDouble();
+    final x2 = newFrames.framesData.first.position.x.toDouble();
+
+    position.x = position.x + x1 - x2;
+
+    _aniFrames = newFrames;
   }
 
   @override
   void update(double dt) {
+    if (1 / dt < 50) {
+      debugPrint("每秒帧数降至 ${(1 / dt).toStringAsFixed(2)}");
+    }
+
     if (event == StickAnimationEvent.idle) {
       speed = 0;
       onChange();
@@ -80,7 +92,6 @@ class Player extends SpriteComponent
 
       // 按帧播放
       if (event == StickAnimationEvent.idle) {
-        onTime = 0;
         aniFrames = AnimationStore().getFrames(event, direction);
       }
     } else if (event == StickAnimationEvent.walk) {
@@ -152,10 +163,8 @@ class Player extends SpriteComponent
     final refreshNext = index >= aniFrames.frames.length;
 
     sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
-    final data =
-        refreshNext ? aniFrames.framesData.last : aniFrames.framesData[index];
 
-    position.add(Vector2(speed * dt, 0));
+    position.x = position.x + speed * dt;
     refreshNext ? refresh() : ();
   }
 

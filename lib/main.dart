@@ -34,10 +34,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
         routes: {
           'stage1': Route(
             maintainState: false,
-            () => Stage(
-              "stage1",
-              size: Vector2(80 * blockSize, 50 * blockSize),
-            ),
+            () => Stage("stage1"),
           ),
           // 'level-selector': Route(LevelSelectorPage.new),
           // 'settings': Route(SettingsPage.new, transparent: true),
@@ -61,7 +58,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
         KeyStore().removeRepeat(event.logicalKey);
       }
 
-      debugPrint("RawKeyEvent => ${KeyStore().showKeys}");
+      // debugPrint("RawKeyEvent => ${KeyStore().showKeys}");
     }
 
     return super.onKeyEvent(event, keysPressed);
