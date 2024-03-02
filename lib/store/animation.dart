@@ -177,14 +177,8 @@ final class AnimationStore {
       StickAnimation("8001", 17, 25),
       StickAnimation("8001", 34, 42),
     ],
-    StickAnimationEvent.squatHalf: [
-      StickAnimation("9301", 0, 1),
-      StickAnimation("9301", 2, 3),
-    ],
-    StickAnimationEvent.squat: [
-      StickAnimation("9301", 1, 2),
-      StickAnimation("9301", 3, 4),
-    ],
+    StickAnimationEvent.squatHalf: [StickAnimation("9301", 0, 1)],
+    StickAnimationEvent.squat: [StickAnimation("9301", 1, 2)],
     StickAnimationEvent.squatHandAttack: [
       StickAnimation("6001", 0, 4),
       StickAnimation("6001", 8, 14),
