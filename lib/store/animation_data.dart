@@ -29,6 +29,7 @@ class ImageRectangle {
 }
 
 class AnimationFrameData {
+  final String name;
   final int sequence;
 
   final bool isLand;
@@ -47,6 +48,7 @@ class AnimationFrameData {
   final List<ImageRectangle> attackFoot;
 
   AnimationFrameData({
+    required this.name,
     required this.sequence,
     required this.isLand,
     required this.position,
@@ -64,6 +66,7 @@ class AnimationFrameData {
 
   factory AnimationFrameData.fromJson(Map<String, dynamic> js) =>
       AnimationFrameData(
+        name: js["Name"],
         sequence: js["Sequence"],
         isLand: js["IsLand"],
         position: ImagePoint.fromJson(js["Position"]),
@@ -97,7 +100,7 @@ class AnimationFrameData {
 
   @override
   String toString() =>
-      "{sequence:$sequence, isLand:$isLand, position:$position, size:$size, stickSize:$stickSize,"
+      "{name:$name, sequence:$sequence, isLand:$isLand, position:$position, size:$size, stickSize:$stickSize,"
       "exposeHead:$exposeHead, exposeBody:$exposeBody, "
       "exposeHand:$exposeHand, exposeFoot:$exposeFoot, "
       "attackHead:$attackHead, attackBody:$attackBody, "

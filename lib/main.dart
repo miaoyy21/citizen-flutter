@@ -17,7 +17,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              resolution: Vector2(22.5 * 32, 16 * 32),
+              resolution: Vector2(32 * 32, 23.75 * 32),
             ),
             viewfinder: Viewfinder(),
           ),
@@ -49,7 +49,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   KeyEventResult onKeyEvent(
       RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final player = findByKey<Player>(ComponentKey.named("player"));
+    final player = findByKey<Player>(ComponentKey.named("Player"));
 
     if (player != null) {
       if (event is RawKeyDownEvent) {

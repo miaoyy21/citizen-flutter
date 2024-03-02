@@ -9,6 +9,7 @@ enum StickAnimationEvent {
   idle,
   walk,
   run,
+  dodge,
   standHandAttack,
   standFootAttack,
   jumpUp,
@@ -47,6 +48,7 @@ final class AnimationStore {
     StickAnimationEvent.idle: [StickAnimation("9101", 0, 6)],
     StickAnimationEvent.walk: [StickAnimation("9101", 6, 11)],
     StickAnimationEvent.run: [StickAnimation("9202", 0, 7)],
+    StickAnimationEvent.dodge: [StickAnimation("9401", 0, 12)],
     StickAnimationEvent.standHandAttack: [
       StickAnimation("7001", 0, 5),
       StickAnimation("7001", 14, 22),
@@ -128,6 +130,6 @@ final class AnimationStore {
       _leftFrames[k] = fs;
       _rightFrames[k] = fs;
     }
-    debugPrint("animations is ${_data["6001"]}");
+    debugPrint("animations is ${_data["9401"]}");
   }
 }

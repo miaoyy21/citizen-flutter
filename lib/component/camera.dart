@@ -1,10 +1,10 @@
 import '../index.dart';
 
-class PlayerCamera extends Component with HasGameReference<CitizenGame> {
+class Camera extends Component with HasGameReference<CitizenGame> {
   final Player player;
   final Vector2 mapSize;
 
-  PlayerCamera(this.player, this.mapSize);
+  Camera(this.player, this.mapSize) : super(key: ComponentKey.named("Camera"));
 
   CameraComponent get camera => game.camera;
 
@@ -12,11 +12,16 @@ class PlayerCamera extends Component with HasGameReference<CitizenGame> {
   FutureOr<void> onLoad() {
     camera.viewfinder.anchor = Anchor.bottomLeft;
     camera.moveTo(Vector2(0, 0));
-    // update(0.1);
   }
+
+  late double dx = 0;
 
   @override
   void update(double dt) {
+    if (1 / dt < 50) {
+      debugPrint("Camera 每秒帧数降至 ${(1 / dt).toStringAsFixed(2)}");
+    }
+
     final viewportSize =
         (camera.viewport as FixedResolutionViewport).resolution;
 
@@ -62,8 +67,5 @@ class PlayerCamera extends Component with HasGameReference<CitizenGame> {
       camera.moveTo(
           Vector2(p0.x - viewportSize.x / 2, p0.y + viewportSize.y / 2));
     }
-
-    //   camera.moveTo(Vector2(p0.x - viewportSize.x / 2, 0));
-    // }
   }
 }

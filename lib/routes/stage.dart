@@ -21,7 +21,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     final player = Player(position: Vector2(0, -16 + 5));
     world.add(player);
 
-    final camera = PlayerCamera(player, stage.size);
+    final camera = Camera(player, stage.size);
     world.add(camera);
   }
 
