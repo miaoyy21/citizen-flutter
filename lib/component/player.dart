@@ -9,7 +9,7 @@ class Player extends SpriteComponent
 
   late double speed = 0; // 初始速度
   late double onTime = 0;
-  final List<Sprite?> frames = [];
+  late AnimationFrames aniFrames;
 
   late StickDirection direction = StickDirection.right;
   late StickAnimationEvent event = StickAnimationEvent.idle;
@@ -75,16 +75,13 @@ class Player extends SpriteComponent
       // 重置动画序列
       if (event != StickAnimationEvent.idle) {
         onTime = 0;
-
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
+        aniFrames = AnimationStore().getFrames(event, direction);
       }
 
       // 按帧播放
-      if (frames.isEmpty) {
+      if (event == StickAnimationEvent.idle) {
         onTime = 0;
-        frames.addAll(
-            AnimationStore().getFrames(StickAnimationEvent.idle, direction)!);
+        aniFrames = AnimationStore().getFrames(event, direction);
       }
     } else if (event == StickAnimationEvent.walk) {
       if (KeyStore().isDouble(LogicalKeyboardKey.arrowLeft)) {
@@ -128,8 +125,7 @@ class Player extends SpriteComponent
           event = StickAnimationEvent.idle;
         }
 
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
+        aniFrames = AnimationStore().getFrames(event, direction);
       }
     } else if (event == StickAnimationEvent.run) {
       if (KeyStore().isDown(LogicalKeyboardKey.arrowLeft) &&
@@ -147,74 +143,70 @@ class Player extends SpriteComponent
           event = StickAnimationEvent.idle;
         }
 
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
+        aniFrames = AnimationStore().getFrames(event, direction);
       }
     }
 
     onTime = onTime + dt;
-
     final index = (onTime * designFPS).floor();
-    if (index < frames.length) {
-      sprite = frames[index];
-    } else {
-      sprite = frames.last;
+    final refreshNext = index >= aniFrames.frames.length;
 
-      onTime = 0;
-      if (event == StickAnimationEvent.jumpUp) {
-        if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
-          event = StickAnimationEvent.jumpHandAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit1);
-        } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
-          event = StickAnimationEvent.jumpFootAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit2);
-        } else {
-          event = StickAnimationEvent.jumpDown;
-        }
-
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
-      } else if (event == StickAnimationEvent.jumpDown ||
-          event == StickAnimationEvent.jumpHandAttack ||
-          event == StickAnimationEvent.jumpFootAttack) {
-        event = StickAnimationEvent.idle;
-
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
-      } else if (event == StickAnimationEvent.squatHalf) {
-        if (KeyStore().isDown(LogicalKeyboardKey.arrowDown)) {
-          event = StickAnimationEvent.squat;
-        } else {
-          event = StickAnimationEvent.idle;
-        }
-
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
-      } else if (event == StickAnimationEvent.squat) {
-        if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
-          event = StickAnimationEvent.squatHandAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit1);
-        } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
-          event = StickAnimationEvent.squatFootAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit2);
-        } else if (KeyStore().isDown(LogicalKeyboardKey.arrowDown)) {
-          event = StickAnimationEvent.squat;
-        } else {
-          event = StickAnimationEvent.squatHalf;
-        }
-
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
-      } else if (event == StickAnimationEvent.squatHandAttack ||
-          event == StickAnimationEvent.squatFootAttack) {
-        event = StickAnimationEvent.squat;
-
-        frames.clear();
-        frames.addAll(AnimationStore().getFrames(event, direction)!);
-      }
-    }
+    sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
+    final data =
+        refreshNext ? aniFrames.framesData.last : aniFrames.framesData[index];
 
     position.add(Vector2(speed * dt, 0));
+    refreshNext ? refresh() : ();
+  }
+
+  refresh() {
+    onTime = 0;
+    if (event == StickAnimationEvent.jumpUp) {
+      if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
+        event = StickAnimationEvent.jumpHandAttack;
+        KeyStore().remove(LogicalKeyboardKey.digit1);
+      } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
+        event = StickAnimationEvent.jumpFootAttack;
+        KeyStore().remove(LogicalKeyboardKey.digit2);
+      } else {
+        event = StickAnimationEvent.jumpDown;
+      }
+
+      aniFrames = AnimationStore().getFrames(event, direction);
+    } else if (event == StickAnimationEvent.jumpDown ||
+        event == StickAnimationEvent.jumpHandAttack ||
+        event == StickAnimationEvent.jumpFootAttack) {
+      event = StickAnimationEvent.idle;
+
+      aniFrames = AnimationStore().getFrames(event, direction);
+    } else if (event == StickAnimationEvent.squatHalf) {
+      if (KeyStore().isDown(LogicalKeyboardKey.arrowDown)) {
+        event = StickAnimationEvent.squat;
+      } else {
+        event = StickAnimationEvent.idle;
+      }
+
+      aniFrames = AnimationStore().getFrames(event, direction);
+    } else if (event == StickAnimationEvent.squat) {
+      if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
+        event = StickAnimationEvent.squatHandAttack;
+        KeyStore().remove(LogicalKeyboardKey.digit1);
+      } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
+        event = StickAnimationEvent.squatFootAttack;
+        KeyStore().remove(LogicalKeyboardKey.digit2);
+      } else if (KeyStore().isDown(LogicalKeyboardKey.arrowDown)) {
+        event = StickAnimationEvent.squat;
+      } else {
+        event = StickAnimationEvent.squatHalf;
+      }
+
+      aniFrames = AnimationStore().getFrames(event, direction);
+    } else if (event == StickAnimationEvent.squatHandAttack ||
+        event == StickAnimationEvent.squatFootAttack) {
+      event = StickAnimationEvent.squat;
+
+      aniFrames = AnimationStore().getFrames(event, direction);
+    }
   }
 
   @override

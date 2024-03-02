@@ -39,7 +39,7 @@ final class AnimationStore {
 
   AnimationStore._internal();
 
-  late Map<String, AnimationData> data = {};
+  late Map<String, AnimationData> _data = {};
   final Map<String, List<Sprite?>> _leftFrames = {};
   final Map<String, List<Sprite?>> _rightFrames = {};
 
@@ -79,25 +79,36 @@ final class AnimationStore {
     ],
   };
 
-  List<Sprite?>? getFrames(
+  AnimationFrames getFrames(
       StickAnimationEvent event, StickDirection direction) {
     final ele = animations[event]!;
     final animation = ele[Random.secure().nextInt(ele.length)];
 
-    return (direction == StickDirection.left
-            ? _leftFrames[animation.name]
-            : _rightFrames[animation.name])
-        ?.sublist(animation.start, animation.end);
+// TODO 改为根据方向取
+    final data = (direction == StickDirection.left
+        ? _data[animation.name]!
+        : _data[animation.name]!);
+
+    return AnimationFrames(
+      name: animation.name,
+      width: data.width,
+      height: data.height,
+      frames: (direction == StickDirection.left
+              ? _leftFrames[animation.name]
+              : _rightFrames[animation.name])!
+          .sublist(animation.start, animation.end),
+      framesData: data.frames.sublist(animation.start, animation.end),
+    );
   }
 
+// 加载配置
   Future load() async {
-// 解析动画配置文件
     final js = await rootBundle.loadString('assets/animations.json');
-    data = (json.decode(js) as Map)
+    _data = (json.decode(js) as Map)
         .map((k, v) => MapEntry(k, AnimationData.fromJson(v)));
 
 // 生成动画序列帧
-    final kfs = data.map((k, v) =>
+    final kfs = _data.map((k, v) =>
         MapEntry(k, v.frames.map((f) => "${k}_${f.sequence}.png").toList()));
 
     for (var k in kfs.keys) {
@@ -116,6 +127,6 @@ final class AnimationStore {
       _leftFrames[k] = fs;
       _rightFrames[k] = fs;
     }
-    debugPrint("animations is ${data["6001"]}");
+    debugPrint("animations is ${_data["6001"]}");
   }
 }

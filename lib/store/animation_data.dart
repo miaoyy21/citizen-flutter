@@ -1,3 +1,4 @@
+import '../index.dart';
 
 class ImagePoint {
   final int x;
@@ -19,20 +20,21 @@ class ImageRectangle {
   ImageRectangle({required this.min, required this.max});
 
   factory ImageRectangle.fromJson(Map<String, dynamic> js) => ImageRectangle(
-    min: ImagePoint.fromJson(js['Min']),
-    max: ImagePoint.fromJson(js['Max']),
-  );
+        min: ImagePoint.fromJson(js['Min']),
+        max: ImagePoint.fromJson(js['Max']),
+      );
 
   @override
   String toString() => "{min:$min}, max:$max}";
 }
 
-class AnimationFrame {
+class AnimationFrameData {
   final int sequence;
 
   final bool isLand;
   final ImagePoint position;
   final ImageRectangle size;
+  final ImageRectangle stickSize;
 
   final List<ImageRectangle> exposeHead;
   final List<ImageRectangle> exposeBody;
@@ -44,11 +46,12 @@ class AnimationFrame {
   final List<ImageRectangle> attackHand;
   final List<ImageRectangle> attackFoot;
 
-  AnimationFrame({
+  AnimationFrameData({
     required this.sequence,
     required this.isLand,
     required this.position,
     required this.size,
+    required this.stickSize,
     required this.exposeHead,
     required this.exposeBody,
     required this.exposeHand,
@@ -59,62 +62,85 @@ class AnimationFrame {
     required this.attackFoot,
   });
 
-  factory AnimationFrame.fromJson(Map<String, dynamic> js) => AnimationFrame(
-    sequence: js["Sequence"],
-    isLand: js["IsLand"],
-    position: ImagePoint.fromJson(js["Position"]),
-    size: ImageRectangle.fromJson(js["Size"]),
-    exposeHead: (js["ExposeHead"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-    exposeBody: (js["ExposeBody"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-    exposeHand: (js["ExposeHand"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-    exposeFoot: (js["ExposeFoot"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-    attackHead: (js["AttackHead"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-    attackBody: (js["AttackBody"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-    attackHand: (js["AttackHand"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-    attackFoot: (js["AttackFoot"] as List)
-        .map((v) => ImageRectangle.fromJson(v))
-        .toList(),
-  );
+  factory AnimationFrameData.fromJson(Map<String, dynamic> js) =>
+      AnimationFrameData(
+        sequence: js["Sequence"],
+        isLand: js["IsLand"],
+        position: ImagePoint.fromJson(js["Position"]),
+        size: ImageRectangle.fromJson(js["Size"]),
+        stickSize: ImageRectangle.fromJson(js["StickSize"]),
+        exposeHead: (js["ExposeHead"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        exposeBody: (js["ExposeBody"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        exposeHand: (js["ExposeHand"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        exposeFoot: (js["ExposeFoot"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        attackHead: (js["AttackHead"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        attackBody: (js["AttackBody"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        attackHand: (js["AttackHand"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        attackFoot: (js["AttackFoot"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+      );
 
   @override
   String toString() =>
-      "{sequence:$sequence, isLand:$isLand, position:$position, size:$size, "
-          "exposeHead:$exposeHead, exposeBody:$exposeBody, "
-          "exposeHand:$exposeHand, exposeFoot:$exposeFoot, "
-          "attackHead:$attackHead, attackBody:$attackBody, "
-          "attackHand:$attackHand, attackFoot:$attackFoot}";
+      "{sequence:$sequence, isLand:$isLand, position:$position, size:$size, stickSize:$stickSize,"
+      "exposeHead:$exposeHead, exposeBody:$exposeBody, "
+      "exposeHand:$exposeHand, exposeFoot:$exposeFoot, "
+      "attackHead:$attackHead, attackBody:$attackBody, "
+      "attackHand:$attackHand, attackFoot:$attackFoot}";
 }
 
 class AnimationData {
   final int width;
   final int height;
-  final List<AnimationFrame> frames;
+  final ImageRectangle size;
+  final List<AnimationFrameData> frames;
 
   AnimationData(
-      {required this.width, required this.height, required this.frames});
+      {required this.width,
+      required this.height,
+      required this.size,
+      required this.frames});
 
   factory AnimationData.fromJson(Map<String, dynamic> js) => AnimationData(
-    width: js["Width"],
-    height: js["Height"],
-    frames: (js["Frames"] as List)
-        .map((v) => AnimationFrame.fromJson(v))
-        .toList(),
-  );
+        width: js["Width"],
+        height: js["Height"],
+        size: ImageRectangle.fromJson(js["Size"]),
+        frames: (js["Frames"] as List)
+            .map((v) => AnimationFrameData.fromJson(v))
+            .toList(),
+      );
 
   @override
   String toString() => "{width:$width}, height:$height, frames:$frames}";
+}
+
+class AnimationFrames {
+  final String name;
+  final int width;
+  final int height;
+
+  final List<Sprite?> frames;
+  final List<AnimationFrameData> framesData;
+
+  AnimationFrames(
+      {required this.name,
+      required this.width,
+      required this.height,
+      required this.frames,
+      required this.framesData});
 }
