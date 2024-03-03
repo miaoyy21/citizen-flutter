@@ -15,6 +15,7 @@ class Camera extends Component with HasGameReference<CitizenGame> {
   }
 
   final double speed = 500;
+  late int dx = 0;
 
   @override
   void update(double dt) {
@@ -27,14 +28,29 @@ class Camera extends Component with HasGameReference<CitizenGame> {
 
     final p0 = player.position.clone();
 
-    final first = player.aniFrames.framesData.first;
-    final last = player.aniFrames.framesData.last;
-    final dx = (last.position.x - first.position.x) *
-        player.onTime /
-        (player.aniFrames.frames.length / player.designFPS);
-    if (dx > 20) {
-      p0.add(Vector2(dx, 0));
-    }
+    // final size = player.aniFrames.size;
+
+    // 1. 根据图片尺寸进行判定
+    // if (size.max.x - size.min.x > 150) {
+    //   debugPrint("size.max.x - size.min.x = ${size.max.x - size.min.x}");
+    //   p0.add(Vector2((size.max.x - size.min.x - 100).toDouble(), 0));
+    // }
+
+    // 2. 根据玩家移动判定
+    // if (dx != 0) {
+    //   p0.add(Vector2(dx.toDouble(), 0));
+    //   dx = 0;
+    // }
+
+    // 3. 根据动画帧的总长度来判定
+    // final first = player.aniFrames.framesData.first;
+    // final last = player.aniFrames.framesData.last;
+    // final dx = (last.position.x - first.position.x) *
+    //     player.onTime /
+    //     (player.aniFrames.frames.length / player.designFPS);
+    // if (dx > 20) {
+    //   p0.add(Vector2(dx, 0));
+    // }
 
     // 左下角
     final p1 = Vector2(viewportSize.x / 2, -viewportSize.y / 2);

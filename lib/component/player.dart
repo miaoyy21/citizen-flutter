@@ -166,6 +166,12 @@ class Player extends SpriteComponent
 
     sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
     position.x = position.x + speed * dt + dx;
+    // if (dx != 0) {
+    //   final Camera? camera = game.findByKey(ComponentKey.named("Camera"));
+    //   if (camera != null) {
+    //     camera.dx = dx;
+    //   }
+    // }
     dx = 0;
 
     refreshNext ? refresh() : ();

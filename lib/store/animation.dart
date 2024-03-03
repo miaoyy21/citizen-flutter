@@ -33,7 +33,7 @@ class StickAnimation {
   String toString() => "{name:$name, start:$start, end:$end}";
 }
 
-final class AnimationStore {
+class AnimationStore {
   static final AnimationStore _instance = AnimationStore._internal();
 
   factory AnimationStore() => _instance;
