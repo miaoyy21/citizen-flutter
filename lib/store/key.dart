@@ -22,6 +22,8 @@ class KeyStore {
 
   String get showKeys => "[${KeyStore()._keys.map((e) => "$e").join(", ")}]";
 
+  List<LocalGameKey> get keys => _keys;
+
   // 注意，按键是尾部添加，离现在最近的按键在尾部
   add(RawKeyEvent event) {
     final time = currentTime();

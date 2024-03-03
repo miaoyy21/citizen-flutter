@@ -1,3 +1,5 @@
+import 'package:citizen/store/skill.dart';
+
 import 'index.dart';
 
 void main() async {
@@ -28,6 +30,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     debugMode = true;
 
     await AnimationStore().load();
+    await SkillStore().load();
 
     add(
       router = RouterComponent(

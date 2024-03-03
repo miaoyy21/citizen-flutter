@@ -20,6 +20,7 @@ enum StickAnimationEvent {
   squat,
   squatHandAttack,
   squatFootAttack,
+  skill
 }
 
 class StickAnimation {
@@ -84,8 +85,24 @@ class AnimationStore {
     ],
   };
 
-  AnimationFrames getFrames(
-      StickAnimationEvent event, StickDirection direction) {
+  AnimationFrames byName(String name, StickDirection direction) {
+// TODO 改为根据方向取
+    final data =
+        (direction == StickDirection.left ? _data[name]! : _data[name]!);
+
+    return AnimationFrames(
+      name: name,
+      width: data.width,
+      height: data.height,
+      size: data.size,
+      frames: (direction == StickDirection.left
+          ? _leftFrames[name]
+          : _rightFrames[name])!,
+      framesData: data.frames,
+    );
+  }
+
+  AnimationFrames byEvent(StickAnimationEvent event, StickDirection direction) {
     final ele = animations[event]!;
     final animation = ele[Random.secure().nextInt(ele.length)];
 
