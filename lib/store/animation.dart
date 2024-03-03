@@ -48,7 +48,10 @@ class AnimationStore {
     StickAnimationEvent.idle: [StickAnimation("9101", 0, 6)],
     StickAnimationEvent.walk: [StickAnimation("9101", 6, 11)],
     StickAnimationEvent.run: [StickAnimation("9202", 0, 7)],
-    StickAnimationEvent.move: [StickAnimation("9401", 0, 12)],
+    StickAnimationEvent.move: [
+      StickAnimation("9401", 0, 12),
+      StickAnimation("9402", 0, 11),
+    ],
     StickAnimationEvent.handAttack: [
       StickAnimation("7001", 0, 5),
       StickAnimation("7001", 14, 22),
