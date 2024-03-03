@@ -9,9 +9,9 @@ enum StickAnimationEvent {
   idle,
   walk,
   run,
-  dodge,
-  standHandAttack,
-  standFootAttack,
+  move,
+  handAttack,
+  footAttack,
   jumpUp,
   jumpDown,
   jumpHandAttack,
@@ -48,13 +48,13 @@ class AnimationStore {
     StickAnimationEvent.idle: [StickAnimation("9101", 0, 6)],
     StickAnimationEvent.walk: [StickAnimation("9101", 6, 11)],
     StickAnimationEvent.run: [StickAnimation("9202", 0, 7)],
-    StickAnimationEvent.dodge: [StickAnimation("9401", 0, 12)],
-    StickAnimationEvent.standHandAttack: [
+    StickAnimationEvent.move: [StickAnimation("9401", 0, 12)],
+    StickAnimationEvent.handAttack: [
       StickAnimation("7001", 0, 5),
       StickAnimation("7001", 14, 22),
       StickAnimation("7002", 0, 8),
     ],
-    StickAnimationEvent.standFootAttack: [
+    StickAnimationEvent.footAttack: [
       StickAnimation("7001", 5, 14),
       StickAnimation("7001", 22, 33),
       StickAnimation("7002", 8, 21),

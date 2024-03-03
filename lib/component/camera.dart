@@ -15,7 +15,8 @@ class Camera extends Component with HasGameReference<CitizenGame> {
   }
 
   final double speed = 500;
-  late int dx = 0;
+
+  // late int dx = 0;
 
   @override
   void update(double dt) {

@@ -25,7 +25,15 @@ class Player extends SpriteComponent
 
   onChange() {
     // 接受新的键盘输入按键
-    if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
+    if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
+      // 手攻击
+      speed = 0;
+      event = StickAnimationEvent.handAttack;
+    } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
+      // 脚攻击
+      speed = 0;
+      event = StickAnimationEvent.footAttack;
+    } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
       // 向左跑
       speed = -200;
       event = StickAnimationEvent.run;
@@ -105,13 +113,13 @@ class Player extends SpriteComponent
     } else if (event == StickAnimationEvent.walk) {
       if (KeyStore().isDouble(LogicalKeyboardKey.arrowLeft)) {
         speed = 0;
-        event = StickAnimationEvent.dodge;
+        event = StickAnimationEvent.move;
         direction = StickDirection.left;
 
         aniFrames = AnimationStore().getFrames(event, direction);
       } else if (KeyStore().isDouble(LogicalKeyboardKey.arrowRight)) {
         speed = 0;
-        event = StickAnimationEvent.dodge;
+        event = StickAnimationEvent.move;
         direction = StickDirection.right;
 
         aniFrames = AnimationStore().getFrames(event, direction);
@@ -178,7 +186,7 @@ class Player extends SpriteComponent
   }
 
   refresh() {
-    if (event == StickAnimationEvent.dodge) {
+    if (event == StickAnimationEvent.move) {
       event = StickAnimationEvent.idle;
       aniFrames = AnimationStore().getFrames(event, direction);
     } else {
@@ -226,6 +234,11 @@ class Player extends SpriteComponent
       } else if (event == StickAnimationEvent.squatHandAttack ||
           event == StickAnimationEvent.squatFootAttack) {
         event = StickAnimationEvent.squat;
+
+        aniFrames = AnimationStore().getFrames(event, direction);
+      } else if (event == StickAnimationEvent.handAttack ||
+          event == StickAnimationEvent.footAttack) {
+        event = StickAnimationEvent.idle;
 
         aniFrames = AnimationStore().getFrames(event, direction);
       }
