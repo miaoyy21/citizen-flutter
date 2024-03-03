@@ -45,6 +45,9 @@ class AnimationStore {
   final Map<String, List<Sprite?>> _leftFrames = {};
   final Map<String, List<Sprite?>> _rightFrames = {};
 
+  late LogicalKeyboardKey handAttackKey;
+  late LogicalKeyboardKey footAttackKey;
+
   final Map<StickAnimationEvent, List<StickAnimation>> animations = {
     StickAnimationEvent.idle: [StickAnimation("9101", 0, 6)],
     StickAnimationEvent.walk: [StickAnimation("9101", 6, 11)],
@@ -125,7 +128,7 @@ class AnimationStore {
   }
 
 // 加载配置
-  Future load() async {
+  Future load(LogicalKeyboardKey handKey, LogicalKeyboardKey footKey) async {
     final js = await rootBundle.loadString('assets/animations.json');
     _data = (json.decode(js) as Map)
         .map((k, v) => MapEntry(k, AnimationData.fromJson(v)));
@@ -150,6 +153,11 @@ class AnimationStore {
       _leftFrames[k] = fs;
       _rightFrames[k] = fs;
     }
+
+    // 设置手脚攻击按键
+    handAttackKey = handKey;
+    footAttackKey = footKey;
+
     debugPrint("animations is ${_data["9401"]}");
   }
 }

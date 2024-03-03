@@ -28,26 +28,25 @@ class Player extends SpriteComponent
 
   // 接受新的键盘输入按键
   onChange() {
-    final skillKey = List.from(KeyStore().keys)
-        .where((key) =>
-            SkillStore().skills.containsKey(key.key) &&
-            KeyStore().isDown(key.key))
-        .toList();
+    final skillKey = List<LocalGameKey>.from(KeyStore().keys).where((key) =>
+        SkillStore().skills.containsKey(key.key) && KeyStore().isDown(key.key));
 
     if (skillKey.isNotEmpty) {
       // 技能攻击
       speed = 0;
-      debugPrint("Skill Key is $skillKey");
       skill = SkillStore().skills[skillKey.last.key]!;
+      debugPrint("Skill Key ${skillKey.last.key.debugName}, Skill $skill");
       event = StickAnimationEvent.skill;
-    } else if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
+    } else if (KeyStore().isDown(AnimationStore().handAttackKey)) {
       // 手攻击
       speed = 0;
       event = StickAnimationEvent.handAttack;
-    } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
+      KeyStore().remove(AnimationStore().handAttackKey);
+    } else if (KeyStore().isDown(AnimationStore().footAttackKey)) {
       // 脚攻击
       speed = 0;
       event = StickAnimationEvent.footAttack;
+      KeyStore().remove(AnimationStore().footAttackKey);
     } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
       // 向左跑
       speed = -200;
@@ -214,12 +213,12 @@ class Player extends SpriteComponent
     } else {
       onTime = 0;
       if (event == StickAnimationEvent.jumpUp) {
-        if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
+        if (KeyStore().isDown(AnimationStore().handAttackKey)) {
           event = StickAnimationEvent.jumpHandAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit1);
-        } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
+          KeyStore().remove(AnimationStore().handAttackKey);
+        } else if (KeyStore().isDown(AnimationStore().footAttackKey)) {
           event = StickAnimationEvent.jumpFootAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit2);
+          KeyStore().remove(AnimationStore().handAttackKey);
         } else {
           event = StickAnimationEvent.jumpDown;
         }
@@ -240,12 +239,12 @@ class Player extends SpriteComponent
 
         aniFrames = AnimationStore().byEvent(event, direction);
       } else if (event == StickAnimationEvent.squat) {
-        if (KeyStore().isDown(LogicalKeyboardKey.digit1)) {
+        if (KeyStore().isDown(AnimationStore().handAttackKey)) {
           event = StickAnimationEvent.squatHandAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit1);
-        } else if (KeyStore().isDown(LogicalKeyboardKey.digit2)) {
+          KeyStore().remove(AnimationStore().handAttackKey);
+        } else if (KeyStore().isDown(AnimationStore().footAttackKey)) {
           event = StickAnimationEvent.squatFootAttack;
-          KeyStore().remove(LogicalKeyboardKey.digit2);
+          KeyStore().remove(AnimationStore().handAttackKey);
         } else if (KeyStore().isDown(LogicalKeyboardKey.arrowDown)) {
           event = StickAnimationEvent.squat;
         } else {
