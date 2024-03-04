@@ -145,6 +145,7 @@ class AnimationData {
 
 class AnimationFrames {
   final String name;
+  final StickDirection direction;
   final int width;
   final int height;
   final ImageRectangle size;
@@ -154,6 +155,7 @@ class AnimationFrames {
 
   AnimationFrames(
       {required this.name,
+      required this.direction,
       required this.width,
       required this.height,
       required this.size,
@@ -162,5 +164,5 @@ class AnimationFrames {
 
   @override
   String toString() =>
-      "$name[${framesData.first.sequence},${framesData.last.sequence}]";
+      "$name:[${direction == StickDirection.left ? "1" : "2"}]:[${framesData.first.sequence},${framesData.last.sequence}]";
 }

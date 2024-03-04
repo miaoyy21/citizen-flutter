@@ -73,6 +73,7 @@ class AnimationStore {
 
     return AnimationFrames(
       name: name,
+      direction: direction,
       width: data.width,
       height: data.height,
       size: data.size,
@@ -92,6 +93,7 @@ class AnimationStore {
 
     return AnimationFrames(
       name: animation.name,
+      direction: direction,
       width: data.width,
       height: data.height,
       size: data.size,

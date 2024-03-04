@@ -92,11 +92,31 @@ class Player extends SpriteComponent
         : index;
     final frame = _aniFrames.framesData[index];
 
-    final x1 = frame.position.x;
-    final x2 = _aniFrames.framesData.first.position.x;
-    if (x1 - x2 > 20) {
-      dx = x1 - x2;
-      debugPrint("$_aniFrames -> $newFrames : $dx");
+    late int x;
+
+    final xn = frame.position.x; // 结束
+    final x0 = _aniFrames.framesData.first.position.x; // 开始
+
+    // 站立方向没有变化
+    if (newFrames.direction == StickDirection.left) {
+      x = xn - x0;
+    } else {
+      x = xn - x0;
+    }
+    debugPrint("$_aniFrames -> $newFrames 1111 :$xn - $x0 = ${x}");
+
+    if (newFrames.direction != _aniFrames.direction) {
+      if (newFrames.direction == StickDirection.left) {
+        x = x - newFrames.framesData.first.position.x;
+      } else {
+        x = x - newFrames.framesData.first.position.x;
+      }
+
+      debugPrint("$_aniFrames -> $newFrames 2222 :$x");
+    }
+
+    if (x.abs() > 20) {
+      dx = x;
     }
 
     _aniFrames = newFrames;
@@ -189,6 +209,7 @@ class Player extends SpriteComponent
     final refreshNext = index >= aniFrames.frames.length;
 
     sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
+
     position.x = position.x + speed * dt + dx;
     // if (dx != 0) {
     //   final Camera? camera = game.findByKey(ComponentKey.named("Camera"));
