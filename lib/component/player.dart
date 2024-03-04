@@ -1,11 +1,9 @@
-import 'package:citizen/store/skill.dart';
-
 import '../index.dart';
 
 class Player extends SpriteComponent
     with HasGameReference<CitizenGame>, CollisionCallbacks {
   Player({super.position})
-      : super(anchor: Anchor.bottomLeft, key: ComponentKey.named("Player"));
+      : super(anchor: Anchor.bottomCenter, key: ComponentKey.named("Player"));
 
   final double designFPS = 12;
 
