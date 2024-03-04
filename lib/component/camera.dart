@@ -12,6 +12,8 @@ class Camera extends Component with HasGameReference<CitizenGame> {
   FutureOr<void> onLoad() {
     camera.viewfinder.anchor = Anchor.bottomLeft;
     camera.moveTo(Vector2(0, 0));
+
+    // camera.follow(player);
   }
 
   final double speed = 500;

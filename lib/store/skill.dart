@@ -18,6 +18,7 @@ class SkillStore {
       LogicalKeyboardKey.digit7: "1050",
       LogicalKeyboardKey.digit8: "1060",
       LogicalKeyboardKey.digit9: "1070",
+      LogicalKeyboardKey.digit0: "1080",
     };
 
     skills.forEach((key, value) {

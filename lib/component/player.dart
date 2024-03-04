@@ -3,7 +3,7 @@ import '../index.dart';
 class Player extends SpriteComponent
     with HasGameReference<CitizenGame>, CollisionCallbacks {
   Player({super.position})
-      : super(anchor: Anchor.bottomLeft, key: ComponentKey.named("Player"));
+      : super(anchor: Anchor.bottomCenter, key: ComponentKey.named("Player"));
 
   final double designFPS = 12;
 
@@ -92,28 +92,14 @@ class Player extends SpriteComponent
         : index;
     final frame = _aniFrames.framesData[index];
 
-    late int x;
+    debugPrint("$_aniFrames -> $newFrames ");
+    late int x = 0;
 
-    final xn = frame.position.x; // 结束
-    final x0 = _aniFrames.framesData.first.position.x; // 开始
+    final x1 = _aniFrames.framesData.first.position.x; // 旧 开始
+    final x2 = frame.position.x; // 旧 结束
+    final x3 = newFrames.framesData.first.position.x; // 新 开始
 
-    // 站立方向没有变化
-    if (newFrames.direction == StickDirection.left) {
-      x = xn - x0;
-    } else {
-      x = xn - x0;
-    }
-    debugPrint("$_aniFrames -> $newFrames 1111 :$xn - $x0 = ${x}");
-
-    if (newFrames.direction != _aniFrames.direction) {
-      if (newFrames.direction == StickDirection.left) {
-        x = x - newFrames.framesData.first.position.x;
-      } else {
-        x = x - newFrames.framesData.first.position.x;
-      }
-
-      debugPrint("$_aniFrames -> $newFrames 2222 :$x");
-    }
+    x = x2 - x3;
 
     if (x.abs() > 20) {
       dx = x;
