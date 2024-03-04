@@ -36,16 +36,16 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     add(
       router = RouterComponent(
         routes: {
-          'stage1': Route(
+          'stage01': Route(
             maintainState: false,
-            () => Stage("stage1"),
+            () => Stage("stage01"),
           ),
           // 'level-selector': Route(LevelSelectorPage.new),
           // 'settings': Route(SettingsPage.new, transparent: true),
           // 'pause': PauseRoute(),
           // 'confirm-dialog': OverlayRoute.existing(),
         },
-        initialRoute: 'stage1',
+        initialRoute: 'stage01',
       ),
     );
   }

@@ -30,6 +30,7 @@ class ImageRectangle {
 
 class AnimationFrameData {
   final String name;
+  final StickDirection direction;
   final int sequence;
 
   final bool isLand;
@@ -49,6 +50,7 @@ class AnimationFrameData {
 
   AnimationFrameData({
     required this.name,
+    required this.direction,
     required this.sequence,
     required this.isLand,
     required this.position,
@@ -67,6 +69,8 @@ class AnimationFrameData {
   factory AnimationFrameData.fromJson(Map<String, dynamic> js) =>
       AnimationFrameData(
         name: js["Name"],
+        direction:
+            js["Direction"] == "1" ? StickDirection.left : StickDirection.right,
         sequence: js["Sequence"],
         isLand: js["IsLand"],
         position: ImagePoint.fromJson(js["Position"]),
@@ -100,7 +104,8 @@ class AnimationFrameData {
 
   @override
   String toString() =>
-      "{name:$name, sequence:$sequence, isLand:$isLand, position:$position, size:$size, stickSize:$stickSize,"
+      "{name:$name, direction:$direction, sequence:$sequence, isLand:$isLand, "
+      "position:$position, size:$size, stickSize:$stickSize,"
       "exposeHead:$exposeHead, exposeBody:$exposeBody, "
       "exposeHand:$exposeHand, exposeFoot:$exposeFoot, "
       "attackHead:$attackHead, attackBody:$attackBody, "
@@ -111,25 +116,31 @@ class AnimationData {
   final int width;
   final int height;
   final ImageRectangle size;
-  final List<AnimationFrameData> frames;
+  final List<AnimationFrameData> leftFrames;
+  final List<AnimationFrameData> rightFrames;
 
   AnimationData(
       {required this.width,
       required this.height,
       required this.size,
-      required this.frames});
+      required this.leftFrames,
+      required this.rightFrames});
 
   factory AnimationData.fromJson(Map<String, dynamic> js) => AnimationData(
         width: js["Width"],
         height: js["Height"],
         size: ImageRectangle.fromJson(js["Size"]),
-        frames: (js["Frames"] as List)
+        leftFrames: (js["LeftFrames"] as List)
+            .map((v) => AnimationFrameData.fromJson(v))
+            .toList(),
+        rightFrames: (js["RightFrames"] as List)
             .map((v) => AnimationFrameData.fromJson(v))
             .toList(),
       );
 
   @override
-  String toString() => "{width:$width}, height:$height, frames:$frames}";
+  String toString() =>
+      "{width:$width}, height:$height, leftFrames:$leftFrames, rightFrames:$rightFrames}";
 }
 
 class AnimationFrames {

@@ -20,10 +20,9 @@ class SkillStore {
       LogicalKeyboardKey.digit9: "1070",
     };
 
-    debugPrint("加载技能");
     skills.forEach((key, value) {
       // 触发1次判断，是否存在异常
-      debugPrint("${key.debugName} :: $value");
+      debugPrint("加载技能：${key.debugName} :: $value");
       AnimationStore().byName(value, StickDirection.right);
     });
   }

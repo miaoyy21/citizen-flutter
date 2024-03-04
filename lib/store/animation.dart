@@ -3,26 +3,6 @@ import 'dart:math';
 
 import '../index.dart';
 
-enum StickDirection { left, right, repeat }
-
-enum StickAnimationEvent {
-  idle,
-  walk,
-  run,
-  move,
-  handAttack,
-  footAttack,
-  jumpUp,
-  jumpDown,
-  jumpHandAttack,
-  jumpFootAttack,
-  squatHalf,
-  squat,
-  squatHandAttack,
-  squatFootAttack,
-  skill
-}
-
 class StickAnimation {
   final String name;
   final int start;
@@ -89,9 +69,7 @@ class AnimationStore {
   };
 
   AnimationFrames byName(String name, StickDirection direction) {
-// TODO 改为根据方向取
-    final data =
-        (direction == StickDirection.left ? _data[name]! : _data[name]!);
+    final data = _data[name]!;
 
     return AnimationFrames(
       name: name,
@@ -101,7 +79,8 @@ class AnimationStore {
       frames: (direction == StickDirection.left
           ? _leftFrames[name]
           : _rightFrames[name])!,
-      framesData: data.frames,
+      framesData:
+          direction == StickDirection.left ? data.leftFrames : data.rightFrames,
     );
   }
 
@@ -109,10 +88,7 @@ class AnimationStore {
     final ele = animations[event]!;
     final animation = ele[Random.secure().nextInt(ele.length)];
 
-// TODO 改为根据方向取
-    final data = (direction == StickDirection.left
-        ? _data[animation.name]!
-        : _data[animation.name]!);
+    final data = _data[animation.name]!;
 
     return AnimationFrames(
       name: animation.name,
@@ -123,34 +99,38 @@ class AnimationStore {
               ? _leftFrames[animation.name]
               : _rightFrames[animation.name])!
           .sublist(animation.start, animation.end),
-      framesData: data.frames.sublist(animation.start, animation.end),
+      framesData: (direction == StickDirection.left
+              ? data.leftFrames
+              : data.rightFrames)
+          .sublist(animation.start, animation.end),
     );
   }
 
-// 加载配置
+  // 加载配置
   Future load(LogicalKeyboardKey handKey, LogicalKeyboardKey footKey) async {
     final js = await rootBundle.loadString('assets/animations.json');
     _data = (json.decode(js) as Map)
         .map((k, v) => MapEntry(k, AnimationData.fromJson(v)));
 
-// 生成动画序列帧
-    final kfs = _data.map((k, v) =>
-        MapEntry(k, v.frames.map((f) => "${k}_${f.sequence}.png").toList()));
-
-    for (var k in kfs.keys) {
-      final fs = (await Flame.images.loadAll(kfs[k]!))
+    // 左动画帧
+    final leftFs = _data.map((k, v) => MapEntry(
+        k, v.leftFrames.map((f) => "0_1_${k}_${f.sequence}.png").toList()));
+    for (var k in leftFs.keys) {
+      final fs = (await Flame.images.loadAll(leftFs[k]!))
           .map((img) => SpriteComponent.fromImage(img).sprite)
           .toList();
 
-// TODO 变成 6001_1（向左）和 6001_2（向右） 两个动画
-// if (k.endsWith("_1")) {
-//   leftFrames[k.substring(k.length - 2)] = frames;
-// } else if (k.endsWith("_1")) {
-//   rightFrames[k.substring(k.length - 2)] = frames;
-// } else {
-//   assert(false);
-// }
       _leftFrames[k] = fs;
+    }
+
+    // 右动画帧
+    final rightFs = _data.map((k, v) => MapEntry(
+        k, v.rightFrames.map((f) => "0_2_${k}_${f.sequence}.png").toList()));
+    for (var k in rightFs.keys) {
+      final fs = (await Flame.images.loadAll(rightFs[k]!))
+          .map((img) => SpriteComponent.fromImage(img).sprite)
+          .toList();
+
       _rightFrames[k] = fs;
     }
 
@@ -158,6 +138,6 @@ class AnimationStore {
     handAttackKey = handKey;
     footAttackKey = footKey;
 
-    debugPrint("animations is ${_data["9401"]}");
+    debugPrint("加载动画帧完成");
   }
 }
