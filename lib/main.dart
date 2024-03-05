@@ -27,8 +27,6 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
 
   @override
   FutureOr<void> onLoad() async {
-    debugMode = true;
-
     await AnimationStore()
         .load(LogicalKeyboardKey.digit1, LogicalKeyboardKey.digit2);
     await SkillStore().load();

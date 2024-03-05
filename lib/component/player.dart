@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../index.dart';
 
 class Player extends SpriteComponent
@@ -9,6 +11,7 @@ class Player extends SpriteComponent
 
   late double speed = 0; // 初始速度
   late double onTime = 0;
+  late AnimationFrameData frame;
   late AnimationFrames _aniFrames;
 
   late StickDirection direction = StickDirection.right;
@@ -22,6 +25,11 @@ class Player extends SpriteComponent
     sprite = SpriteComponent.fromImage(empty).sprite;
 
     _aniFrames = AnimationStore().byEvent(event, direction);
+    add(
+      RectangleHitbox()
+        ..debugMode = true
+        ..debugColor = Colors.purple,
+    );
   }
 
   // 接受新的键盘输入按键
@@ -195,14 +203,10 @@ class Player extends SpriteComponent
     final refreshNext = index >= aniFrames.frames.length;
 
     sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
+    frame =
+        refreshNext ? aniFrames.framesData.last : aniFrames.framesData[index];
 
     position.x = position.x + speed * dt + dx;
-    // if (dx != 0) {
-    //   final Camera? camera = game.findByKey(ComponentKey.named("Camera"));
-    //   if (camera != null) {
-    //     camera.dx = dx;
-    //   }
-    // }
     dx = 0;
 
     refreshNext ? refresh() : ();
@@ -272,19 +276,57 @@ class Player extends SpriteComponent
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    super.onCollisionStart(intersectionPoints, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
 
-    // debugPrint("Player onCollisionStart ${(other as NPC).id}");
+    if (other is Enemy) {
+      // 玩家所在的世界坐标，以图片的左下角为基点
+      final p0 = position.clone()..sub(Vector2(frame.width / 2, 0));
+      final p1 = other.position.clone()..sub(Vector2(frame.width / 2, 0));
+
+      // 是否被对方攻击判定
+      final byAttack = other.frame.attackFoot.any((f1) {
+        if (frame.exposeHead.any((f0) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("玩家头部被攻击");
+          return true;
+        }
+
+        if (frame.exposeBody.any((f0) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("玩家身体被攻击");
+          return true;
+        }
+
+        if (frame.exposeHand.any((f0) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("玩家手部被攻击");
+          return true;
+        }
+
+        if (frame.exposeFoot.any((f0) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("玩家脚部被攻击");
+          return true;
+        }
+
+        return false;
+      });
+
+
+      if (byAttack) {
+        // game.paused = true;
+      }
+    }
   }
 
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
+  isCollision(
+      Vector2 p1, ImageRectangle rect1, Vector2 p2, ImageRectangle rect2) {
+    final min1 = rect1.min.toVector2(p1);
+    final max1 = rect1.max.toVector2(p1);
 
-    // debugPrint("Player onCollisionEnd ${(other as NPC).id}");
+    final min2 = rect2.min.toVector2(p2);
+    final max2 = rect2.max.toVector2(p2);
+
+    return (max(max1.x, max2.x) - min(min1.x, min2.x)).abs() <
+            (max1.x - min1.x) + (max2.x - min2.x) &&
+        (max(min1.y, min2.y) - min(max1.y, max2.y)).abs() <
+            (min1.x - max1.y) + (min2.y - max2.y);
   }
 }

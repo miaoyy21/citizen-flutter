@@ -31,6 +31,8 @@ class ImageRectangle {
 class AnimationFrameData {
   final String name;
   final StickDirection direction;
+  final int width;
+  final int height;
   final int sequence;
 
   final bool isLand;
@@ -51,6 +53,8 @@ class AnimationFrameData {
   AnimationFrameData({
     required this.name,
     required this.direction,
+    required this.width,
+    required this.height,
     required this.sequence,
     required this.isLand,
     required this.position,
@@ -71,6 +75,8 @@ class AnimationFrameData {
         name: js["Name"],
         direction:
             js["Direction"] == "1" ? StickDirection.left : StickDirection.right,
+        width: js["Width"],
+        height: js["Height"],
         sequence: js["Sequence"],
         isLand: js["IsLand"],
         position: ImagePoint.fromJson(js["Position"]),
@@ -104,7 +110,8 @@ class AnimationFrameData {
 
   @override
   String toString() =>
-      "{name:$name, direction:$direction, sequence:$sequence, isLand:$isLand, "
+      "{name:$name, direction:$direction, width:$width, height:$height, "
+      "sequence:$sequence, isLand:$isLand, "
       "position:$position, size:$size, stickSize:$stickSize,"
       "exposeHead:$exposeHead, exposeBody:$exposeBody, "
       "exposeHand:$exposeHand, exposeFoot:$exposeFoot, "

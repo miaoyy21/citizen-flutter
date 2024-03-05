@@ -19,10 +19,19 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     world.add(stage);
 
     final player = Player(position: Vector2(300 + 48, -16 + 5));
+    player.debugColor = Colors.purple;
     world.add(player);
 
     final camera = Camera(player, stage.size);
     world.add(camera);
+
+    final enemy1 = Enemy(1, position: Vector2(450 + 48, -16 + 5));
+    enemy1.debugColor = Colors.blue;
+    world.add(enemy1);
+
+    // final enemy2 = Enemy(2, position: Vector2(600 + 48, -16 + 5));
+    // enemy2.debugColor = Colors.green;
+    // world.add(enemy2);
   }
 
   @override
