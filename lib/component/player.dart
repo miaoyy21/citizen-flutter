@@ -92,17 +92,17 @@ class Player extends SpriteComponent
         : index;
     final frame = _aniFrames.framesData[index];
 
-    debugPrint("$_aniFrames -> $newFrames ");
     late int x = 0;
 
     final x1 = _aniFrames.framesData.first.position.x; // 旧 开始
     final x2 = frame.position.x; // 旧 结束
     final x3 = newFrames.framesData.first.position.x; // 新 开始
+    debugPrint(
+        "$_aniFrames [$index] -> $newFrames x1 = $x1, x2 = $x2, x3 = $x3 ");
 
     x = x2 - x3;
-
     if (x.abs() > 20) {
-      dx = x;
+      dx = dx + x;
     }
 
     _aniFrames = newFrames;
