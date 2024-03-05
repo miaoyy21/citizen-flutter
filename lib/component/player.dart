@@ -309,7 +309,6 @@ class Player extends SpriteComponent
         return false;
       });
 
-
       if (byAttack) {
         // game.paused = true;
       }
