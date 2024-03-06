@@ -7,7 +7,11 @@ class TestComponent extends PositionComponent
 
   @override
   FutureOr<void> onLoad() {
-    add(RectangleHitbox(position: position, size: size, anchor: anchor));
-    return super.onLoad();
+    add(
+      RectangleHitbox()
+        ..debugMode = true
+        ..isSolid = true
+        ..debugColor = Colors.redAccent,
+    );
   }
 }

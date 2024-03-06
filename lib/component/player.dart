@@ -18,6 +18,8 @@ class Player extends SpriteComponent
   late StickAnimationEvent event = StickAnimationEvent.idle;
   late String skill;
 
+  World get world => game.world;
+
   @override
   Future<void> onLoad() async {
     // 初始帧为向右站立

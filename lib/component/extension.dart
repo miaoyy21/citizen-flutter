@@ -9,5 +9,5 @@ extension ExtensionObject on Object {
 
 extension ExtensionImagePoint on ImagePoint {
   // 与地面存在5像素的固定差值
-  Vector2 toGlobal(Vector2 p0) => Vector2(p0.x + x, p0.y - y + 5);
+  Vector2 toGlobal(Vector2 p0) => Vector2(p0.x + x, p0.y - y);
 }
