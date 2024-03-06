@@ -309,7 +309,7 @@ class Player extends SpriteComponent
       // });
 
       frame.attackFoot.any((f0) {
-        if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
+        if (other.frame.exposeHead.any((f1) => (isCollision(p0, f0, p1, f1)))) {
           debugPrint("使用脚攻击对方的头部");
           return true;
         }
@@ -334,13 +334,13 @@ class Player extends SpriteComponent
     }
   }
 
-  isCollision(
+  bool isCollision(
       Vector2 p1, ImageRectangle rect1, Vector2 p2, ImageRectangle rect2) {
-    final min1 = rect1.min.toVector2(p1);
-    final max1 = rect1.max.toVector2(p1);
+    final min1 = rect1.min.toGlobal(p1);
+    final max1 = rect1.max.toGlobal(p1);
 
-    final min2 = rect2.min.toVector2(p2);
-    final max2 = rect2.max.toVector2(p2);
+    final min2 = rect2.min.toGlobal(p2);
+    final max2 = rect2.max.toGlobal(p2);
 
     return (max(max1.x, max2.x) - min(min1.x, min2.x)).abs() <
             (max1.x - min1.x) + (max2.x - min2.x) &&
