@@ -286,22 +286,22 @@ class Player extends SpriteComponent
 
       // frame.attackHand.any((f0) {
       //   if (other.frame.exposeBody.any((f1) => isCollision(p0, f0, p1, f1))) {
-      //     debugPrint("攻击对方的身体");
+      //     debugPrint("使用手攻击对方的身体");
       //     return true;
       //   }
       //
       //   if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
-      //     debugPrint("攻击对方的头部");
+      //     debugPrint("使用手攻击对方的头部");
       //     return true;
       //   }
       //
       //   if (other.frame.exposeHand.any((f1) => isCollision(p0, f0, p1, f1))) {
-      //     debugPrint("攻击对方的手");
+      //     debugPrint("使用手攻击对方的手");
       //     return true;
       //   }
       //
       //   if (other.frame.exposeFoot.any((f1) => isCollision(p0, f0, p1, f1))) {
-      //     debugPrint("攻击对方的脚");
+      //     debugPrint("使用手攻击对方的脚");
       //     return true;
       //   }
       //
