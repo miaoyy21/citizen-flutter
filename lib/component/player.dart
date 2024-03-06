@@ -280,38 +280,57 @@ class Player extends SpriteComponent
     super.onCollision(intersectionPoints, other);
 
     if (other is Enemy) {
-      // 玩家所在的世界坐标，以图片的左下角为基点
+      // 玩家所在的世界坐标，以左下角为基点
       final p0 = position.clone()..sub(Vector2(frame.width / 2, 0));
       final p1 = other.position.clone()..sub(Vector2(frame.width / 2, 0));
 
-      // 是否被对方攻击判定
-      final byAttack = other.frame.attackFoot.any((f1) {
-        if (frame.exposeHead.any((f0) => isCollision(p0, f0, p1, f1))) {
-          debugPrint("玩家头部被攻击");
+      // frame.attackHand.any((f0) {
+      //   if (other.frame.exposeBody.any((f1) => isCollision(p0, f0, p1, f1))) {
+      //     debugPrint("攻击对方的身体");
+      //     return true;
+      //   }
+      //
+      //   if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
+      //     debugPrint("攻击对方的头部");
+      //     return true;
+      //   }
+      //
+      //   if (other.frame.exposeHand.any((f1) => isCollision(p0, f0, p1, f1))) {
+      //     debugPrint("攻击对方的手");
+      //     return true;
+      //   }
+      //
+      //   if (other.frame.exposeFoot.any((f1) => isCollision(p0, f0, p1, f1))) {
+      //     debugPrint("攻击对方的脚");
+      //     return true;
+      //   }
+      //
+      //   return false;
+      // });
+
+      frame.attackFoot.any((f0) {
+        if (other.frame.exposeBody.any((f1) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("使用脚攻击对方的身体");
           return true;
         }
 
-        if (frame.exposeBody.any((f0) => isCollision(p0, f0, p1, f1))) {
-          debugPrint("玩家身体被攻击");
+        if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("使用脚攻击对方的头部");
           return true;
         }
 
-        if (frame.exposeHand.any((f0) => isCollision(p0, f0, p1, f1))) {
-          debugPrint("玩家手部被攻击");
+        if (other.frame.exposeHand.any((f1) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("使用脚攻击对方的手");
           return true;
         }
 
-        if (frame.exposeFoot.any((f0) => isCollision(p0, f0, p1, f1))) {
-          debugPrint("玩家脚部被攻击");
+        if (other.frame.exposeFoot.any((f1) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("使用脚攻击对方的脚");
           return true;
         }
 
         return false;
       });
-
-      if (byAttack) {
-        // game.paused = true;
-      }
     }
   }
 

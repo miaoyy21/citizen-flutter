@@ -19,7 +19,8 @@ class Enemy extends SpriteComponent
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
 
-    aniFrames = AnimationStore().byName("10${id}0", StickDirection.left);
+    aniFrames =
+        AnimationStore().byEvent(StickAnimationEvent.idle, StickDirection.left);
     add(
       RectangleHitbox()
         ..debugMode = true
