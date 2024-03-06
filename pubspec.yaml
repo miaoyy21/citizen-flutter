@@ -94,5 +94,6 @@ flutter:
 
   assets:
     - assets/
+    - assets/attacks/
     - assets/audio/
     - assets/images/
