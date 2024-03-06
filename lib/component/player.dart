@@ -285,13 +285,13 @@ class Player extends SpriteComponent
       final p1 = other.position.clone()..sub(Vector2(frame.width / 2, 0));
 
       // frame.attackHand.any((f0) {
-      //   if (other.frame.exposeBody.any((f1) => isCollision(p0, f0, p1, f1))) {
-      //     debugPrint("使用手攻击对方的身体");
+      //   if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
+      //     debugPrint("使用手攻击对方的头部");
       //     return true;
       //   }
       //
-      //   if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
-      //     debugPrint("使用手攻击对方的头部");
+      //   if (other.frame.exposeBody.any((f1) => isCollision(p0, f0, p1, f1))) {
+      //     debugPrint("使用手攻击对方的身体");
       //     return true;
       //   }
       //
@@ -309,13 +309,13 @@ class Player extends SpriteComponent
       // });
 
       frame.attackFoot.any((f0) {
-        if (other.frame.exposeBody.any((f1) => isCollision(p0, f0, p1, f1))) {
-          debugPrint("使用脚攻击对方的身体");
+        if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("使用脚攻击对方的头部");
           return true;
         }
 
-        if (other.frame.exposeHead.any((f1) => isCollision(p0, f0, p1, f1))) {
-          debugPrint("使用脚攻击对方的头部");
+        if (other.frame.exposeBody.any((f1) => isCollision(p0, f0, p1, f1))) {
+          debugPrint("使用脚攻击对方的身体");
           return true;
         }
 
