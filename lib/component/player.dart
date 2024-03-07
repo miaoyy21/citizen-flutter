@@ -347,6 +347,6 @@ class Player extends SpriteComponent
     return (max(max1.x, max2.x) - min(min1.x, min2.x)).abs() <
             (max1.x - min1.x) + (max2.x - min2.x) &&
         (max(min1.y, min2.y) - min(max1.y, max2.y)).abs() <
-            (min1.x - max1.y) + (min2.y - max2.y);
+            (min1.y - max1.y) + (min2.y - max2.y);
   }
 }
