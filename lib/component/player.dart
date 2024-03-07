@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flame/effects.dart';
+
 import '../index.dart';
 
 class Player extends SpriteComponent
@@ -31,6 +33,10 @@ class Player extends SpriteComponent
       RectangleHitbox()
         ..debugMode = true
         ..debugColor = Colors.purple,
+    );
+
+    add(
+      ColorEffect(Colors.red, EffectController(duration: 0)),
     );
   }
 
@@ -341,32 +347,32 @@ class Player extends SpriteComponent
       });
 
       if (hasAttack) {
-        other.byFrame = frame;
-
-        debugPrint("敌人被攻击，当前攻击帧序号 ${frame.sequence} ${frame.attackPoint}");
-
-        final nextFrame = aniFrames.framesData
-            .getRange(frame.sequence, aniFrames.framesData.length)
-            .firstWhere(
-              (f) => f.attackPoint.x != 0 && f.attackPoint.y != 0,
-              orElse: AnimationFrameData.invalid,
-            );
-        if (!nextFrame.isValid) {
-          debugPrint("敌人下次被攻击不存在");
-          return;
-        }
-
-        debugPrint(
-            "敌人下次被攻击的帧序号 ${nextFrame.sequence} ${nextFrame.attackPoint}");
-
-        if (nextFrame.attackPoint.y > 110) {
-          // 玩家需要被抛起
-        } else {
-          // 玩家被攻击向后移动
-          final diff = nextFrame.sequence - frame.sequence;
-        }
+        // other.byFrame = frame;
+        //
+        // debugPrint("敌人被攻击，当前攻击帧序号 ${frame.sequence} ${frame.attackPoint}");
+        //
+        // final nextFrame = aniFrames.framesData
+        //     .getRange(frame.sequence, aniFrames.framesData.length)
+        //     .firstWhere(
+        //       (f) => f.attackPoint.x != 0 && f.attackPoint.y != 0,
+        //       orElse: AnimationFrameData.invalid,
+        //     );
+        // if (!nextFrame.isValid) {
+        //   debugPrint("敌人下次被攻击不存在");
+        //   return;
+        // }
+        //
+        // debugPrint(
+        //     "敌人下次被攻击的帧序号 ${nextFrame.sequence} ${nextFrame.attackPoint}");
+        //
+        // if (nextFrame.attackPoint.y > 110) {
+        //   // 玩家需要被抛起
+        // } else {
+        //   // 玩家被攻击向后移动
+        //   final diff = nextFrame.sequence - frame.sequence;
+        // }
       } else {
-        other.byFrame = AnimationFrameData.invalid();
+        // other.byFrame = AnimationFrameData.invalid();
       }
     }
   }

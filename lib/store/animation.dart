@@ -25,7 +25,7 @@ class AnimationStore {
   final Map<String, List<Sprite?>> _leftFrames = {};
   final Map<String, List<Sprite?>> _rightFrames = {};
 
-  late Map<String, List<AttackData>> _attacks = {};
+  // late Map<String, List<AttackData>> _attacks = {};
 
   late LogicalKeyboardKey handAttackKey;
   late LogicalKeyboardKey footAttackKey;
@@ -143,14 +143,14 @@ class AnimationStore {
     debugPrint("加载动画帧完成");
 
     // 加载攻击帧解析信息
-    _attacks.clear();
-    for (var k in _data.keys) {
-      final jsx = await rootBundle.loadString('assets/attacks/$k.json');
-      _attacks[k] = (json.decode(jsx) as List)
-          .map((vx) => AttackData.fromJson(vx))
-          .toList();
-    }
-    debugPrint("$_attacks");
+    // _attacks.clear();
+    // for (var k in _data.keys) {
+    //   final jsx = await rootBundle.loadString('assets/attacks/$k.json');
+    //   _attacks[k] = (json.decode(jsx) as List)
+    //       .map((vx) => AttackData.fromJson(vx))
+    //       .toList();
+    // }
+    // debugPrint("$_attacks");
 
     // 设置手脚攻击按键
     handAttackKey = handKey;

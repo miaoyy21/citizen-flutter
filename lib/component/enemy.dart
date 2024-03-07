@@ -13,10 +13,6 @@ class Enemy extends SpriteComponent
   late AnimationFrameData frame;
   late AnimationFrameData byFrame;
 
-  late double xSpeed = 0;
-  late double ySpeed = 0;
-  late double ySpeedRate = 0;
-
   @override
   FutureOr<void> onLoad() async {
     final empty = await Flame.images.load("empty.png");
