@@ -7,32 +7,40 @@ class Enemy extends SpriteComponent
   Enemy(this.id, {super.position}) : super(anchor: Anchor.bottomCenter);
 
   late double onTime = 0;
-
-  late AnimationFrameData frame;
+  late StickDirection direction = StickDirection.left;
   late AnimationFrames aniFrames;
 
-  final _defaultColor = Colors.blue;
-  final _collisionColor = Colors.red;
+  late AnimationFrameData frame;
+  late AnimationFrameData byFrame;
+
+  late double xSpeed = 0;
+  late double ySpeed = 0;
+  late double ySpeedRate = 0;
 
   @override
   FutureOr<void> onLoad() async {
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
+    aniFrames = AnimationStore().byEvent(StickAnimationEvent.idle, direction);
+    byFrame = AnimationFrameData.invalid();
 
-    aniFrames =
-        AnimationStore().byEvent(StickAnimationEvent.idle, StickDirection.left);
     add(
       RectangleHitbox()
         ..debugMode = true
-        ..debugColor = _defaultColor,
+        ..debugColor = Colors.blue,
     );
   }
 
   @override
   void update(double dt) {
-    onTime = onTime + dt;
+    if (((onTime + dt) * 12).floor() >= aniFrames.frames.length) {
+      aniFrames = AnimationStore().byEvent(StickAnimationEvent.idle, direction);
+      onTime = 0;
+    }
 
-    final index = (onTime * 12).floor() % aniFrames.frames.length;
+    onTime = onTime + dt;
+    late int index = (onTime * 12).floor();
+
     sprite = aniFrames.frames[index];
     frame = aniFrames.framesData[index];
   }

@@ -70,6 +70,9 @@ class AnimationStore {
     ],
   };
 
+  AnimationFrameData get idleFrameData =>
+      byEvent(StickAnimationEvent.idle, StickDirection.left).framesData.first;
+
   AnimationFrames byName(String name, StickDirection direction) {
     final data = _data[name]!;
 

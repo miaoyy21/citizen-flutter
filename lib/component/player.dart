@@ -282,6 +282,12 @@ class Player extends SpriteComponent
     super.onCollision(intersectionPoints, other);
 
     if (other is Enemy) {
+      if (other.byFrame.name == frame.name &&
+          other.byFrame.sequence == frame.sequence) {
+        // 帧内已被攻击
+        return;
+      }
+
       // 玩家所在的世界坐标，以左下角为基点
       final p0 = position.clone()..sub(Vector2(frame.width / 2, 0));
       final p1 = other.position.clone()..sub(Vector2(frame.width / 2, 0));
@@ -310,7 +316,7 @@ class Player extends SpriteComponent
       //   return false;
       // });
 
-      frame.attackFoot.any((f0) {
+      final hasAttack = frame.attackFoot.any((f0) {
         if (other.frame.exposeHead.any((f1) => (isCollision(p0, f0, p1, f1)))) {
           debugPrint("使用脚攻击对方的头部");
           return true;
@@ -333,6 +339,35 @@ class Player extends SpriteComponent
 
         return false;
       });
+
+      if (hasAttack) {
+        other.byFrame = frame;
+
+        debugPrint("敌人被攻击，当前攻击帧序号 ${frame.sequence} ${frame.attackPoint}");
+
+        final nextFrame = aniFrames.framesData
+            .getRange(frame.sequence, aniFrames.framesData.length)
+            .firstWhere(
+              (f) => f.attackPoint.x != 0 && f.attackPoint.y != 0,
+              orElse: AnimationFrameData.invalid,
+            );
+        if (!nextFrame.isValid) {
+          debugPrint("敌人下次被攻击不存在");
+          return;
+        }
+
+        debugPrint(
+            "敌人下次被攻击的帧序号 ${nextFrame.sequence} ${nextFrame.attackPoint}");
+
+        if (nextFrame.attackPoint.y > 110) {
+          // 玩家需要被抛起
+        } else {
+          // 玩家被攻击向后移动
+          final diff = nextFrame.sequence - frame.sequence;
+        }
+      } else {
+        other.byFrame = AnimationFrameData.invalid();
+      }
     }
   }
 
