@@ -1,5 +1,8 @@
 enum StickDirection { left, right, repeat }
 
+enum StickSymbol { self, enemy }
+
+
 enum StickAnimationEvent {
   idle,
   walk,

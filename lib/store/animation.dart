@@ -22,8 +22,10 @@ class AnimationStore {
   AnimationStore._internal();
 
   late Map<String, AnimationData> _data = {};
-  final Map<String, List<Sprite?>> _leftFrames = {};
-  final Map<String, List<Sprite?>> _rightFrames = {};
+
+  // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
+  final Map<String, Map<String, List<Sprite?>>> _leftFrames = {};
+  final Map<String, Map<String, List<Sprite?>>> _rightFrames = {};
 
   // late Map<String, List<AttackData>> _attacks = {};
 
@@ -70,11 +72,12 @@ class AnimationStore {
     ],
   };
 
-  AnimationFrameData get idleFrameData =>
-      byEvent(StickAnimationEvent.idle, StickDirection.left).framesData.first;
-
-  AnimationFrames byName(String name, StickDirection direction) {
+  AnimationFrames byName(
+      String name, StickSymbol symbol, StickDirection direction) {
     final data = _data[name]!;
+    final frames = direction == StickDirection.left
+        ? _leftFrames[name]
+        : _rightFrames[name];
 
     return AnimationFrames(
       name: name,
@@ -82,34 +85,47 @@ class AnimationStore {
       width: data.width,
       height: data.height,
       size: data.size,
-      frames: (direction == StickDirection.left
-          ? _leftFrames[name]
-          : _rightFrames[name])!,
-      framesData:
-          direction == StickDirection.left ? data.leftFrames : data.rightFrames,
+      frames: frames!["${symbol.asString()}_stick"]!,
+      framesData: symbol == StickSymbol.self
+          ? ((direction == StickDirection.left
+              ? data.leftSelfFrames
+              : data.rightSelfFrames))
+          : ((direction == StickDirection.left
+              ? data.leftEnemyFrames
+              : data.rightEnemyFrames)),
+      capeFrames: frames["${symbol.asString()}_cape"]!,
+      effectFrames: frames["${symbol.asString()}_effect"],
     );
   }
 
-  AnimationFrames byEvent(StickAnimationEvent event, StickDirection direction) {
+  AnimationFrames byEvent(
+      StickAnimationEvent event, StickSymbol symbol, StickDirection direction) {
     final ele = animations[event]!;
     final animation = ele[Random.secure().nextInt(ele.length)];
 
     final data = _data[animation.name]!;
+    final frames = direction == StickDirection.left
+        ? _leftFrames[animation.name]
+        : _rightFrames[animation.name];
 
+    // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
     return AnimationFrames(
       name: animation.name,
       direction: direction,
       width: data.width,
       height: data.height,
       size: data.size,
-      frames: (direction == StickDirection.left
-              ? _leftFrames[animation.name]
-              : _rightFrames[animation.name])!
-          .sublist(animation.start, animation.end),
-      framesData: (direction == StickDirection.left
-              ? data.leftFrames
-              : data.rightFrames)
-          .sublist(animation.start, animation.end),
+      frames: frames!["${symbol.asString()}_stick"]!,
+      framesData: symbol == StickSymbol.self
+          ? ((direction == StickDirection.left
+              ? data.leftSelfFrames
+              : data.rightSelfFrames))
+          : ((direction == StickDirection.left
+                  ? data.leftEnemyFrames
+                  : data.rightEnemyFrames))
+              .sublist(animation.start, animation.end),
+      capeFrames: frames["${symbol.asString()}_cape"]!,
+      effectFrames: frames["${symbol.asString()}_effect"],
     );
   }
 
@@ -127,7 +143,7 @@ class AnimationStore {
           .map((img) => SpriteComponent.fromImage(img).sprite)
           .toList();
 
-      _leftFrames[k] = fs;
+      _leftSelfFrames[k] = fs;
     }
 
     // 右动画帧
@@ -138,7 +154,7 @@ class AnimationStore {
           .map((img) => SpriteComponent.fromImage(img).sprite)
           .toList();
 
-      _rightFrames[k] = fs;
+      _rightSelfFrames[k] = fs;
     }
     debugPrint("加载动画帧完成");
 

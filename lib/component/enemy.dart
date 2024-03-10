@@ -17,7 +17,8 @@ class Enemy extends SpriteComponent
   FutureOr<void> onLoad() async {
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
-    aniFrames = AnimationStore().byEvent(StickAnimationEvent.idle, direction);
+    aniFrames = AnimationStore()
+        .byEvent(StickAnimationEvent.idle, StickSymbol.self, direction);
     byFrame = AnimationFrameData.invalid();
 
     add(
@@ -30,7 +31,8 @@ class Enemy extends SpriteComponent
   @override
   void update(double dt) {
     if (((onTime + dt) * 12).floor() >= aniFrames.frames.length) {
-      aniFrames = AnimationStore().byEvent(StickAnimationEvent.idle, direction);
+      aniFrames = AnimationStore()
+          .byEvent(StickAnimationEvent.idle, StickSymbol.self, direction);
       onTime = 0;
     }
 

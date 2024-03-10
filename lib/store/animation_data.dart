@@ -30,6 +30,7 @@ class ImageRectangle {
 
 class AnimationFrameData {
   final String name;
+  final StickSymbol symbol;
   final StickDirection direction;
   final int width;
   final int height;
@@ -54,6 +55,7 @@ class AnimationFrameData {
 
   AnimationFrameData({
     required this.name,
+    required this.symbol,
     required this.direction,
     required this.width,
     required this.height,
@@ -77,6 +79,7 @@ class AnimationFrameData {
 
   factory AnimationFrameData.invalid() => AnimationFrameData(
         name: "0000",
+        symbol: StickSymbol.self,
         direction: StickDirection.repeat,
         width: 0,
         height: 0,
@@ -101,7 +104,8 @@ class AnimationFrameData {
   factory AnimationFrameData.fromJson(Map<String, dynamic> js) =>
       AnimationFrameData(
           name: js["Name"],
-          direction: js["Direction"] == "1"
+          symbol: js["Symbol"] == "self" ? StickSymbol.self : StickSymbol.enemy,
+          direction: js["Direction"] == "left"
               ? StickDirection.left
               : StickDirection.right,
           width: js["Width"],
@@ -139,7 +143,7 @@ class AnimationFrameData {
 
   @override
   String toString() =>
-      "{name:$name, direction:$direction, width:$width, height:$height, "
+      "{name:$name, symbol:$symbol, direction:$direction, width:$width, height:$height, "
       "sequence:$sequence, isLand:$isLand, "
       "position:$position, size:$size, stickSize:$stickSize,"
       "exposeHead:$exposeHead, exposeBody:$exposeBody, "
@@ -152,31 +156,43 @@ class AnimationData {
   final int width;
   final int height;
   final ImageRectangle size;
-  final List<AnimationFrameData> leftFrames;
-  final List<AnimationFrameData> rightFrames;
+  final List<AnimationFrameData> leftSelfFrames;
+  final List<AnimationFrameData> leftEnemyFrames;
+  final List<AnimationFrameData> rightSelfFrames;
+  final List<AnimationFrameData> rightEnemyFrames;
 
-  AnimationData(
-      {required this.width,
-      required this.height,
-      required this.size,
-      required this.leftFrames,
-      required this.rightFrames});
+  AnimationData({
+    required this.width,
+    required this.height,
+    required this.size,
+    required this.leftSelfFrames,
+    required this.leftEnemyFrames,
+    required this.rightSelfFrames,
+    required this.rightEnemyFrames,
+  });
 
   factory AnimationData.fromJson(Map<String, dynamic> js) => AnimationData(
         width: js["Width"],
         height: js["Height"],
         size: ImageRectangle.fromJson(js["Size"]),
-        leftFrames: (js["LeftFrames"] as List)
+        leftSelfFrames: (js["LeftSelfFrames"] as List)
             .map((v) => AnimationFrameData.fromJson(v))
             .toList(),
-        rightFrames: (js["RightFrames"] as List)
+        leftEnemyFrames: (js["LeftEnemyFrames"] as List)
+            .map((v) => AnimationFrameData.fromJson(v))
+            .toList(),
+        rightSelfFrames: (js["RightSelfFrames"] as List)
+            .map((v) => AnimationFrameData.fromJson(v))
+            .toList(),
+        rightEnemyFrames: (js["RightEnemyFrames"] as List)
             .map((v) => AnimationFrameData.fromJson(v))
             .toList(),
       );
 
   @override
   String toString() =>
-      "{width:$width}, height:$height, leftFrames:$leftFrames, rightFrames:$rightFrames}";
+      "{width:$width}, height:$height, leftSelfFrames:$leftSelfFrames, leftEnemyFrames:$leftEnemyFrames, "
+      "rightSelfFrames:$rightSelfFrames, rightEnemyFrames:$rightEnemyFrames}";
 }
 
 class AnimationFrames {
@@ -189,16 +205,22 @@ class AnimationFrames {
   final List<Sprite?> frames;
   final List<AnimationFrameData> framesData;
 
-  AnimationFrames(
-      {required this.name,
-      required this.direction,
-      required this.width,
-      required this.height,
-      required this.size,
-      required this.frames,
-      required this.framesData});
+  final List<Sprite?> capeFrames; // 披风
+  final List<Sprite?>? effectFrames; // 特效
+
+  AnimationFrames({
+    required this.name,
+    required this.direction,
+    required this.width,
+    required this.height,
+    required this.size,
+    required this.frames,
+    required this.framesData,
+    required this.capeFrames,
+    required this.effectFrames,
+  });
 
   @override
   String toString() =>
-      "$name:[${direction == StickDirection.left ? "1" : "2"}]:[${framesData.first.sequence},${framesData.last.sequence}]";
+      "$name:[$direction]:[${framesData.first.sequence},${framesData.last.sequence}]";
 }

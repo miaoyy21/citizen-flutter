@@ -24,7 +24,7 @@ class SkillStore {
     skills.forEach((key, value) {
       // 触发1次判断，是否存在异常
       debugPrint("加载技能：${key.debugName} :: $value");
-      AnimationStore().byName(value, StickDirection.right);
+      AnimationStore().byName(value, StickSymbol.self, StickDirection.right);
     });
   }
 }
