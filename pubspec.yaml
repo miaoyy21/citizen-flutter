@@ -94,6 +94,21 @@ flutter:
 
   assets:
     - assets/
-    - assets/attacks/
     - assets/audio/
     - assets/images/
+    - assets/images/left/
+    - assets/images/left/enemy/
+    - assets/images/left/enemy/cape/
+    - assets/images/left/enemy/stick/
+    - assets/images/left/role/
+    - assets/images/left/role/cape/
+    - assets/images/left/role/effect/
+    - assets/images/left/role/stick/
+    - assets/images/right/
+    - assets/images/right/enemy/
+    - assets/images/right/enemy/cape/
+    - assets/images/right/enemy/stick/
+    - assets/images/right/role/
+    - assets/images/right/role/cape/
+    - assets/images/right/role/effect/
+    - assets/images/right/role/stick/
