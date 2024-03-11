@@ -46,12 +46,8 @@ class AnimationFrameData {
   final List<ImageRectangle> exposeHand;
   final List<ImageRectangle> exposeFoot;
 
-  final List<ImageRectangle> attackHead;
-  final List<ImageRectangle> attackBody;
   final List<ImageRectangle> attackHand;
   final List<ImageRectangle> attackFoot;
-
-  final ImagePoint attackPoint;
 
   AnimationFrameData({
     required this.name,
@@ -68,11 +64,8 @@ class AnimationFrameData {
     required this.exposeBody,
     required this.exposeHand,
     required this.exposeFoot,
-    required this.attackHead,
-    required this.attackBody,
     required this.attackHand,
     required this.attackFoot,
-    required this.attackPoint,
   });
 
   bool get isValid => name != "0000";
@@ -94,52 +87,43 @@ class AnimationFrameData {
         exposeBody: [],
         exposeHand: [],
         exposeFoot: [],
-        attackHead: [],
-        attackBody: [],
         attackHand: [],
         attackFoot: [],
-        attackPoint: ImagePoint(x: 0, y: 0),
       );
 
   factory AnimationFrameData.fromJson(Map<String, dynamic> js) =>
       AnimationFrameData(
-          name: js["Name"],
-          symbol: js["Symbol"] == "self" ? StickSymbol.self : StickSymbol.enemy,
-          direction: js["Direction"] == "left"
-              ? StickDirection.left
-              : StickDirection.right,
-          width: js["Width"],
-          height: js["Height"],
-          sequence: js["Sequence"],
-          isLand: js["IsLand"],
-          position: ImagePoint.fromJson(js["Position"]),
-          size: ImageRectangle.fromJson(js["Size"]),
-          stickSize: ImageRectangle.fromJson(js["StickSize"]),
-          exposeHead: (js["ExposeHead"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          exposeBody: (js["ExposeBody"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          exposeHand: (js["ExposeHand"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          exposeFoot: (js["ExposeFoot"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          attackHead: (js["AttackHead"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          attackBody: (js["AttackBody"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          attackHand: (js["AttackHand"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          attackFoot: (js["AttackFoot"] as List)
-              .map((v) => ImageRectangle.fromJson(v))
-              .toList(),
-          attackPoint: ImagePoint.fromJson(js["AttackPoint"]));
+        name: js["Name"],
+        symbol: js["Symbol"] == "self" ? StickSymbol.self : StickSymbol.enemy,
+        direction: js["Direction"] == "left"
+            ? StickDirection.left
+            : StickDirection.right,
+        width: js["Width"],
+        height: js["Height"],
+        sequence: js["Sequence"],
+        isLand: js["IsLand"],
+        position: ImagePoint.fromJson(js["Position"]),
+        size: ImageRectangle.fromJson(js["Size"]),
+        stickSize: ImageRectangle.fromJson(js["StickSize"]),
+        exposeHead: (js["ExposeHead"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        exposeBody: (js["ExposeBody"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        exposeHand: (js["ExposeHand"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        exposeFoot: (js["ExposeFoot"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        attackHand: (js["AttackHand"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+        attackFoot: (js["AttackFoot"] as List)
+            .map((v) => ImageRectangle.fromJson(v))
+            .toList(),
+      );
 
   @override
   String toString() =>
@@ -148,33 +132,32 @@ class AnimationFrameData {
       "position:$position, size:$size, stickSize:$stickSize,"
       "exposeHead:$exposeHead, exposeBody:$exposeBody, "
       "exposeHand:$exposeHand, exposeFoot:$exposeFoot, "
-      "attackHead:$attackHead, attackBody:$attackBody, "
       "attackHand:$attackHand, attackFoot:$attackFoot}";
 }
 
 class AnimationData {
   final int width;
   final int height;
-  final ImageRectangle size;
   final List<AnimationFrameData> leftSelfFrames;
   final List<AnimationFrameData> leftEnemyFrames;
   final List<AnimationFrameData> rightSelfFrames;
   final List<AnimationFrameData> rightEnemyFrames;
 
+  final Map<String, String> files;
+
   AnimationData({
     required this.width,
     required this.height,
-    required this.size,
     required this.leftSelfFrames,
     required this.leftEnemyFrames,
     required this.rightSelfFrames,
     required this.rightEnemyFrames,
+    required this.files,
   });
 
   factory AnimationData.fromJson(Map<String, dynamic> js) => AnimationData(
         width: js["Width"],
         height: js["Height"],
-        size: ImageRectangle.fromJson(js["Size"]),
         leftSelfFrames: (js["LeftSelfFrames"] as List)
             .map((v) => AnimationFrameData.fromJson(v))
             .toList(),
@@ -187,12 +170,13 @@ class AnimationData {
         rightEnemyFrames: (js["RightEnemyFrames"] as List)
             .map((v) => AnimationFrameData.fromJson(v))
             .toList(),
+        files: (js["Files"] as Map).map((k, v) => MapEntry("$k", "$v")),
       );
 
   @override
   String toString() =>
       "{width:$width}, height:$height, leftSelfFrames:$leftSelfFrames, leftEnemyFrames:$leftEnemyFrames, "
-      "rightSelfFrames:$rightSelfFrames, rightEnemyFrames:$rightEnemyFrames}";
+      "rightSelfFrames:$rightSelfFrames, rightEnemyFrames:$rightEnemyFrames, files:$files}";
 }
 
 class AnimationFrames {
@@ -200,8 +184,6 @@ class AnimationFrames {
   final StickDirection direction;
   final int width;
   final int height;
-  final ImageRectangle size;
-
   final List<Sprite?> frames;
   final List<AnimationFrameData> framesData;
 
@@ -213,7 +195,6 @@ class AnimationFrames {
     required this.direction,
     required this.width,
     required this.height,
-    required this.size,
     required this.frames,
     required this.framesData,
     required this.capeFrames,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import '../index.dart';
@@ -23,11 +24,10 @@ class AnimationStore {
 
   late Map<String, AnimationData> _data = {};
 
+  // left,right
   // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
   final Map<String, Map<String, List<Sprite?>>> _leftFrames = {};
   final Map<String, Map<String, List<Sprite?>>> _rightFrames = {};
-
-  // late Map<String, List<AttackData>> _attacks = {};
 
   late LogicalKeyboardKey handAttackKey;
   late LogicalKeyboardKey footAttackKey;
@@ -79,12 +79,12 @@ class AnimationStore {
         ? _leftFrames[name]
         : _rightFrames[name];
 
+    // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
     return AnimationFrames(
       name: name,
       direction: direction,
       width: data.width,
       height: data.height,
-      size: data.size,
       frames: frames!["${symbol.asString()}_stick"]!,
       framesData: symbol == StickSymbol.self
           ? ((direction == StickDirection.left
@@ -114,8 +114,8 @@ class AnimationStore {
       direction: direction,
       width: data.width,
       height: data.height,
-      size: data.size,
-      frames: frames!["${symbol.asString()}_stick"]!,
+      frames: frames!["${symbol.asString()}_stick"]!
+          .sublist(animation.start, animation.end),
       framesData: symbol == StickSymbol.self
           ? ((direction == StickDirection.left
               ? data.leftSelfFrames
@@ -124,8 +124,12 @@ class AnimationStore {
                   ? data.leftEnemyFrames
                   : data.rightEnemyFrames))
               .sublist(animation.start, animation.end),
-      capeFrames: frames["${symbol.asString()}_cape"]!,
-      effectFrames: frames["${symbol.asString()}_effect"],
+      capeFrames: frames["${symbol.asString()}_cape"]!
+          .sublist(animation.start, animation.end),
+      effectFrames: frames["${symbol.asString()}_effect"] != null
+          ? frames["${symbol.asString()}_effect"]
+              ?.sublist(animation.start, animation.end)
+          : [],
     );
   }
 
@@ -135,38 +139,40 @@ class AnimationStore {
     _data = (json.decode(js) as Map)
         .map((k, v) => MapEntry(k, AnimationData.fromJson(v)));
 
-    // 左动画帧
-    final leftFs = _data.map((k, v) => MapEntry(
-        k, v.leftFrames.map((f) => "0_1_${k}_${f.sequence}.png").toList()));
-    for (var k in leftFs.keys) {
-      final fs = (await Flame.images.loadAll(leftFs[k]!))
-          .map((img) => SpriteComponent.fromImage(img).sprite)
-          .toList();
+    final fss = _data.map((k, v) => MapEntry(
+          k,
+          v.files.map((k0, v0) => MapEntry(
+              k0,
+              v.leftSelfFrames
+                  .map((f) => "$v0/${k}_${f.sequence}.png")
+                  .toList())),
+        ));
 
-      _leftSelfFrames[k] = fs;
-    }
+    // 动画帧
+    for (var k in fss.keys) {
+      // left
+      final Map<String, List<Sprite?>> lfs = {};
+      for (var k0 in fss[k]!.keys) {
+        lfs[k0] = (await Flame.images
+                .loadAll(fss[k]![k0]!.map((v) => "left/$v").toList()))
+            .toList()
+            .map((img) => SpriteComponent.fromImage(img).sprite)
+            .toList();
+      }
+      _leftFrames[k] = lfs;
 
-    // 右动画帧
-    final rightFs = _data.map((k, v) => MapEntry(
-        k, v.rightFrames.map((f) => "0_2_${k}_${f.sequence}.png").toList()));
-    for (var k in rightFs.keys) {
-      final fs = (await Flame.images.loadAll(rightFs[k]!))
-          .map((img) => SpriteComponent.fromImage(img).sprite)
-          .toList();
-
-      _rightSelfFrames[k] = fs;
+      // right
+      final Map<String, List<Sprite?>> rfs = {};
+      for (var k0 in fss[k]!.keys) {
+        rfs[k0] = (await Flame.images
+                .loadAll(fss[k]![k0]!.map((v) => "right/$v").toList()))
+            .toList()
+            .map((img) => SpriteComponent.fromImage(img).sprite)
+            .toList();
+      }
+      _rightFrames[k] = rfs;
     }
     debugPrint("加载动画帧完成");
-
-    // 加载攻击帧解析信息
-    // _attacks.clear();
-    // for (var k in _data.keys) {
-    //   final jsx = await rootBundle.loadString('assets/attacks/$k.json');
-    //   _attacks[k] = (json.decode(jsx) as List)
-    //       .map((vx) => AttackData.fromJson(vx))
-    //       .toList();
-    // }
-    // debugPrint("$_attacks");
 
     // 设置手脚攻击按键
     handAttackKey = handKey;
