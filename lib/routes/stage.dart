@@ -18,7 +18,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
         anchor: Anchor.bottomLeft);
     world.add(stage);
 
-    final playerPosition = Vector2(300 + 48, -16 + 5);
+    final playerPosition = Vector2(300 + 48, -11);
     final playerCape = Cape(Colors.red, position: playerPosition);
     final player = Player(playerCape, Colors.black, position: playerPosition);
     player.debugColor = Colors.purple;
@@ -28,7 +28,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     final camera = Camera(player, stage.size);
     world.add(camera);
 
-    final enemy1Position = Vector2(450 + 48, -16 + 5);
+    final enemy1Position = Vector2(450 + 48, -11);
     final enemy1Cape = Cape(Colors.orange, position: enemy1Position);
     final enemy1 = Enemy(1, enemy1Cape, Colors.black, position: enemy1Position);
     enemy1.debugColor = Colors.blue;

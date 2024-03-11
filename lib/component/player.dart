@@ -10,7 +10,7 @@ class Player extends SpriteComponent
   Player(this.cape, this.color, {super.position})
       : super(anchor: Anchor.bottomCenter, key: ComponentKey.named("Player"));
 
-  late double speed = 0; // 初始速度
+  late double speedRate = 0; // 初始速度
   late double onTime = 0;
   late AnimationFrameData frame;
   late AnimationFrames _aniFrames;
@@ -45,47 +45,47 @@ class Player extends SpriteComponent
 
     if (skillKey.isNotEmpty) {
       // 技能攻击
-      speed = 0;
+      speedRate = 0;
       skill = SkillStore().skills[skillKey.last.key]!;
       debugPrint("Skill Key ${skillKey.last.key.debugName}, Skill $skill");
       event = StickAnimationEvent.skill;
     } else if (KeyStore().isDown(AnimationStore().handAttackKey)) {
       // 手攻击
-      speed = 0;
+      speedRate = 0;
       event = StickAnimationEvent.handAttack;
       KeyStore().remove(AnimationStore().handAttackKey);
     } else if (KeyStore().isDown(AnimationStore().footAttackKey)) {
       // 脚攻击
-      speed = 0;
+      speedRate = 0;
       event = StickAnimationEvent.footAttack;
       KeyStore().remove(AnimationStore().footAttackKey);
     } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
       // 向左跑
-      speed = -200;
+      speedRate = -2.0;
       event = StickAnimationEvent.run;
       direction = StickDirection.left;
     } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowRight)) {
       // 向右跑
-      speed = 200;
+      speedRate = 2.0;
       event = StickAnimationEvent.run;
       direction = StickDirection.right;
     } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowLeft)) {
       // 向左走
-      speed = -100;
+      speedRate = -1.0;
       event = StickAnimationEvent.walk;
       direction = StickDirection.left;
     } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowRight)) {
       // 向右走
-      speed = 100;
+      speedRate = 1.0;
       event = StickAnimationEvent.walk;
       direction = StickDirection.right;
     } else if (KeyStore().isDown(LogicalKeyboardKey.arrowUp)) {
       // 向上跳
-      speed = 0;
+      speedRate = 0;
       event = StickAnimationEvent.jumpUp;
     } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowDown)) {
       // 向下蹲
-      speed = 0;
+      speedRate = 0;
       event = StickAnimationEvent.squatHalf;
     }
   }
@@ -130,7 +130,7 @@ class Player extends SpriteComponent
     }
 
     if (event == StickAnimationEvent.idle) {
-      speed = 0;
+      speedRate = 0;
       onChange();
 
       // 重置动画序列
@@ -152,14 +152,14 @@ class Player extends SpriteComponent
       }
     } else if (event == StickAnimationEvent.walk) {
       if (KeyStore().isDouble(LogicalKeyboardKey.arrowLeft)) {
-        speed = 0;
+        speedRate = 0;
         event = StickAnimationEvent.move;
         direction = StickDirection.left;
 
         aniFrames =
             AnimationStore().byEvent(event, StickSymbol.self, direction);
       } else if (KeyStore().isDouble(LogicalKeyboardKey.arrowRight)) {
-        speed = 0;
+        speedRate = 0;
         event = StickAnimationEvent.move;
         direction = StickDirection.right;
 
@@ -173,15 +173,15 @@ class Player extends SpriteComponent
         // 什么都不需要做
       } else {
         onTime = 0;
-        speed = 0;
+        speedRate = 0;
         if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
           // 向左跑
-          speed = -200;
+          speedRate = -2.0;
           event = StickAnimationEvent.run;
           direction = StickDirection.left;
         } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowRight)) {
           // 向右跑
-          speed = 200;
+          speedRate = 2.0;
           event = StickAnimationEvent.run;
           direction = StickDirection.right;
         } else {
@@ -201,7 +201,7 @@ class Player extends SpriteComponent
       } else {
         onTime = 0;
         if (KeyStore().isDown(LogicalKeyboardKey.arrowUp)) {
-          speed = direction == StickDirection.left ? -200 : 200;
+          speedRate = direction == StickDirection.left ? -2.0 : 2.0;
           event = StickAnimationEvent.jumpUp;
         } else {
           event = StickAnimationEvent.idle;
@@ -222,8 +222,8 @@ class Player extends SpriteComponent
     frame =
         refreshNext ? aniFrames.framesData.last : aniFrames.framesData[index];
 
-    position.x = position.x + speed * dt + dx;
-    cape.position.x = cape.position.x + speed * dt + dx;
+    position.x = position.x + speedRate * 80 * dt + dx;
+    cape.position.x = cape.position.x + speedRate * 80 * dt + dx;
     dx = 0;
 
     refreshNext ? refresh() : ();
