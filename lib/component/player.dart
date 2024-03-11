@@ -12,7 +12,6 @@ class Player extends SpriteComponent
 
   late double onTime = 0;
   late double speedRate = 0; // 速度比
-  late double speedRatio = 1.0; // 速度衰减
   late AnimationFrameData frame;
   late AnimationFrames _aniFrames;
 
@@ -140,6 +139,9 @@ class Player extends SpriteComponent
         if (event == StickAnimationEvent.skill) {
           aniFrames =
               AnimationStore().byName(skill, StickSymbol.self, direction);
+
+          // 技能发动距离
+          debugPrint("技能发动标准距离: ${aniFrames.distance}");
         } else {
           aniFrames =
               AnimationStore().byEvent(event, StickSymbol.self, direction);
@@ -224,8 +226,8 @@ class Player extends SpriteComponent
         refreshNext ? aniFrames.framesData.last : aniFrames.framesData[index];
 
     // Position
-    position.x = position.x + speedRate * speedRatio * 100 * dt + dx;
-    cape.position.x = cape.position.x + speedRate * speedRatio * 100 * dt + dx;
+    position.x = position.x + speedRate * 100 * dt + dx;
+    cape.position.x = cape.position.x + speedRate * 100 * dt + dx;
     dx = 0;
 
     refreshNext ? refresh() : ();
@@ -304,68 +306,103 @@ class Player extends SpriteComponent
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-
     if (other is Enemy) {
-      if (other.byFrame.name == frame.name) {
+      if (frame.step == StickStep.start) {
         return;
-      }
+      } else if (frame.step == StickStep.prepare) {
+        if (event != StickAnimationEvent.skill ||
+            other.byFrame.name == frame.name &&
+                other.byFrame.sequence == frame.sequence) return;
 
-      final List<ImageRectangle> playerAttacks = [];
-      playerAttacks.addAll(frame.attackHand);
-      playerAttacks.addAll(frame.attackFoot);
+        // 预判处理
+        final firstHitFrame = aniFrames.framesData.firstWhere(
+            (frame) => frame.step == StickStep.hit,
+            orElse: AnimationFrameData.invalid);
+        if (!firstHitFrame.isValid) return;
 
-      final List<ImageRectangle> enemyExpose = [];
-      enemyExpose.addAll(other.frame.exposeHead);
-      enemyExpose.addAll(other.frame.exposeBody);
-      enemyExpose.addAll(other.frame.exposeHand);
-      enemyExpose.addAll(other.frame.exposeFoot);
+        final currentDistance = (other.position.x + other.frame.position.x) -
+            (position.x + frame.position.x);
+        final skillDistance = (firstHitFrame.position.x - frame.position.x);
 
-      // 玩家所在的世界坐标，以左下角为基点
-      final p0 = position.clone()..sub(Vector2(frame.width / 2, 0));
-      final p1 = other.position.clone()..sub(Vector2(frame.width / 2, 0));
+        if (currentDistance > skillDistance) {
+          // 如果现在角色与敌方单位间的距离大于技能释放的标准间隔，那么调整速度比来保证角色可以打到敌方单位
+          final diffTime = (firstHitFrame.sequence - frame.sequence + 1) / 12.0;
+          speedRate = (currentDistance - skillDistance) / (diffTime * 80.0);
 
-      if (playerAttacks.any(
-          (f0) => enemyExpose.any((f1) => (isCollision(p0, f0, p1, f1))))) {
+          debugPrint(
+              "角色与单位当前实际距离$currentDistance，技能内需要移动距离$skillDistance，帧间隔时间${(firstHitFrame.sequence - frame.sequence + 1) / 12.0} \n"
+              " 得出速度为 $speedRate");
+        } else {
+          // 如果现在角色与敌方单位间的距离小于技能释放的标准间隔，可以通过缩减动画帧来保证角色可以打到敌方单位
+        }
         other.byFrame = frame;
+      } else if (frame.step == StickStep.hit) {
+        speedRate = 0;
 
-        debugPrint("敌人被攻击，当前攻击帧序号 ${frame.name} ${frame.sequence}");
-        other.direction = direction.reverse();
-        other.aniFrames = AnimationStore().byNameStartEnd(aniFrames.name,
-            StickSymbol.enemy, direction, frame.sequence, aniFrames.end);
+        if (other.byFrame.name == frame.name &&
+            other.byFrame.sequence == frame.sequence) {
+          return;
+        }
+
+        final List<ImageRectangle> playerAttacks = [];
+        playerAttacks.addAll(frame.attackHand);
+        playerAttacks.addAll(frame.attackFoot);
+
+        final List<ImageRectangle> enemyExpose = [];
+        enemyExpose.addAll(other.frame.exposeHead);
+        enemyExpose.addAll(other.frame.exposeBody);
+        enemyExpose.addAll(other.frame.exposeHand);
+        enemyExpose.addAll(other.frame.exposeFoot);
+
+        // 玩家所在的世界坐标，以左下角为基点
+        final p0 = position.clone()..sub(Vector2(frame.width / 2, 0));
+        final p1 = other.position.clone()..sub(Vector2(frame.width / 2, 0));
+
+        if (playerAttacks.any(
+            (f0) => enemyExpose.any((f1) => (isCollision(p0, f0, p1, f1))))) {
+          other.byFrame = frame;
+
+          debugPrint("敌人被攻击，当前攻击帧序号 ${frame.name} ${frame.sequence}");
+          other.direction = direction.reverse();
+          other.aniFrames = AnimationStore().byNameStartEnd(aniFrames.name,
+              StickSymbol.enemy, direction, frame.sequence, aniFrames.end);
+        } else {
+          // other.byFrame = AnimationFrameData.invalid();
+          //
+          // // 推动敌方移动
+          // final List<ImageRectangle> playerExpose = [];
+          // playerExpose.addAll(frame.exposeHead);
+          // playerExpose.addAll(frame.exposeBody);
+          // playerExpose.addAll(frame.exposeHand);
+          // playerExpose.addAll(frame.exposeFoot);
+          //
+          // if (playerExpose.any(
+          //     (f0) => enemyExpose.any((f1) => (isCollision(p0, f0, p1, f1))))) {
+          //   // 推动对方，但速度减半
+          //   if (direction == StickDirection.right) {
+          //     // int maxX = 0;
+          //     // aniFrames.framesData.forEach((e) {
+          //     //   if (e.stickSize.max.x > maxX) {
+          //     //     maxX = e.stickSize.max.x;
+          //     //   }
+          //     // });
+          //
+          //     // final p0MaxX = ImagePoint(x: maxX, y: 5).toGlobal(p0).x;
+          //
+          //     final p0MaxX = frame.stickSize.max.toGlobal(p0).x;
+          //     final p1MinX = other.frame.stickSize.min.toGlobal(p1).x;
+          //
+          //     // speedRate = 0.5;
+          //     // other.speedRate = 0.5;
+          //     other.dx = other.dx + (p0MaxX - p1MinX).toInt();
+          //   }
+          //   debugPrint("playerExpose Collision with enemyExpose");
+          // } else {
+          //   // other.speedRate = 0;
+          // }
+        }
       } else {
         other.byFrame = AnimationFrameData.invalid();
-
-        // 推动敌方移动
-        final List<ImageRectangle> playerExpose = [];
-        playerExpose.addAll(frame.exposeHead);
-        playerExpose.addAll(frame.exposeBody);
-        playerExpose.addAll(frame.exposeHand);
-        playerExpose.addAll(frame.exposeFoot);
-
-        if (playerExpose.any(
-            (f0) => enemyExpose.any((f1) => (isCollision(p0, f0, p1, f1))))) {
-          // 推动对方，但速度减半
-          if (direction == StickDirection.right) {
-            // int maxX = 0;
-            // aniFrames.framesData.forEach((e) {
-            //   if (e.stickSize.max.x > maxX) {
-            //     maxX = e.stickSize.max.x;
-            //   }
-            // });
-
-            // final p0MaxX = ImagePoint(x: maxX, y: 5).toGlobal(p0).x;
-
-            final p0MaxX = frame.stickSize.max.toGlobal(p0).x;
-            final p1MinX = other.frame.stickSize.min.toGlobal(p1).x;
-
-            // speedRate = 0.5;
-            // other.speedRate = 0.5;
-            other.dx = other.dx + (p0MaxX - p1MinX).toInt();
-          }
-          debugPrint("playerExpose Collision with enemyExpose");
-        } else {
-          // other.speedRate = 0;
-        }
       }
     }
   }

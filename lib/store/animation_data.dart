@@ -143,6 +143,7 @@ class AnimationFrameData {
 class AnimationData {
   final int width;
   final int height;
+  final int distance;
   final List<AnimationFrameData> leftSelfFrames;
   final List<AnimationFrameData> leftEnemyFrames;
   final List<AnimationFrameData> rightSelfFrames;
@@ -153,6 +154,7 @@ class AnimationData {
   AnimationData({
     required this.width,
     required this.height,
+    required this.distance,
     required this.leftSelfFrames,
     required this.leftEnemyFrames,
     required this.rightSelfFrames,
@@ -163,6 +165,7 @@ class AnimationData {
   factory AnimationData.fromJson(Map<String, dynamic> js) => AnimationData(
         width: js["Width"],
         height: js["Height"],
+        distance: js["Distance"],
         leftSelfFrames: (js["LeftSelfFrames"] as List)
             .map((v) => AnimationFrameData.fromJson(v))
             .toList(),
@@ -179,8 +182,8 @@ class AnimationData {
       );
 
   @override
-  String toString() =>
-      "{width:$width}, height:$height, leftSelfFrames:$leftSelfFrames, leftEnemyFrames:$leftEnemyFrames, "
+  String toString() => "{width:$width}, height:$height, distance:$distance, "
+      "leftSelfFrames:$leftSelfFrames, leftEnemyFrames:$leftEnemyFrames, "
       "rightSelfFrames:$rightSelfFrames, rightEnemyFrames:$rightEnemyFrames, files:$files}";
 }
 
@@ -189,6 +192,7 @@ class AnimationFrames {
   final StickDirection direction;
   final int start;
   final int end;
+  final int distance;
   final int width;
   final int height;
   final List<Sprite?> frames;
@@ -202,6 +206,7 @@ class AnimationFrames {
     required this.direction,
     required this.start,
     required this.end,
+    required this.distance,
     required this.width,
     required this.height,
     required this.frames,

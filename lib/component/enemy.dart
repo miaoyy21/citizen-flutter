@@ -11,7 +11,6 @@ class Enemy extends SpriteComponent
 
   late double onTime = 0;
   late double speedRate = 0; // 速度比
-  // late double speedRatio = 1.0; // 速度衰减
   late StickDirection direction = StickDirection.left;
   late AnimationFrames _aniFrames;
 
