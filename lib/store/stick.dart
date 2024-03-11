@@ -2,7 +2,6 @@ enum StickDirection { left, right, repeat }
 
 enum StickSymbol { self, enemy }
 
-
 enum StickAnimationEvent {
   idle,
   walk,
@@ -20,3 +19,5 @@ enum StickAnimationEvent {
   squatFootAttack,
   skill
 }
+
+enum StickStep { start, prepare, hit, finish }

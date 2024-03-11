@@ -10,8 +10,10 @@ class Enemy extends SpriteComponent
       : super(anchor: Anchor.bottomCenter);
 
   late double onTime = 0;
+  late double speedRate = 0; // 速度比
+  // late double speedRatio = 1.0; // 速度衰减
   late StickDirection direction = StickDirection.left;
-  late AnimationFrames aniFrames;
+  late AnimationFrames _aniFrames;
 
   late AnimationFrameData frame;
   late AnimationFrameData byFrame;
@@ -20,7 +22,7 @@ class Enemy extends SpriteComponent
   FutureOr<void> onLoad() async {
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
-    aniFrames = AnimationStore()
+    _aniFrames = AnimationStore()
         .byEvent(StickAnimationEvent.idle, StickSymbol.self, direction);
     byFrame = AnimationFrameData.invalid();
 
@@ -33,8 +35,46 @@ class Enemy extends SpriteComponent
     add(ColorEffect(color, EffectController(duration: 0)));
   }
 
+  late int dx = 0;
+
+  AnimationFrames get aniFrames => _aniFrames;
+
+  set aniFrames(AnimationFrames newFrames) {
+    // debugPrint("$_aniFrames => $newFrames");
+    if ("$newFrames" == "$_aniFrames") {
+      return;
+    }
+
+    // 帧发生变化时，计算中间移动的距离差
+    int index = (onTime * 12).floor();
+    index = index >= _aniFrames.framesData.length
+        ? _aniFrames.framesData.length - 1
+        : index;
+    final frame = _aniFrames.framesData[index];
+
+    late int x = 0;
+
+    final x1 = _aniFrames.framesData.first.position.x; // 旧 开始
+    final x2 = frame.position.x; // 旧 结束
+    final x3 = newFrames.framesData.first.position.x; // 新 开始
+    debugPrint(
+        "$_aniFrames [$index] -> $newFrames x1 = $x1, x2 = $x2, x3 = $x3 ");
+
+    x = x2 - x3;
+    if (x.abs() > 20) {
+      dx = dx + x;
+    }
+
+    onTime = 0;
+    _aniFrames = newFrames;
+  }
+
   @override
   void update(double dt) {
+    if (1 / dt < 50) {
+      debugPrint("Enemy 每秒帧数降至 ${(1 / dt).toStringAsFixed(2)}");
+    }
+
     if (((onTime + dt) * 12).floor() >= aniFrames.frames.length) {
       aniFrames = AnimationStore()
           .byEvent(StickAnimationEvent.idle, StickSymbol.self, direction);
@@ -48,6 +88,11 @@ class Enemy extends SpriteComponent
     cape.sprite = aniFrames.capeFrames[index];
 
     frame = aniFrames.framesData[index];
+
+    // Position
+    position.x = position.x + speedRate * 100 * dt + dx;
+    cape.position.x = cape.position.x + speedRate * 100 * dt + dx;
+    dx = 0;
   }
 
   @override
@@ -56,14 +101,9 @@ class Enemy extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is Player) {
-      debugPrint("Player");
+      debugPrint("onCollisionStart Player");
     } else if (other is Enemy) {
-      debugPrint("Enemy");
+      debugPrint("onCollisionStart Enemy");
     }
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
   }
 }

@@ -32,13 +32,13 @@ class AnimationFrameData {
   final String name;
   final StickSymbol symbol;
   final StickDirection direction;
+  final StickStep step;
   final int width;
   final int height;
   final int sequence;
 
   final bool isLand;
   final ImagePoint position;
-  final ImageRectangle size;
   final ImageRectangle stickSize;
 
   final List<ImageRectangle> exposeHead;
@@ -53,12 +53,12 @@ class AnimationFrameData {
     required this.name,
     required this.symbol,
     required this.direction,
+    required this.step,
     required this.width,
     required this.height,
     required this.sequence,
     required this.isLand,
     required this.position,
-    required this.size,
     required this.stickSize,
     required this.exposeHead,
     required this.exposeBody,
@@ -74,13 +74,12 @@ class AnimationFrameData {
         name: "0000",
         symbol: StickSymbol.self,
         direction: StickDirection.repeat,
+        step: StickStep.start,
         width: 0,
         height: 0,
         sequence: 0,
         isLand: false,
         position: ImagePoint(x: 0, y: 0),
-        size: ImageRectangle(
-            min: ImagePoint(x: 0, y: 0), max: ImagePoint(x: 0, y: 0)),
         stickSize: ImageRectangle(
             min: ImagePoint(x: 0, y: 0), max: ImagePoint(x: 0, y: 0)),
         exposeHead: [],
@@ -98,12 +97,18 @@ class AnimationFrameData {
         direction: js["Direction"] == "left"
             ? StickDirection.left
             : StickDirection.right,
+        step: js["Step"] == "start"
+            ? StickStep.start
+            : js["Step"] == "prepare"
+                ? StickStep.prepare
+                : js["Step"] == "hit"
+                    ? StickStep.hit
+                    : StickStep.finish,
         width: js["Width"],
         height: js["Height"],
         sequence: js["Sequence"],
         isLand: js["IsLand"],
         position: ImagePoint.fromJson(js["Position"]),
-        size: ImageRectangle.fromJson(js["Size"]),
         stickSize: ImageRectangle.fromJson(js["StickSize"]),
         exposeHead: (js["ExposeHead"] as List)
             .map((v) => ImageRectangle.fromJson(v))
@@ -126,10 +131,10 @@ class AnimationFrameData {
       );
 
   @override
-  String toString() =>
-      "{name:$name, symbol:$symbol, direction:$direction, width:$width, height:$height, "
+  String toString() => "{name:$name, symbol:$symbol, direction:$direction, "
+      "step:$step, width:$width, height:$height, "
       "sequence:$sequence, isLand:$isLand, "
-      "position:$position, size:$size, stickSize:$stickSize,"
+      "position:$position, stickSize:$stickSize, "
       "exposeHead:$exposeHead, exposeBody:$exposeBody, "
       "exposeHand:$exposeHand, exposeFoot:$exposeFoot, "
       "attackHand:$attackHand, attackFoot:$attackFoot}";
@@ -182,6 +187,8 @@ class AnimationData {
 class AnimationFrames {
   final String name;
   final StickDirection direction;
+  final int start;
+  final int end;
   final int width;
   final int height;
   final List<Sprite?> frames;
@@ -193,6 +200,8 @@ class AnimationFrames {
   AnimationFrames({
     required this.name,
     required this.direction,
+    required this.start,
+    required this.end,
     required this.width,
     required this.height,
     required this.frames,
@@ -202,6 +211,5 @@ class AnimationFrames {
   });
 
   @override
-  String toString() =>
-      "$name:[${direction.asString()}]:[${framesData.first.sequence},${framesData.last.sequence}]";
+  String toString() => "$name:[${direction.asString()}]:[$start,$end]";
 }

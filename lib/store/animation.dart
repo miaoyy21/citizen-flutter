@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import '../index.dart';
@@ -72,6 +71,37 @@ class AnimationStore {
     ],
   };
 
+  AnimationFrames byNameStartEnd(String name, StickSymbol symbol,
+      StickDirection direction, int start, int end) {
+    final data = _data[name]!;
+    final frames = direction == StickDirection.left
+        ? _leftFrames[name]
+        : _rightFrames[name];
+
+    // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
+    return AnimationFrames(
+      name: name,
+      direction: direction,
+      start: 1,
+      end: data.rightSelfFrames.length,
+      width: data.width,
+      height: data.height,
+      frames: frames!["${symbol.asString()}_stick"]!.sublist(start, end),
+      framesData: (symbol == StickSymbol.self
+              ? (direction == StickDirection.left
+                  ? data.leftSelfFrames
+                  : data.rightSelfFrames)
+              : (direction == StickDirection.left
+                  ? data.leftEnemyFrames
+                  : data.rightEnemyFrames))
+          .sublist(start, end),
+      capeFrames: frames["${symbol.asString()}_cape"]!.sublist(start, end),
+      effectFrames: frames["${symbol.asString()}_effect"] != null
+          ? frames["${symbol.asString()}_effect"]?.sublist(start, end)
+          : [],
+    );
+  }
+
   AnimationFrames byName(
       String name, StickSymbol symbol, StickDirection direction) {
     final data = _data[name]!;
@@ -83,16 +113,18 @@ class AnimationStore {
     return AnimationFrames(
       name: name,
       direction: direction,
+      start: 1,
+      end: data.rightSelfFrames.length,
       width: data.width,
       height: data.height,
       frames: frames!["${symbol.asString()}_stick"]!,
       framesData: symbol == StickSymbol.self
-          ? ((direction == StickDirection.left
+          ? (direction == StickDirection.left
               ? data.leftSelfFrames
-              : data.rightSelfFrames))
-          : ((direction == StickDirection.left
+              : data.rightSelfFrames)
+          : (direction == StickDirection.left
               ? data.leftEnemyFrames
-              : data.rightEnemyFrames)),
+              : data.rightEnemyFrames),
       capeFrames: frames["${symbol.asString()}_cape"]!,
       effectFrames: frames["${symbol.asString()}_effect"],
     );
@@ -113,17 +145,19 @@ class AnimationStore {
     return AnimationFrames(
       name: animation.name,
       direction: direction,
+      start: animation.start,
+      end: animation.end,
       width: data.width,
       height: data.height,
       frames: frames!["${symbol.asString()}_stick"]!
           .sublist(animation.start, animation.end),
       framesData: (symbol == StickSymbol.self
-              ? ((direction == StickDirection.left
+              ? (direction == StickDirection.left
                   ? data.leftSelfFrames
-                  : data.rightSelfFrames))
-              : ((direction == StickDirection.left
+                  : data.rightSelfFrames)
+              : (direction == StickDirection.left
                   ? data.leftEnemyFrames
-                  : data.rightEnemyFrames)))
+                  : data.rightEnemyFrames))
           .sublist(animation.start, animation.end),
       capeFrames: frames["${symbol.asString()}_cape"]!
           .sublist(animation.start, animation.end),
