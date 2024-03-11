@@ -3,8 +3,11 @@ import '../index.dart';
 class Enemy extends SpriteComponent
     with HasGameReference<CitizenGame>, CollisionCallbacks {
   final int id;
+  final Cape cape;
+  final Color color;
 
-  Enemy(this.id, {super.position}) : super(anchor: Anchor.bottomCenter);
+  Enemy(this.id, this.cape, this.color, {super.position})
+      : super(anchor: Anchor.bottomCenter);
 
   late double onTime = 0;
   late StickDirection direction = StickDirection.left;
@@ -26,6 +29,8 @@ class Enemy extends SpriteComponent
         ..debugMode = true
         ..debugColor = Colors.blue,
     );
+
+    add(ColorEffect(color, EffectController(duration: 0)));
   }
 
   @override
@@ -40,6 +45,8 @@ class Enemy extends SpriteComponent
     late int index = (onTime * 12).floor();
 
     sprite = aniFrames.frames[index];
+    cape.sprite = aniFrames.capeFrames[index];
+
     frame = aniFrames.framesData[index];
   }
 

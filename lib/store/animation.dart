@@ -35,10 +35,10 @@ class AnimationStore {
   final Map<StickAnimationEvent, List<StickAnimation>> animations = {
     StickAnimationEvent.idle: [StickAnimation("9101", 0, 6)],
     StickAnimationEvent.walk: [StickAnimation("9101", 6, 11)],
-    StickAnimationEvent.run: [StickAnimation("9202", 0, 7)],
+    StickAnimationEvent.run: [StickAnimation("9202", 0, 6)],
     StickAnimationEvent.move: [
       StickAnimation("9401", 0, 12),
-      StickAnimation("9402", 0, 11),
+      StickAnimation("9402", 0, 12),
     ],
     StickAnimationEvent.handAttack: [
       StickAnimation("7001", 0, 5),
@@ -102,6 +102,7 @@ class AnimationStore {
       StickAnimationEvent event, StickSymbol symbol, StickDirection direction) {
     final ele = animations[event]!;
     final animation = ele[Random.secure().nextInt(ele.length)];
+    // debugPrint("byEvent => $animation");
 
     final data = _data[animation.name]!;
     final frames = direction == StickDirection.left
@@ -116,14 +117,14 @@ class AnimationStore {
       height: data.height,
       frames: frames!["${symbol.asString()}_stick"]!
           .sublist(animation.start, animation.end),
-      framesData: symbol == StickSymbol.self
-          ? ((direction == StickDirection.left
-              ? data.leftSelfFrames
-              : data.rightSelfFrames))
-          : ((direction == StickDirection.left
+      framesData: (symbol == StickSymbol.self
+              ? ((direction == StickDirection.left
+                  ? data.leftSelfFrames
+                  : data.rightSelfFrames))
+              : ((direction == StickDirection.left
                   ? data.leftEnemyFrames
-                  : data.rightEnemyFrames))
-              .sublist(animation.start, animation.end),
+                  : data.rightEnemyFrames)))
+          .sublist(animation.start, animation.end),
       capeFrames: frames["${symbol.asString()}_cape"]!
           .sublist(animation.start, animation.end),
       effectFrames: frames["${symbol.asString()}_effect"] != null

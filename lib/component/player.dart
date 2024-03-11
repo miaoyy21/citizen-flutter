@@ -1,15 +1,14 @@
 import 'dart:math';
 
-import 'package:flame/effects.dart';
-
 import '../index.dart';
 
 class Player extends SpriteComponent
     with HasGameReference<CitizenGame>, CollisionCallbacks {
-  Player({super.position})
-      : super(anchor: Anchor.bottomCenter, key: ComponentKey.named("Player"));
+  final Cape cape;
+  final Color color;
 
-  final double designFPS = 12;
+  Player(this.cape, this.color, {super.position})
+      : super(anchor: Anchor.bottomCenter, key: ComponentKey.named("Player"));
 
   late double speed = 0; // 初始速度
   late double onTime = 0;
@@ -29,15 +28,14 @@ class Player extends SpriteComponent
     sprite = SpriteComponent.fromImage(empty).sprite;
 
     _aniFrames = AnimationStore().byEvent(event, StickSymbol.self, direction);
+    debugPrint("onLoad => $_aniFrames");
     add(
       RectangleHitbox()
         ..debugMode = true
         ..debugColor = Colors.purple,
     );
 
-    add(
-      ColorEffect(Colors.red, EffectController(duration: 0)),
-    );
+    add(ColorEffect(color, EffectController(duration: 0)));
   }
 
   // 接受新的键盘输入按键
@@ -97,12 +95,13 @@ class Player extends SpriteComponent
   AnimationFrames get aniFrames => _aniFrames;
 
   set aniFrames(AnimationFrames newFrames) {
+    // debugPrint("$_aniFrames => $newFrames");
     if ("$newFrames" == "$_aniFrames") {
       return;
     }
 
     // 帧发生变化时，计算中间移动的距离差
-    int index = (onTime * designFPS).floor();
+    int index = (onTime * 12).floor();
     index = index >= _aniFrames.framesData.length
         ? _aniFrames.framesData.length - 1
         : index;
@@ -214,20 +213,24 @@ class Player extends SpriteComponent
     }
 
     onTime = onTime + dt;
-    final index = (onTime * designFPS).floor();
+    final index = (onTime * 12).floor();
     final refreshNext = index >= aniFrames.frames.length;
 
     sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
+    cape.sprite =
+        refreshNext ? aniFrames.capeFrames.last : aniFrames.capeFrames[index];
     frame =
         refreshNext ? aniFrames.framesData.last : aniFrames.framesData[index];
 
     position.x = position.x + speed * dt + dx;
+    cape.position.x = cape.position.x + speed * dt + dx;
     dx = 0;
 
     refreshNext ? refresh() : ();
   }
 
   refresh() {
+    debugPrint("refresh $event");
     if (event == StickAnimationEvent.skill) {
       event = StickAnimationEvent.idle;
       aniFrames = AnimationStore().byEvent(event, StickSymbol.self, direction);

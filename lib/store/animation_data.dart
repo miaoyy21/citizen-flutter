@@ -203,5 +203,5 @@ class AnimationFrames {
 
   @override
   String toString() =>
-      "$name:[$direction]:[${framesData.first.sequence},${framesData.last.sequence}]";
+      "$name:[${direction.asString()}]:[${framesData.first.sequence},${framesData.last.sequence}]";
 }
