@@ -227,7 +227,7 @@ class Player extends SpriteComponent
 
     // Position
     position.x = position.x + speedRate * 100 * dt + dx;
-    cape.position.x = cape.position.x + speedRate * 100 * dt + dx;
+    cape.position = position;
     dx = 0;
 
     refreshNext ? refresh() : ();
@@ -323,6 +323,9 @@ class Player extends SpriteComponent
         final currentDistance = (other.position.x + other.frame.position.x) -
             (position.x + frame.position.x);
         final skillDistance = (firstHitFrame.position.x - frame.position.x);
+
+        // TODO 战斗中角色与敌方单位的距离
+        final hitDistance = 0;
 
         if (currentDistance > skillDistance) {
           // 如果现在角色与敌方单位间的距离大于技能释放的标准间隔，那么调整速度比来保证角色可以打到敌方单位

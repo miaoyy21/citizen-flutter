@@ -39,7 +39,6 @@ class Enemy extends SpriteComponent
   AnimationFrames get aniFrames => _aniFrames;
 
   set aniFrames(AnimationFrames newFrames) {
-    // debugPrint("$_aniFrames => $newFrames");
     if ("$newFrames" == "$_aniFrames") {
       return;
     }
@@ -90,7 +89,7 @@ class Enemy extends SpriteComponent
 
     // Position
     position.x = position.x + speedRate * 100 * dt + dx;
-    cape.position.x = cape.position.x + speedRate * 100 * dt + dx;
+    cape.position = position;
     dx = 0;
   }
 
