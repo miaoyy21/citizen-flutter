@@ -316,28 +316,33 @@ class Player extends SpriteComponent
 
         // 预判处理
         final firstHitFrame = aniFrames.framesData.firstWhere(
-            (frame) => frame.step == StickStep.hit,
+            (v) => v.step == StickStep.hit,
             orElse: AnimationFrameData.invalid);
         if (!firstHitFrame.isValid) return;
 
+        final firstEnemyFrame = AnimationStore()
+            .byName(aniFrames.name, StickSymbol.enemy, direction)
+            .framesData
+            .firstWhere((v) => v.sequence == firstHitFrame.sequence);
+
         final currentDistance = (other.position.x + other.frame.position.x) -
-            (position.x + frame.position.x);
+            (position.x + frame.position.x) -
+            (firstEnemyFrame.position.x - firstHitFrame.position.x) ~/ 2;
         final skillDistance = (firstHitFrame.position.x - frame.position.x);
 
-        // TODO 战斗中角色与敌方单位的距离
-        final hitDistance = 0;
+        // if (currentDistance > skillDistance) {
+        // 如果现在角色与敌方单位间的距离大于技能释放的标准间隔，那么调整速度比来保证角色可以打到敌方单位
+        final deltaTime =
+            (firstHitFrame.sequence - frame.sequence + 1 - 0.2) / 12.0;
+        speedRate = (currentDistance - skillDistance) / (deltaTime * 80.0);
 
-        if (currentDistance > skillDistance) {
-          // 如果现在角色与敌方单位间的距离大于技能释放的标准间隔，那么调整速度比来保证角色可以打到敌方单位
-          final diffTime = (firstHitFrame.sequence - frame.sequence + 1) / 12.0;
-          speedRate = (currentDistance - skillDistance) / (diffTime * 80.0);
-
-          debugPrint(
-              "角色与单位当前实际距离$currentDistance，技能内需要移动距离$skillDistance，帧间隔时间${(firstHitFrame.sequence - frame.sequence + 1) / 12.0} \n"
-              " 得出速度为 $speedRate");
-        } else {
-          // 如果现在角色与敌方单位间的距离小于技能释放的标准间隔，可以通过缩减动画帧来保证角色可以打到敌方单位
-        }
+        debugPrint("角色与单位当前实际距离$currentDistance "
+            "(${(other.position.x + other.frame.position.x)} - ${(position.x + frame.position.x)} - ${(firstEnemyFrame.position.x - firstHitFrame.position.x)})，"
+            "技能内需要移动距离$skillDistance，帧间隔时间${(firstHitFrame.sequence - frame.sequence + 1) / 12.0} \n"
+            " 得出速度为 $speedRate");
+        // } else {
+        //   // 如果现在角色与敌方单位间的距离小于技能释放的标准间隔，可以通过缩减动画帧来保证角色可以打到敌方单位
+        // }
         other.byFrame = frame;
       } else if (frame.step == StickStep.hit) {
         speedRate = 0;
@@ -368,7 +373,7 @@ class Player extends SpriteComponent
           debugPrint("敌人被攻击，当前攻击帧序号 ${frame.name} ${frame.sequence}");
           other.direction = direction.reverse();
           other.aniFrames = AnimationStore().byNameStartEnd(aniFrames.name,
-              StickSymbol.enemy, direction, frame.sequence, aniFrames.end);
+              StickSymbol.enemy, direction, frame.sequence - 1, aniFrames.end);
         } else {
           // other.byFrame = AnimationFrameData.invalid();
           //
