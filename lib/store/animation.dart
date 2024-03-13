@@ -40,13 +40,13 @@ class AnimationStore {
       StickAnimation("9402", 0, 12),
     ],
     StickAnimationEvent.handAttack: [
-      StickAnimation("7001", 0, 5),
-      StickAnimation("7001", 14, 22),
+      StickAnimation("7001", 0, 6),
+      StickAnimation("7001", 15, 24),
       StickAnimation("7002", 0, 7),
     ],
     StickAnimationEvent.footAttack: [
-      StickAnimation("7001", 5, 14),
-      StickAnimation("7001", 22, 33),
+      StickAnimation("7001", 6, 15),
+      StickAnimation("7001", 24, 34),
       StickAnimation("7002", 7, 20),
     ],
     StickAnimationEvent.jumpUp: [StickAnimation("8001", 0, 5)],
@@ -82,7 +82,7 @@ class AnimationStore {
     return AnimationFrames(
       name: name,
       direction: direction,
-      start: 1,
+      start: start,
       end: data.rightSelfFrames.length,
       width: data.width,
       height: data.height,

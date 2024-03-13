@@ -18,6 +18,7 @@ class Player extends SpriteComponent
 
   late StickDirection direction = StickDirection.right;
   late StickAnimationEvent event = StickAnimationEvent.idle;
+  late AnimationFrames idle;
   late String skill;
 
   World get world => game.world;
@@ -28,7 +29,8 @@ class Player extends SpriteComponent
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
 
-    _aniFrames = AnimationStore().byEvent(event, StickSymbol.self, direction);
+    idle = AnimationStore().byEvent(event, StickSymbol.self, direction);
+    _aniFrames = idle;
     debugPrint("onLoad => $_aniFrames");
     add(
       RectangleHitbox()
@@ -50,44 +52,50 @@ class Player extends SpriteComponent
       skill = SkillStore().skills[skillKey.last.key]!;
       debugPrint("Skill Key ${skillKey.last.key.debugName}, Skill $skill");
       event = StickAnimationEvent.skill;
-    } else if (KeyStore().isDown(AnimationStore().handAttackKey)) {
-      // 手攻击
-      speedRate = 0;
-      event = StickAnimationEvent.handAttack;
-      KeyStore().remove(AnimationStore().handAttackKey);
-    } else if (KeyStore().isDown(AnimationStore().footAttackKey)) {
-      // 脚攻击
-      speedRate = 0;
-      event = StickAnimationEvent.footAttack;
-      KeyStore().remove(AnimationStore().footAttackKey);
-    } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
-      // 向左跑
-      speedRate = -2.0;
-      event = StickAnimationEvent.run;
-      direction = StickDirection.left;
-    } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowRight)) {
-      // 向右跑
-      speedRate = 2.0;
-      event = StickAnimationEvent.run;
-      direction = StickDirection.right;
-    } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowLeft)) {
-      // 向左走
-      speedRate = -1.0;
-      event = StickAnimationEvent.walk;
-      direction = StickDirection.left;
-    } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowRight)) {
-      // 向右走
-      speedRate = 1.0;
-      event = StickAnimationEvent.walk;
-      direction = StickDirection.right;
-    } else if (KeyStore().isDown(LogicalKeyboardKey.arrowUp)) {
-      // 向上跳
-      speedRate = 0;
-      event = StickAnimationEvent.jumpUp;
-    } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowDown)) {
-      // 向下蹲
-      speedRate = 0;
-      event = StickAnimationEvent.squatHalf;
+      aniFrames = AnimationStore().byName(skill, StickSymbol.self, direction);
+    } else {
+      if (KeyStore().isDown(AnimationStore().handAttackKey)) {
+        // 手攻击
+        event = StickAnimationEvent.handAttack;
+        KeyStore().remove(AnimationStore().handAttackKey);
+      } else if (KeyStore().isDown(AnimationStore().footAttackKey)) {
+        // 脚攻击
+        event = StickAnimationEvent.footAttack;
+        KeyStore().remove(AnimationStore().footAttackKey);
+      } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
+        // 向左跑
+        speedRate = -2.0;
+        event = StickAnimationEvent.run;
+        direction = StickDirection.left;
+      } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowRight)) {
+        // 向右跑
+        speedRate = 2.0;
+        event = StickAnimationEvent.run;
+        direction = StickDirection.right;
+      } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowLeft)) {
+        // 向左走
+        speedRate = -1.0;
+        event = StickAnimationEvent.walk;
+        direction = StickDirection.left;
+      } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowRight)) {
+        // 向右走
+        speedRate = 1.0;
+        event = StickAnimationEvent.walk;
+        direction = StickDirection.right;
+      } else if (KeyStore().isDown(LogicalKeyboardKey.arrowUp)) {
+        // 向上跳
+        speedRate = 0;
+        event = StickAnimationEvent.jumpUp;
+      } else if (KeyStore().isSingle(LogicalKeyboardKey.arrowDown)) {
+        // 向下蹲
+        speedRate = 0;
+        event = StickAnimationEvent.squatHalf;
+      } else {
+        speedRate = 0;
+        event = StickAnimationEvent.idle;
+      }
+
+      aniFrames = AnimationStore().byEvent(event, StickSymbol.self, direction);
     }
   }
 
@@ -121,6 +129,7 @@ class Player extends SpriteComponent
       dx = dx + x;
     }
 
+    onTime = 0;
     _aniFrames = newFrames;
   }
 
@@ -131,29 +140,7 @@ class Player extends SpriteComponent
     }
 
     if (event == StickAnimationEvent.idle) {
-      speedRate = 0;
       onChange();
-
-      // 重置动画序列
-      if (event != StickAnimationEvent.idle) {
-        onTime = 0;
-        if (event == StickAnimationEvent.skill) {
-          aniFrames =
-              AnimationStore().byName(skill, StickSymbol.self, direction);
-
-          // 技能发动距离
-          debugPrint("技能发动标准距离: ${aniFrames.distance}");
-        } else {
-          aniFrames =
-              AnimationStore().byEvent(event, StickSymbol.self, direction);
-        }
-      }
-
-      // 按帧播放
-      if (event == StickAnimationEvent.idle) {
-        aniFrames =
-            AnimationStore().byEvent(event, StickSymbol.self, direction);
-      }
     } else if (event == StickAnimationEvent.walk) {
       if (KeyStore().isDouble(LogicalKeyboardKey.arrowLeft)) {
         speedRate = 0;
@@ -176,24 +163,29 @@ class Player extends SpriteComponent
           direction == StickDirection.right) {
         // 什么都不需要做
       } else {
-        onTime = 0;
         speedRate = 0;
         if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
           // 向左跑
           speedRate = -2.0;
           event = StickAnimationEvent.run;
           direction = StickDirection.left;
+
+          aniFrames =
+              AnimationStore().byEvent(event, StickSymbol.self, direction);
         } else if (KeyStore().isRepeat(LogicalKeyboardKey.arrowRight)) {
           // 向右跑
           speedRate = 2.0;
           event = StickAnimationEvent.run;
           direction = StickDirection.right;
+
+          aniFrames =
+              AnimationStore().byEvent(event, StickSymbol.self, direction);
         } else {
           event = StickAnimationEvent.idle;
-        }
+          aniFrames = idle;
 
-        aniFrames =
-            AnimationStore().byEvent(event, StickSymbol.self, direction);
+          onChange();
+        }
       }
     } else if (event == StickAnimationEvent.run) {
       if (KeyStore().isDown(LogicalKeyboardKey.arrowLeft) &&
@@ -203,16 +195,29 @@ class Player extends SpriteComponent
           direction == StickDirection.right) {
         // 什么都不需要做
       } else {
-        onTime = 0;
-        if (KeyStore().isDown(LogicalKeyboardKey.arrowUp)) {
-          speedRate = direction == StickDirection.left ? -2.0 : 2.0;
+        if (KeyStore().isDown(AnimationStore().handAttackKey)) {
+          speedRate = 0;
+          event = StickAnimationEvent.handAttack;
+          debugPrint("奔跑中用手打");
+          aniFrames =
+              AnimationStore().byEvent(event, StickSymbol.self, direction);
+        } else if (KeyStore().isDown(AnimationStore().footAttackKey)) {
+          speedRate = 0;
+          event = StickAnimationEvent.footAttack;
+          debugPrint("奔跑中用脚打");
+          aniFrames =
+              AnimationStore().byEvent(event, StickSymbol.self, direction);
+        } else if (KeyStore().isDown(LogicalKeyboardKey.arrowUp)) {
           event = StickAnimationEvent.jumpUp;
+
+          aniFrames =
+              AnimationStore().byEvent(event, StickSymbol.self, direction);
         } else {
           event = StickAnimationEvent.idle;
-        }
+          aniFrames = idle;
 
-        aniFrames =
-            AnimationStore().byEvent(event, StickSymbol.self, direction);
+          onChange();
+        }
       }
     }
 
@@ -238,19 +243,21 @@ class Player extends SpriteComponent
     effect.position = position;
     dx = 0;
 
-    refreshNext ? refresh() : ();
+    refreshNext ? onRefresh() : ();
   }
 
-  refresh() {
-    debugPrint("refresh $event");
+  onRefresh() {
     if (event == StickAnimationEvent.skill) {
       event = StickAnimationEvent.idle;
-      aniFrames = AnimationStore().byEvent(event, StickSymbol.self, direction);
+      aniFrames = idle;
+
+      onChange();
     } else if (event == StickAnimationEvent.move) {
       event = StickAnimationEvent.idle;
-      aniFrames = AnimationStore().byEvent(event, StickSymbol.self, direction);
+      aniFrames = idle;
+
+      onChange();
     } else {
-      onTime = 0;
       if (event == StickAnimationEvent.jumpUp) {
         if (KeyStore().isDown(AnimationStore().handAttackKey)) {
           event = StickAnimationEvent.jumpHandAttack;
@@ -268,18 +275,20 @@ class Player extends SpriteComponent
           event == StickAnimationEvent.jumpHandAttack ||
           event == StickAnimationEvent.jumpFootAttack) {
         event = StickAnimationEvent.idle;
+        aniFrames = idle;
 
-        aniFrames =
-            AnimationStore().byEvent(event, StickSymbol.self, direction);
+        onChange();
       } else if (event == StickAnimationEvent.squatHalf) {
         if (KeyStore().isDown(LogicalKeyboardKey.arrowDown)) {
           event = StickAnimationEvent.squat;
+          aniFrames =
+              AnimationStore().byEvent(event, StickSymbol.self, direction);
         } else {
           event = StickAnimationEvent.idle;
-        }
+          aniFrames = idle;
 
-        aniFrames =
-            AnimationStore().byEvent(event, StickSymbol.self, direction);
+          onChange();
+        }
       } else if (event == StickAnimationEvent.squat) {
         if (KeyStore().isDown(AnimationStore().handAttackKey)) {
           event = StickAnimationEvent.squatHandAttack;
@@ -304,9 +313,11 @@ class Player extends SpriteComponent
       } else if (event == StickAnimationEvent.handAttack ||
           event == StickAnimationEvent.footAttack) {
         event = StickAnimationEvent.idle;
+        aniFrames = idle;
 
-        aniFrames =
-            AnimationStore().byEvent(event, StickSymbol.self, direction);
+        onChange();
+      } else {
+        onTime = 0;
       }
     }
   }
@@ -359,13 +370,12 @@ class Player extends SpriteComponent
         // }
         other.byFrame = frame;
       } else if (frame.step == StickStep.hit) {
-        speedRate = 0;
-
         if (other.byFrame.name == frame.name &&
             other.byFrame.sequence == frame.sequence) {
           return;
         }
 
+        speedRate = 0;
         final List<ImageRectangle> playerAttacks = [];
         playerAttacks.addAll(frame.attackHand);
         playerAttacks.addAll(frame.attackFoot);

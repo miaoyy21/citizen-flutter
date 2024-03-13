@@ -73,7 +73,8 @@ class Enemy extends SpriteComponent
       debugPrint("Enemy 每秒帧数降至 ${(1 / dt).toStringAsFixed(2)}");
     }
 
-    if (((onTime + dt) * 12).floor() >= aniFrames.frames.length) {
+    if (((onTime + dt) * 12).floor() >= aniFrames.frames.length ||
+        aniFrames.framesData[((onTime + dt) * 12).floor()].exposeBody.isEmpty) {
       aniFrames = AnimationStore()
           .byEvent(StickAnimationEvent.idle, StickSymbol.self, direction);
       onTime = 0;
