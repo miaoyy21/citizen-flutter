@@ -1,9 +1,10 @@
 import '../index.dart';
 
-class StickCape extends SpriteComponent {
+class StickEffect extends SpriteComponent {
   final Color color;
 
-  StickCape(this.color, {super.position}) : super(anchor: Anchor.bottomCenter);
+  StickEffect(this.color, {super.position})
+      : super(anchor: Anchor.bottomCenter);
 
   @override
   Future<void> onLoad() async {

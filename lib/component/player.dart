@@ -4,10 +4,11 @@ import '../index.dart';
 
 class Player extends SpriteComponent
     with HasGameReference<CitizenGame>, CollisionCallbacks {
-  final Cape cape;
+  final StickCape cape;
+  final StickEffect effect;
   final Color color;
 
-  Player(this.cape, this.color, {super.position})
+  Player(this.cape, this.effect, this.color, {super.position})
       : super(anchor: Anchor.bottomCenter, key: ComponentKey.named("Player"));
 
   late double onTime = 0;
@@ -222,12 +223,19 @@ class Player extends SpriteComponent
     sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
     cape.sprite =
         refreshNext ? aniFrames.capeFrames.last : aniFrames.capeFrames[index];
+    if (aniFrames.effectFrames != null && aniFrames.effectFrames!.isNotEmpty) {
+      effect.sprite = refreshNext
+          ? aniFrames.effectFrames?.last
+          : aniFrames.effectFrames?[index];
+    }
+
     frame =
         refreshNext ? aniFrames.framesData.last : aniFrames.framesData[index];
 
     // Position
     position.x = position.x + speedRate * 100 * dt + dx;
     cape.position = position;
+    effect.position = position;
     dx = 0;
 
     refreshNext ? refresh() : ();
@@ -330,7 +338,8 @@ class Player extends SpriteComponent
             (firstEnemyFrame.position.x - firstHitFrame.position.x) ~/ 2;
         final skillDistance = (firstHitFrame.position.x - frame.position.x);
 
-        // if (currentDistance > skillDistance) {
+        // if (currentDistance > skillDistance * 0.5 &&
+        //     currentDistance < skillDistance * 1.5) {
         // 如果现在角色与敌方单位间的距离大于技能释放的标准间隔，那么调整速度比来保证角色可以打到敌方单位
         final deltaTime =
             (firstHitFrame.sequence - frame.sequence + 1 - 0.2) / 12.0;
@@ -342,6 +351,11 @@ class Player extends SpriteComponent
             " 得出速度为 $speedRate");
         // } else {
         //   // 如果现在角色与敌方单位间的距离小于技能释放的标准间隔，可以通过缩减动画帧来保证角色可以打到敌方单位
+        //   onTime = 0;
+        //   aniFrames = AnimationStore()
+        //       .byEvent(StickAnimationEvent.idle, StickSymbol.self, direction);
+        //
+        //   debugPrint("技能发动失败");
         // }
         other.byFrame = frame;
       } else if (frame.step == StickStep.hit) {

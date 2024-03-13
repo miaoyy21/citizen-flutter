@@ -3,7 +3,7 @@ import '../index.dart';
 class Enemy extends SpriteComponent
     with HasGameReference<CitizenGame>, CollisionCallbacks {
   final int id;
-  final Cape cape;
+  final StickCape cape;
   final Color color;
 
   Enemy(this.id, this.cape, this.color, {super.position})
