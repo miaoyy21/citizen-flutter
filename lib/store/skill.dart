@@ -13,7 +13,7 @@ class SkillStore {
     skills = {
       LogicalKeyboardKey.digit3: "1080",
       LogicalKeyboardKey.digit4: "3010",
-      // LogicalKeyboardKey.digit5: "1030",
+      LogicalKeyboardKey.digit5: "3020",
       // LogicalKeyboardKey.digit6: "1040",
       // LogicalKeyboardKey.digit7: "1050",
       // LogicalKeyboardKey.digit8: "1060",

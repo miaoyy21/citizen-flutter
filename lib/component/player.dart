@@ -346,7 +346,7 @@ class Player extends SpriteComponent
 
         final currentDistance = (other.position.x + other.frame.position.x) -
             (position.x + frame.position.x) -
-            (firstEnemyFrame.position.x - firstHitFrame.position.x) ~/ 2;
+            (firstEnemyFrame.position.x - firstHitFrame.position.x);
         final skillDistance = (firstHitFrame.position.x - frame.position.x);
 
         // if (currentDistance > skillDistance * 0.5 &&
