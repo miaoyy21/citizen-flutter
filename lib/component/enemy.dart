@@ -34,7 +34,7 @@ class Enemy extends SpriteComponent
     add(ColorEffect(color, EffectController(duration: 0)));
   }
 
-  late int dx = 0;
+  late double dx = 0;
 
   AnimationFrames get aniFrames => _aniFrames;
 

@@ -354,7 +354,7 @@ class Player extends SpriteComponent
         // 如果现在角色与敌方单位间的距离大于技能释放的标准间隔，那么调整速度比来保证角色可以打到敌方单位
         final deltaTime =
             (firstHitFrame.sequence - frame.sequence + 1 - 0.2) / 12.0;
-        speedRate = (currentDistance - skillDistance) / (deltaTime * 80.0);
+        speedRate = (currentDistance - skillDistance) / (deltaTime * 100.0);
 
         debugPrint("角色与单位当前实际距离$currentDistance "
             "(${(other.position.x + other.frame.position.x)} - ${(position.x + frame.position.x)} - ${(firstEnemyFrame.position.x - firstHitFrame.position.x)})，"
@@ -395,9 +395,12 @@ class Player extends SpriteComponent
           other.byFrame = frame;
 
           debugPrint("敌人被攻击，当前攻击帧序号 ${frame.name} ${frame.sequence}");
-          other.direction = direction.reverse();
           other.aniFrames = AnimationStore().byNameStartEnd(aniFrames.name,
               StickSymbol.enemy, direction, frame.sequence - 1, aniFrames.end);
+          other.direction = direction.reverse();
+          other.dx = position.x - other.position.x;
+          // other.position = position;
+          // other.cape.position = position;
         } else {
           // other.byFrame = AnimationFrameData.invalid();
           //

@@ -1,9 +1,9 @@
 import '../index.dart';
 
 class StickEffect extends SpriteComponent {
-  final Color color;
+  final Color? color;
 
-  StickEffect(this.color, {super.position})
+  StickEffect({this.color, super.position})
       : super(anchor: Anchor.bottomCenter);
 
   @override
@@ -11,6 +11,8 @@ class StickEffect extends SpriteComponent {
     final empty = await Flame.images.load("empty.png");
     sprite = SpriteComponent.fromImage(empty).sprite;
 
-    add(ColorEffect(color, EffectController(duration: 0)));
+    if (color != null) {
+      add(ColorEffect(color!, EffectController(duration: 0)));
+    }
   }
 }
