@@ -7,16 +7,7 @@ enum StickAnimationEvent {
   walk,
   run,
   move,
-  handAttack,
-  footAttack,
-  jumpUp,
-  jumpDown,
-  jumpHandAttack,
-  jumpFootAttack,
-  squatHalf,
-  squat,
-  squatHandAttack,
-  squatFootAttack,
+  jump,
   skill
 }
 

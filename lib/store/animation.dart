@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import '../index.dart';
 
@@ -31,44 +30,12 @@ class AnimationStore {
   late LogicalKeyboardKey handAttackKey;
   late LogicalKeyboardKey footAttackKey;
 
-  final Map<StickAnimationEvent, List<StickAnimation>> animations = {
-    StickAnimationEvent.idle: [StickAnimation("9101", 0, 6)],
-    StickAnimationEvent.walk: [StickAnimation("9101", 6, 11)],
-    StickAnimationEvent.run: [StickAnimation("9202", 0, 6)],
-    StickAnimationEvent.move: [
-      StickAnimation("9401", 0, 12),
-      StickAnimation("9402", 0, 12),
-    ],
-    StickAnimationEvent.handAttack: [
-      StickAnimation("7001", 0, 6),
-      StickAnimation("7001", 15, 24),
-      StickAnimation("7002", 0, 7),
-    ],
-    StickAnimationEvent.footAttack: [
-      StickAnimation("7001", 6, 15),
-      StickAnimation("7001", 24, 34),
-      StickAnimation("7002", 7, 20),
-    ],
-    StickAnimationEvent.jumpUp: [StickAnimation("8001", 0, 5)],
-    StickAnimationEvent.jumpDown: [StickAnimation("8001", 5, 11)],
-    StickAnimationEvent.jumpHandAttack: [
-      StickAnimation("8001", 11, 19),
-      StickAnimation("8001", 26, 34),
-    ],
-    StickAnimationEvent.jumpFootAttack: [
-      StickAnimation("8001", 19, 26),
-      StickAnimation("8001", 34, 42),
-    ],
-    StickAnimationEvent.squatHalf: [StickAnimation("9301", 0, 1)],
-    StickAnimationEvent.squat: [StickAnimation("9301", 1, 2)],
-    StickAnimationEvent.squatHandAttack: [
-      StickAnimation("6001", 0, 4),
-      StickAnimation("6001", 8, 14),
-    ],
-    StickAnimationEvent.squatFootAttack: [
-      StickAnimation("6001", 4, 8),
-      StickAnimation("6001", 14, 20),
-    ],
+  final Map<StickAnimationEvent, StickAnimation> animations = {
+    StickAnimationEvent.idle: StickAnimation("9101", 0, 6),
+    StickAnimationEvent.walk: StickAnimation("9101", 6, 11),
+    StickAnimationEvent.run: StickAnimation("9202", 0, 6),
+    StickAnimationEvent.move: StickAnimation("9402", 0, 12),
+    StickAnimationEvent.jump: StickAnimation("8001", 0, 11),
   };
 
   AnimationFrames byNameStartEnd(String name, StickSymbol symbol,
@@ -134,8 +101,7 @@ class AnimationStore {
 
   AnimationFrames byEvent(
       StickAnimationEvent event, StickSymbol symbol, StickDirection direction) {
-    final ele = animations[event]!;
-    final animation = ele[Random.secure().nextInt(ele.length)];
+    final animation = animations[event]!;
     // debugPrint("byEvent => $animation");
 
     final data = _data[animation.name]!;

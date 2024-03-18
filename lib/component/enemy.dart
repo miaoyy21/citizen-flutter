@@ -3,10 +3,11 @@ import '../index.dart';
 class Enemy extends SpriteComponent
     with HasGameReference<CitizenGame>, CollisionCallbacks {
   final int id;
+  final Stage stage;
   final StickCape cape;
   final Color color;
 
-  Enemy(this.id, this.cape, this.color, {super.position})
+  Enemy(this.id, this.stage, this.cape, this.color, {super.position})
       : super(anchor: Anchor.bottomCenter);
 
   late double onTime = 0;
@@ -44,7 +45,7 @@ class Enemy extends SpriteComponent
     }
 
     // 帧发生变化时，计算中间移动的距离差
-    int index = (onTime * 12).floor();
+    int index = (onTime * stage.fps).floor();
     index = index >= _aniFrames.framesData.length
         ? _aniFrames.framesData.length - 1
         : index;
@@ -73,15 +74,16 @@ class Enemy extends SpriteComponent
       debugPrint("Enemy 每秒帧数降至 ${(1 / dt).toStringAsFixed(2)}");
     }
 
-    if (((onTime + dt) * 12).floor() >= aniFrames.frames.length ||
-        aniFrames.framesData[((onTime + dt) * 12).floor()].exposeBody.isEmpty) {
+    if (((onTime + dt) * stage.fps).floor() >= aniFrames.frames.length ||
+        aniFrames.framesData[((onTime + dt) * stage.fps).floor()].exposeBody
+            .isEmpty) {
       aniFrames = AnimationStore()
           .byEvent(StickAnimationEvent.idle, StickSymbol.self, direction);
       onTime = 0;
     }
 
     onTime = onTime + dt;
-    late int index = (onTime * 12).floor();
+    late int index = (onTime * stage.fps).floor();
 
     sprite = aniFrames.frames[index];
     cape.sprite = aniFrames.capeFrames[index];
@@ -89,20 +91,8 @@ class Enemy extends SpriteComponent
     frame = aniFrames.framesData[index];
 
     // Position
-    position.x = position.x + speedRate * 100 * dt + dx;
+    position.x = position.x + speedRate * stage.speed * dt + dx;
     cape.position = position;
     dx = 0;
-  }
-
-  @override
-  void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
-
-    if (other is Player) {
-      debugPrint("onCollisionStart Player");
-    } else if (other is Enemy) {
-      debugPrint("onCollisionStart Enemy");
-    }
   }
 }
