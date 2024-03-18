@@ -23,7 +23,6 @@ class AnimationStore {
   late Map<String, AnimationData> _data = {};
 
   // left,right
-  // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
   final Map<String, Map<String, List<Sprite?>>> _leftFrames = {};
   final Map<String, Map<String, List<Sprite?>>> _rightFrames = {};
 
@@ -31,11 +30,11 @@ class AnimationStore {
   late LogicalKeyboardKey footAttackKey;
 
   final Map<StickAnimationEvent, StickAnimation> animations = {
-    StickAnimationEvent.idle: StickAnimation("9101", 0, 6),
-    StickAnimationEvent.walk: StickAnimation("9101", 6, 11),
-    StickAnimationEvent.run: StickAnimation("9202", 0, 6),
-    StickAnimationEvent.move: StickAnimation("9402", 0, 12),
-    StickAnimationEvent.jump: StickAnimation("8001", 0, 11),
+    StickAnimationEvent.idle: StickAnimation("9010", 0, 6),
+    StickAnimationEvent.walk: StickAnimation("9010", 6, 11),
+    StickAnimationEvent.run: StickAnimation("9010", 11, 18),
+    StickAnimationEvent.move: StickAnimation("9010", 18, 30),
+    StickAnimationEvent.jump: StickAnimation("9010", 30, 41),
   };
 
   AnimationFrames byNameStartEnd(String name, StickSymbol symbol,

@@ -33,7 +33,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     final playerPosition = Vector2(300 + 48, -11);
     final playerCape = StickCape(Colors.purple, position: playerPosition);
     final playerEffect = StickEffect(position: playerPosition);
-    player = Player(this, playerCape, playerEffect, Colors.red,
+    player = Player(this, playerCape, playerEffect, Colors.black,
         position: playerPosition);
     player.debugColor = Colors.purple;
 
