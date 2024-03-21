@@ -41,8 +41,7 @@ class Player extends SpriteComponent
     add(ColorEffect(color, EffectController(duration: 0)));
   }
 
-  // 接受新的键盘输入按键
-  onChange() {
+  bool onSkill() {
     final skillKey = List<LocalGameKey>.from(KeyStore().keys).where((key) =>
         SkillStore().skills.containsKey(key.key) && KeyStore().isDown(key.key));
 
@@ -61,7 +60,17 @@ class Player extends SpriteComponent
       debugPrint("技能快捷键 ${skillKey.last.key.debugName} , "
           "技能编号 $skill ，"
           "攻击距离 ${((stage.prepareSpeedRate * stage.speed / stage.fps) * (hitFrame.sequence - prepareFrame.sequence)).toStringAsFixed(2)} ");
-    } else {
+
+      return true;
+    }
+
+    return false;
+  }
+
+  // 接受新的键盘输入按键
+  onChange() {
+    final isSkill = onSkill();
+    if (!isSkill) {
       speedRate = 0;
       if (KeyStore().isRepeat(LogicalKeyboardKey.arrowLeft)) {
         // 向左跑
@@ -201,6 +210,12 @@ class Player extends SpriteComponent
           onChange();
         }
       }
+    } else if (event == StickAnimationEvent.move) {
+      final index =
+          aniFrames.framesData.indexWhere((f) => f.sequence == frame.sequence);
+
+      // 滚地过程中释放技能
+      if (index >= 3) onSkill();
     } else if (event == StickAnimationEvent.skill) {
       final index = ((onTime + dt) * stage.fps).floor();
       if (index < aniFrames.frames.length) {
@@ -276,7 +291,7 @@ class Player extends SpriteComponent
     sprite = refreshNext ? aniFrames.frames.last : aniFrames.frames[index];
     cape.sprite =
         refreshNext ? aniFrames.capeFrames.last : aniFrames.capeFrames[index];
-    if (aniFrames.effectFrames!.isNotEmpty) {
+    if (aniFrames.effectFrames != null && aniFrames.effectFrames!.isNotEmpty) {
       effect.sprite = refreshNext
           ? aniFrames.effectFrames?.last
           : aniFrames.effectFrames?[index];
