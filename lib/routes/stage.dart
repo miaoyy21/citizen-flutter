@@ -52,8 +52,8 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     enemies.add(enemy1);
 
     world.add(player);
-    world.add(playerEffect);
     world.add(playerCape);
+    world.add(playerEffect);
   }
 
   // 寻找最近的可攻击目标
