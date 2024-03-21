@@ -259,11 +259,19 @@ class Player extends SpriteComponent
         } else if (newFrame.step == StickStep.hit) {
           final enemy = stage.isPlayerCollision(frame);
           if (enemy != null) {
-            debugPrint("攻击进行中：检测到可攻击敌方单位 ${enemy.id} ，当前攻击帧${frame.sequence}");
-
             // 跳转到攻击帧
             aniFrames = AnimationStore().byNameStartEnd(aniFrames.name,
                 StickSymbol.self, direction, frame.sequence - 1, aniFrames.end);
+
+            // 获取敌方单位的攻击结束帧
+            final enemyFinished = AnimationStore()
+                .byName(aniFrames.name, StickSymbol.enemy, direction)
+                .framesData
+                .lastIndexWhere((f) =>
+                    f.sequence > frame.sequence && f.exposeBody.isNotEmpty);
+
+            debugPrint("攻击进行中：检测到可攻击敌方单位 ${enemy.id} ，"
+                "当前攻击帧${frame.sequence}，攻击结束帧${enemyFinished + 1}");
 
             // 让敌方单位与玩家的帧同步
             enemy.aniFrames = AnimationStore().byNameStartEnd(
@@ -271,7 +279,7 @@ class Player extends SpriteComponent
                 StickSymbol.enemy,
                 direction,
                 frame.sequence - 1,
-                aniFrames.end);
+                enemyFinished + 1);
             enemy.direction = direction.reverse();
             enemy.dx = position.x - enemy.position.x;
           }
