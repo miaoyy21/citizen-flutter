@@ -17,7 +17,7 @@ class SkillStore {
       LogicalKeyboardKey.digit6: "3010",
       LogicalKeyboardKey.digit7: "3020",
       LogicalKeyboardKey.digit8: "3030",
-      // LogicalKeyboardKey.digit9: "1070",
+      LogicalKeyboardKey.digit9: "3040",
       // LogicalKeyboardKey.digit0: "1080",
     };
 
