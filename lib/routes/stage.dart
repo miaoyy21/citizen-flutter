@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math';
 
 import '../index.dart';
@@ -23,6 +24,8 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     world.add(SpriteComponent.fromImage(await Flame.images.load("129.png"),
         anchor: Anchor.bottomLeft));
     debugPrint("onLoad game.world.children.length => ${world.children.length}");
+
+    FlameAudio.bgm.play(fileName)..
 
     final stage = SpriteComponent.fromImage(
         await Flame.images.load("$name.png"),

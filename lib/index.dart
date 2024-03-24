@@ -9,6 +9,7 @@ export 'package:flame/collisions.dart';
 export 'package:flame/experimental.dart';
 export 'package:flame/extensions.dart';
 export 'package:flame/effects.dart';
+export 'package:flame_audio/flame_audio.dart';
 
 export 'package:flame/palette.dart';
 export 'package:flame/sprite.dart';

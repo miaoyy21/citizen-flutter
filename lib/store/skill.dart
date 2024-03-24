@@ -11,14 +11,16 @@ class SkillStore {
 
   load() async {
     skills = {
-      LogicalKeyboardKey.digit3: "1080",
-      LogicalKeyboardKey.digit4: "1090",
-      LogicalKeyboardKey.digit5: "1100",
+      LogicalKeyboardKey.digit1: "1080",
+      LogicalKeyboardKey.digit2: "1090",
+      LogicalKeyboardKey.digit3: "1100",
+      LogicalKeyboardKey.digit4: "2010",
+      LogicalKeyboardKey.digit5: "2020",
       LogicalKeyboardKey.digit6: "3010",
-      LogicalKeyboardKey.digit7: "3020",
-      LogicalKeyboardKey.digit8: "3030",
-      LogicalKeyboardKey.digit9: "3040",
-      // LogicalKeyboardKey.digit0: "1080",
+      LogicalKeyboardKey.digit7: "3010",
+      LogicalKeyboardKey.digit8: "3020",
+      LogicalKeyboardKey.digit9: "3030",
+      LogicalKeyboardKey.digit0: "3040",
     };
 
     skills.forEach((key, value) {
