@@ -19,7 +19,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              resolution: Vector2(32 * 32, 23.75 * 32),
+              resolution: Vector2(32 * 32, 23.75 * 32).scaled(0.67),
             ),
             viewfinder: Viewfinder(),
           ),
