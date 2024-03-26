@@ -287,8 +287,26 @@ class Player extends SpriteComponent
       }
     }
 
+    final lastIndex = (onTime * stage.fps).floor();
+
     onTime = onTime + dt;
     final index = (onTime * stage.fps).floor();
+    if (lastIndex != index) {
+      // 播放挥舞动作
+      final soundSwing = SoundStore()
+          .sound(aniFrames.name, frame.sequence, SoundCategory.swing);
+      if (soundSwing != null) {
+        debugPrint("Play Swing Audio $soundSwing");
+        FlameAudio.play(soundSwing, volume: 0.5);
+      }
+
+      final soundBlow = SoundStore()
+          .sound(aniFrames.name, frame.sequence, SoundCategory.blow);
+      if (soundBlow != null) {
+        debugPrint("Play Blow Audio $soundBlow");
+        FlameAudio.play(soundBlow, volume: 0.5);
+      }
+    }
 
     // Frame
     final refreshNext = index >= aniFrames.frames.length;

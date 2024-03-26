@@ -1,5 +1,3 @@
-import 'package:citizen/store/skill.dart';
-
 import 'index.dart';
 
 void main() async {
@@ -7,6 +5,13 @@ void main() async {
 
   Flame.device.setLandscape();
   Flame.device.fullScreen();
+
+  // final List<String> ss = ["111", "222", "333"];
+  // debugPrint(jsonEncode(ss));
+  //
+  // final String js = jsonEncode(ss);
+  // final as = json.decode(js);
+  // debugPrint("${(as as List).map((s) => (s as String)).toList()}");
 
   runApp(GameWidget(game: CitizenGame()));
 }
@@ -19,7 +24,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              resolution: Vector2(32 * 32, 23.75 * 32).scaled(0.67),
+              resolution: Vector2(32 * 32, 23.75 * 32),
             ),
             viewfinder: Viewfinder(),
           ),
@@ -30,6 +35,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     await AnimationStore()
         .load(LogicalKeyboardKey.digit1, LogicalKeyboardKey.digit2);
     await SkillStore().load();
+    await SoundStore().load();
 
     add(
       router = RouterComponent(
