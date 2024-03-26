@@ -17,10 +17,10 @@ class SkillStore {
       LogicalKeyboardKey.digit4: "2010",
       LogicalKeyboardKey.digit5: "2020",
       LogicalKeyboardKey.digit6: "3010",
-      LogicalKeyboardKey.digit7: "3010",
-      LogicalKeyboardKey.digit8: "3020",
-      LogicalKeyboardKey.digit9: "3030",
-      LogicalKeyboardKey.digit0: "3040",
+      LogicalKeyboardKey.digit7: "3020",
+      LogicalKeyboardKey.digit8: "3030",
+      LogicalKeyboardKey.digit9: "3040",
+      // LogicalKeyboardKey.digit0: "3050",
     };
 
     skills.forEach((key, value) {
