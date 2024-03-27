@@ -28,6 +28,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
         await Flame.images.load("$name.png"),
         anchor: Anchor.bottomLeft);
     world.add(stage);
+    FlameAudio.bgm.play("bg01.wav", volume: 0.5);
 
     // Player
     final playerPosition = Vector2(300 + 48, -11);
