@@ -6,4 +6,4 @@ enum StickAnimationEvent { idle, walk, run, move, jump, skill }
 
 enum StickStep { start, prepare, hit, finish }
 
-enum SoundCategory { blow, swing }
+enum SoundCategory { attack, swing }

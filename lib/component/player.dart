@@ -301,7 +301,7 @@ class Player extends SpriteComponent
       }
 
       final soundBlow = SoundStore()
-          .sound(aniFrames.name, frame.sequence, SoundCategory.blow);
+          .sound(aniFrames.name, frame.sequence, SoundCategory.attack);
       if (soundBlow != null) {
         debugPrint("Play Blow Audio $soundBlow");
         FlameAudio.play(soundBlow, volume: 0.5);
