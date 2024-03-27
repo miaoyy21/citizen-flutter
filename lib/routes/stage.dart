@@ -28,7 +28,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
         await Flame.images.load("$name.png"),
         anchor: Anchor.bottomLeft);
     world.add(stage);
-    FlameAudio.bgm.play("bg01.wav", volume: 0.5);
+    FlameAudio.play("bg01.wav", volume: 0.25);
 
     // Player
     final playerPosition = Vector2(300 + 48, -11);
@@ -103,6 +103,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
 
   @override
   void onRemove() {
+    FlameAudio.bgm.stop();
     world.removeAll(world.children);
     // debugPrint("onRemove >>> $tileName");
 
