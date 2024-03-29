@@ -254,6 +254,12 @@ class Player extends SpriteComponent
                   aniFrames.end);
               enemy.direction = direction.reverse();
               enemy.dx = position.x - enemy.position.x;
+
+              // 修改层次
+              final last = game.children.last;
+              priority = last.priority + 1;
+              cape.priority = last.priority + 2;
+              effect.priority = last.priority + 3;
             }
           }
         } else if (newFrame.step == StickStep.hit) {
@@ -282,6 +288,12 @@ class Player extends SpriteComponent
                 enemyFinished + 1);
             enemy.direction = direction.reverse();
             enemy.dx = position.x - enemy.position.x;
+
+            // 修改层次
+            final last = game.children.last;
+            priority = last.priority + 1;
+            cape.priority = last.priority + 2;
+            effect.priority = last.priority + 3;
           }
         }
       }
