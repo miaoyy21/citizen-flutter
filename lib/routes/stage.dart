@@ -47,11 +47,13 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     // Enemy
     final enemy1Position = Vector2(150 + 48, -11);
     final enemy1Cape = StickCape(Colors.orange, position: enemy1Position);
-    final enemy1 =
-        Enemy(1, this, enemy1Cape, Colors.green, position: enemy1Position);
+    final enemy1Effect = StickEffect(position: enemy1Position);
+    final enemy1 = Enemy(1, this, enemy1Cape, enemy1Effect, Colors.green,
+        position: enemy1Position);
     enemy1.debugColor = Colors.blue;
     world.add(enemy1);
     world.add(enemy1Cape);
+    world.add(enemy1Effect);
     enemies.add(enemy1);
 
     world.add(player);

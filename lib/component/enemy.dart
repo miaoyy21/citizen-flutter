@@ -5,9 +5,11 @@ class Enemy extends SpriteComponent
   final int id;
   final Stage stage;
   final StickCape cape;
+  final StickEffect effect;
   final Color color;
 
-  Enemy(this.id, this.stage, this.cape, this.color, {super.position})
+  Enemy(this.id, this.stage, this.cape, this.effect, this.color,
+      {super.position})
       : super(anchor: Anchor.bottomCenter);
 
   late double onTime = 0;
@@ -85,14 +87,19 @@ class Enemy extends SpriteComponent
     onTime = onTime + dt;
     late int index = (onTime * stage.fps).floor();
 
+    frame = aniFrames.framesData[index];
     sprite = aniFrames.frames[index];
     cape.sprite = aniFrames.capeFrames[index];
-
-    frame = aniFrames.framesData[index];
+    if (aniFrames.effectFrames != null && aniFrames.effectFrames!.isNotEmpty) {
+      effect.sprite = aniFrames.effectFrames![index];
+    }else{
+      effect.sprite = null;
+    }
 
     // Position
     position.x = position.x + speedRate * stage.speed * dt + dx;
     cape.position = position;
+    effect.position = position;
     dx = 0;
   }
 }

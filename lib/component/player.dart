@@ -321,6 +321,8 @@ class Player extends SpriteComponent
       effect.sprite = refreshNext
           ? aniFrames.effectFrames?.last
           : aniFrames.effectFrames?[index];
+    } else {
+      effect.sprite = null;
     }
 
     // Position

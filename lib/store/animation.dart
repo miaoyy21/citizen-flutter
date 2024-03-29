@@ -44,7 +44,7 @@ class AnimationStore {
         ? _leftFrames[name]
         : _rightFrames[name];
 
-    // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
+    // enemy_cape,enemy_effect,enemy_stick,self_cape,self_effect,self_stick
     return AnimationFrames(
       name: name,
       direction: direction,
@@ -76,7 +76,7 @@ class AnimationStore {
         ? _leftFrames[name]
         : _rightFrames[name];
 
-    // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
+    // enemy_cape,enemy_effect,enemy_stick,self_cape,self_effect,self_stick
     return AnimationFrames(
       name: name,
       direction: direction,
@@ -108,7 +108,7 @@ class AnimationStore {
         ? _leftFrames[animation.name]
         : _rightFrames[animation.name];
 
-    // enemy_cape,enemy_stick,self_cape,self_effect,self_stick
+    // enemy_cape,enemy_effect,enemy_stick,self_cape,self_effect,self_stick
     return AnimationFrames(
       name: animation.name,
       direction: direction,
