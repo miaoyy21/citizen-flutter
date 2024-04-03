@@ -128,7 +128,7 @@ class Player extends SpriteComponent
         "$_aniFrames [$index] -> $newFrames x1 = $x1, x2 = $x2, x3 = $x3 ");
 
     x = x2 - x3;
-    if (x.abs() > 20) {
+    if (x.abs() > 10) {
       dx = dx + x;
     }
 
