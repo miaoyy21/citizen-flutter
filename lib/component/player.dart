@@ -53,22 +53,14 @@ class Player extends SpriteComponent
       event = StickAnimationEvent.skill;
       aniFrames = AnimationStore().byName(skill, StickSymbol.self, direction);
 
-      final prepareFrames = aniFrames.framesData
-          .where((v) => v.step == StickStep.prepare)
-          .toList();
+      final prepareFrame =
+          aniFrames.framesData.firstWhere((v) => v.step == StickStep.prepare);
       final hitFrame =
           aniFrames.framesData.firstWhere((v) => v.step == StickStep.hit);
 
-      final prepareRate = prepareFrames.length > 9
-          ? 0.15
-          : prepareFrames.length > 6
-              ? 0.25
-              : prepareFrames.length > 3
-                  ? 0.5
-                  : 1.0;
       debugPrint("技能快捷键 ${skillKey.last.key.debugName} , "
           "技能编号 $skill ，"
-          "攻击距离 ${((stage.prepareSpeedRate * prepareRate * stage.speed / stage.fps) * (hitFrame.sequence - prepareFrames.first.sequence)).toStringAsFixed(2)} ");
+          "攻击距离 ${((stage.prepareSpeedRate * AnimationStore().getPrepareRate(aniFrames) * stage.speed / stage.fps) * (hitFrame.sequence - prepareFrame.sequence)).toStringAsFixed(2)} ");
 
       return true;
     }
@@ -232,9 +224,10 @@ class Player extends SpriteComponent
 
         final newFrame = aniFrames.framesData[index];
         if (newFrame.step == StickStep.prepare) {
-          speedRate = direction == StickDirection.left
-              ? -stage.prepareSpeedRate
-              : stage.prepareSpeedRate;
+          speedRate = (direction == StickDirection.left
+                  ? -stage.prepareSpeedRate
+                  : stage.prepareSpeedRate) *
+              AnimationStore().getPrepareRate(aniFrames);
 
           // 第1个攻击帧
           final hitIndex =

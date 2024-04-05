@@ -37,6 +37,19 @@ class AnimationStore {
     StickAnimationEvent.jump: StickAnimation("9010", 30, 41),
   };
 
+  double getPrepareRate(AnimationFrames aniFrames) {
+    final prepareFrames =
+        aniFrames.framesData.where((v) => v.step == StickStep.prepare).toList();
+
+    return prepareFrames.length > 9
+        ? 0.15
+        : prepareFrames.length > 6
+            ? 0.25
+            : prepareFrames.length > 3
+                ? 0.5
+                : 1.0;
+  }
+
   AnimationFrames byNameStartEnd(String name, StickSymbol symbol,
       StickDirection direction, int start, int end) {
     final data = _data[name]!;
