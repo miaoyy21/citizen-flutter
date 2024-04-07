@@ -66,6 +66,7 @@ class AnimationStore {
       width: data.width,
       height: data.height,
       distance: data.distance,
+      breakPrepare: data.breakPrepare,
       frames: frames!["${symbol.asString()}_stick"]!.sublist(start, end),
       framesData: (symbol == StickSymbol.self
               ? (direction == StickDirection.left
@@ -98,6 +99,7 @@ class AnimationStore {
       width: data.width,
       height: data.height,
       distance: data.distance,
+      breakPrepare: data.breakPrepare,
       frames: frames!["${symbol.asString()}_stick"]!,
       framesData: symbol == StickSymbol.self
           ? (direction == StickDirection.left
@@ -130,6 +132,7 @@ class AnimationStore {
       distance: data.distance,
       width: data.width,
       height: data.height,
+      breakPrepare: data.breakPrepare,
       frames: frames!["${symbol.asString()}_stick"]!
           .sublist(animation.start, animation.end),
       framesData: (symbol == StickSymbol.self

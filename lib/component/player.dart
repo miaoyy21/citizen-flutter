@@ -236,35 +236,38 @@ class Player extends SpriteComponent
             final hitFrame = aniFrames.framesData.elementAt(hitIndex);
             final enemy = stage.isPlayerCollision(hitFrame);
             if (enemy != null) {
-              debugPrint(
-                  "攻击准备中：检测到可攻击敌方单位 ${enemy.id} ，当前帧序号${index + 1}，跳转至攻击帧${hitFrame.sequence}");
+              if (!aniFrames.breakPrepare) {
+                debugPrint(
+                    "攻击准备中：检测到可攻击敌方单位 ${enemy.id} ，当前帧序号${index + 1}，不可跳过准备阶段，移动速度设为0");
+                speedRate = 0;
+              } else {
+                debugPrint(
+                    "攻击准备中：检测到可攻击敌方单位 ${enemy.id} ，当前帧序号${index + 1}，跳转至攻击帧${hitFrame.sequence}");
 
-              speedRate = 0;
+                // 跳转到攻击帧
+                aniFrames = AnimationStore().byNameStartEnd(
+                    aniFrames.name,
+                    StickSymbol.self,
+                    direction,
+                    hitFrame.sequence - 1,
+                    aniFrames.end);
 
-              //
-              // // 跳转到攻击帧
-              // aniFrames = AnimationStore().byNameStartEnd(
-              //     aniFrames.name,
-              //     StickSymbol.self,
-              //     direction,
-              //     hitFrame.sequence - 1,
-              //     aniFrames.end);
-              //
-              // // 让敌方单位与玩家的帧同步
-              // enemy.aniFrames = AnimationStore().byNameStartEnd(
-              //     aniFrames.name,
-              //     StickSymbol.enemy,
-              //     direction,
-              //     hitFrame.sequence - 1,
-              //     aniFrames.end);
-              // enemy.direction = direction.reverse();
-              // enemy.dx = position.x - enemy.position.x;
-              //
-              // // 修改层次
-              // final last = game.children.last;
-              // priority = last.priority + 1;
-              // cape.priority = last.priority + 2;
-              // effect.priority = last.priority + 3;
+                // 让敌方单位与玩家的帧同步
+                enemy.aniFrames = AnimationStore().byNameStartEnd(
+                    aniFrames.name,
+                    StickSymbol.enemy,
+                    direction,
+                    hitFrame.sequence - 1,
+                    aniFrames.end);
+                enemy.direction = direction.reverse();
+                enemy.dx = position.x - enemy.position.x;
+
+                // 修改层次
+                final last = game.children.last;
+                priority = last.priority + 1;
+                cape.priority = last.priority + 2;
+                effect.priority = last.priority + 3;
+              }
             }
           }
         } else if (newFrame.step == StickStep.hit) {

@@ -30,7 +30,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     world.add(stage);
 
     // Background Music
-    FlameAudio.bgm.play("bg01.wav", volume: 0.25);
+    // FlameAudio.bgm.play("bg01.wav", volume: 0.25);
 
     // Player
     final playerPosition = Vector2(300 + 48, -11);
