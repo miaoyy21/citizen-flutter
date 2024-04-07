@@ -239,29 +239,32 @@ class Player extends SpriteComponent
               debugPrint(
                   "攻击准备中：检测到可攻击敌方单位 ${enemy.id} ，当前帧序号${index + 1}，跳转至攻击帧${hitFrame.sequence}");
 
-              // 跳转到攻击帧
-              aniFrames = AnimationStore().byNameStartEnd(
-                  aniFrames.name,
-                  StickSymbol.self,
-                  direction,
-                  hitFrame.sequence - 1,
-                  aniFrames.end);
+              speedRate = 0;
 
-              // 让敌方单位与玩家的帧同步
-              enemy.aniFrames = AnimationStore().byNameStartEnd(
-                  aniFrames.name,
-                  StickSymbol.enemy,
-                  direction,
-                  hitFrame.sequence - 1,
-                  aniFrames.end);
-              enemy.direction = direction.reverse();
-              enemy.dx = position.x - enemy.position.x;
-
-              // 修改层次
-              final last = game.children.last;
-              priority = last.priority + 1;
-              cape.priority = last.priority + 2;
-              effect.priority = last.priority + 3;
+              //
+              // // 跳转到攻击帧
+              // aniFrames = AnimationStore().byNameStartEnd(
+              //     aniFrames.name,
+              //     StickSymbol.self,
+              //     direction,
+              //     hitFrame.sequence - 1,
+              //     aniFrames.end);
+              //
+              // // 让敌方单位与玩家的帧同步
+              // enemy.aniFrames = AnimationStore().byNameStartEnd(
+              //     aniFrames.name,
+              //     StickSymbol.enemy,
+              //     direction,
+              //     hitFrame.sequence - 1,
+              //     aniFrames.end);
+              // enemy.direction = direction.reverse();
+              // enemy.dx = position.x - enemy.position.x;
+              //
+              // // 修改层次
+              // final last = game.children.last;
+              // priority = last.priority + 1;
+              // cape.priority = last.priority + 2;
+              // effect.priority = last.priority + 3;
             }
           }
         } else if (newFrame.step == StickStep.hit) {
