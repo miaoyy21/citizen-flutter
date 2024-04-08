@@ -96,6 +96,9 @@ flutter:
     - family: AaKuangPaiShouShu
       fonts:
         - asset: assets/fonts/AaKuangPaiShouShu-2.ttf
+    - family: YeZiGongChangYouLongXingKai
+      fonts:
+        - asset: assets/fonts/YeZiGongChangYouLongXingKai-2.ttf
 
   assets:
     - assets/

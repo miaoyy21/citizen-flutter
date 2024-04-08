@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:citizen/overlays/bag.dart';
 
 import 'index.dart';
@@ -12,6 +14,7 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
+    scrollBehavior: GameCustomScrollBehavior(),
     home: Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -19,7 +22,7 @@ void main() async {
           GameWidget(
             game: game,
             overlayBuilderMap: {
-              "BagPage": (context, game) => BagPage(),
+              "BagPage": (context, _) => BagPage(game),
             },
           ),
           MenuOverlay(game: game)
@@ -27,6 +30,15 @@ void main() async {
       ),
     ),
   ));
+}
+
+// Override behavior methods and getters like dragDevices
+class GameCustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
 
 class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {

@@ -17,16 +17,20 @@ class MenuOverlay extends StatelessWidget {
         child: Row(
           children: [
             GameTextButton(
+              text: "角色",
+              onTap: () {
+                debugPrint("打开 【角色】");
+              },
+            ),
+            GameTextButton(
               text: "背包",
               onTap: () {
-                // showDialog(context: context, builder: (context) => BagPage());
                 game.overlays.add("BagPage");
               },
             ),
             GameTextButton(
               text: "秘技",
               onTap: () {
-                // game.overlays.remove("BagPage");
                 debugPrint("打开 【秘技】");
               },
             ),
