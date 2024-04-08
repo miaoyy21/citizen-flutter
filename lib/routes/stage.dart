@@ -23,7 +23,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     world.add(
       SpriteComponent.fromImage(
         await Flame.images.load("65.png", key: "Background"),
-        anchor: Anchor.bottomLeft,
+        anchor: Anchor.topLeft,
         key: ComponentKey.named("Background"),
       ),
     );
