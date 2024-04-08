@@ -20,13 +20,20 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
 
   @override
   FutureOr<void> onLoad() async {
-    world.add(SpriteComponent.fromImage(await Flame.images.load("65.png"),
-        anchor: Anchor.bottomLeft));
+    world.add(
+      SpriteComponent.fromImage(
+        await Flame.images.load("65.png", key: "Background"),
+        anchor: Anchor.bottomLeft,
+        key: ComponentKey.named("Background"),
+      ),
+    );
     debugPrint("onLoad game.world.children.length => ${world.children.length}");
 
     final stage = SpriteComponent.fromImage(
-        await Flame.images.load("$name.png"),
-        anchor: Anchor.bottomLeft);
+      await Flame.images.load("$name.png"),
+      anchor: Anchor.bottomLeft,
+      key: ComponentKey.named("Stage"),
+    );
     world.add(stage);
 
     // Background Music

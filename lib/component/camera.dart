@@ -12,13 +12,9 @@ class Camera extends Component with HasGameReference<CitizenGame> {
   FutureOr<void> onLoad() {
     camera.viewfinder.anchor = Anchor.bottomLeft;
     camera.moveTo(Vector2(0, 0));
-
-    // camera.follow(player);
   }
 
   final double speed = 500;
-
-  // late int dx = 0;
 
   @override
   void update(double dt) {
@@ -96,5 +92,28 @@ class Camera extends Component with HasGameReference<CitizenGame> {
           Vector2(p0.x - viewportSize.x / 2, p0.y + viewportSize.y / 2),
           speed: speed);
     }
+
+    // final background =
+    //     game.findByKey<SpriteComponent>(ComponentKey.named("Background"));
+    // final stage = game.findByKey<SpriteComponent>(ComponentKey.named("Stage"));
+    // if (background != null && stage != null) {
+    //   final x0 = stage.width;
+    //   final y0 = stage.height;
+    //   final x1 = background.width;
+    //   final y1 = background.height;
+    //   final x2 = viewportSize.x;
+    //   final y2 = viewportSize.y;
+    //   //
+    //   // debugPrint(
+    //   //     "${background.position} ->($x1,$y1) - ($x2,$y2) = (${x1 - x2},${y1 - y2})");
+    //   //- (x1 - x2) * p0.x / x0
+    //
+    //
+    //
+    //   background.position.x =
+    //       camera.viewfinder.position.x - (x1 - x2) *(p0.x / (x0 - 5 * 16) > 1.0 ? 1.0:p0.x / (x0 - 5 * 16) ) ;
+    //   // background.position.y =
+    //   //     camera.viewfinder.position.y + (y1 - y2) * f0.y / (y0 - 1 * 16);
+    // }
   }
 }
