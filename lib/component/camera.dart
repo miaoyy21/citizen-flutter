@@ -108,10 +108,8 @@ class Camera extends Component with HasGameReference<CitizenGame> {
     //   //     "${background.position} ->($x1,$y1) - ($x2,$y2) = (${x1 - x2},${y1 - y2})");
     //   //- (x1 - x2) * p0.x / x0
     //
-    //
-    //
     //   background.position.x =
-    //       camera.viewfinder.position.x - (x1 - x2) *(p0.x / (x0 - 5 * 16) > 1.0 ? 1.0:p0.x / (x0 - 5 * 16) ) ;
+    //       camera.viewfinder.position.x - (x1 - x2) * p0.x / (x0 - 4 * 16);
     //   // background.position.y =
     //   //     camera.viewfinder.position.y + (y1 - y2) * f0.y / (y0 - 1 * 16);
     // }

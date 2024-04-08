@@ -354,30 +354,6 @@ class Player extends SpriteComponent
     dx = 0;
 
     refreshNext ? onNext() : ();
-
-    // final bgSprite =
-    //     game.findByKey<SpriteComponent>(ComponentKey.named("Background"));
-    // final stageSprite =
-    //     game.findByKey<SpriteComponent>(ComponentKey.named("Stage"));
-    // if (bgSprite != null && stageSprite != null) {
-    //   final x0 = stageSprite.width;
-    //   final y0 = stageSprite.height;
-    //   final x1 = bgSprite.width;
-    //   final y1 = bgSprite.height;
-    //   final x2 = (camera.viewport as FixedResolutionViewport).resolution.x;
-    //   final y2 = (camera.viewport as FixedResolutionViewport).resolution.y;
-    //
-    //   late double delta = position.x / (x0 - 5 * 16);
-    //   if (delta > 1.0) {
-    //     delta = 1.0;
-    //   } else if (delta < 0) {
-    //     delta = 0;
-    //   }
-    //
-    //   bgSprite.position.x = camera.viewfinder.position.x - (x1 - x2) * delta;
-    //   // bgSprite.position.y = camera.viewfinder.position.y +
-    //   //     (y1 - y2) * frame.position.y / (y0 - 1 * 16);
-    // }
   }
 
   onNext() {
