@@ -23,7 +23,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     world.add(
       SpriteComponent.fromImage(
         await Flame.images.load("65.png", key: "Background"),
-        anchor: Anchor.topLeft,
+        anchor: Anchor.bottomLeft,
         key: ComponentKey.named("Background"),
       ),
     );
@@ -40,7 +40,7 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     // FlameAudio.bgm.play("bg01.wav", volume: 0.25);
 
     // Player
-    final playerPosition = Vector2(300 + 48, -11);
+    final playerPosition = Vector2(300 + 48, -8 * 16 + 5);
     final playerCape = StickCape(Colors.red, position: playerPosition);
     final playerEffect = StickEffect(position: playerPosition);
     player = Player(this, playerCape, playerEffect, Colors.black,
@@ -52,20 +52,29 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     world.add(camera);
 
     // Enemy
-    final enemy1Position = Vector2(150 + 48, -11);
+    final enemy1Position = Vector2(150 + 48, -8 * 16 + 5);
     final enemy1Cape = StickCape(Colors.orange, position: enemy1Position);
     final enemy1Effect = StickEffect(position: enemy1Position);
     final enemy1 = Enemy(1, this, enemy1Cape, enemy1Effect, Colors.green,
         position: enemy1Position);
     enemy1.debugColor = Colors.blue;
-    world.add(enemy1);
-    world.add(enemy1Cape);
-    world.add(enemy1Effect);
-    enemies.add(enemy1);
+    // world.add(enemy1);
+    // world.add(enemy1Cape);
+    // world.add(enemy1Effect);
+    // enemies.add(enemy1);
+    //
+    // // Player
+    // world.add(player);
+    // world.add(playerCape);
+    // world.add(playerEffect);
 
-    world.add(player);
-    world.add(playerCape);
-    world.add(playerEffect);
+    game.overlays.addEntry(
+      "Overlays",
+      Menus().builder,
+    );
+
+    debugPrint("Overlays Add");
+    game.overlays.add("Overlays");
   }
 
   // 寻找最近的可攻击目标

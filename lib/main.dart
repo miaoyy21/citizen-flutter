@@ -24,8 +24,8 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              /* 1024 * 760 */
-              resolution: Vector2(32 * 32, 23.75 * 32)..scale(0.75),
+              /* 1024 * 768 */
+              resolution: Vector2(32 * 32, 24 * 32)..scale(0.75),
             ),
             viewfinder: Viewfinder(),
           ),
@@ -34,13 +34,14 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   FutureOr<void> onLoad() async {
     debugPrint("111 ${DateTime.now().toIso8601String()}");
-    await AnimationStore().load();
-    await SkillStore().load();
-    await SoundStore().load();
+    // await AnimationStore().load();
+    // await SkillStore().load();
+    // await SoundStore().load();
     debugPrint("222 ${DateTime.now().toIso8601String()}");
 
     add(
       router = RouterComponent(
+        initialRoute: 'stage01',
         routes: {
           'stage01': Route(
             maintainState: false,
@@ -51,7 +52,6 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
           // 'pause': PauseRoute(),
           // 'confirm-dialog': OverlayRoute.existing(),
         },
-        initialRoute: 'stage01',
       ),
     );
     debugPrint("333 ${DateTime.now().toIso8601String()}");

@@ -29,3 +29,4 @@ export 'main.dart' show CitizenGame;
 export 'routes/stage.dart';
 export 'component/index.dart';
 export 'store/index.dart';
+export 'overlays/index.dart';

@@ -33,6 +33,7 @@ class Player extends SpriteComponent
 
     idle = AnimationStore().byEvent(event, StickSymbol.self, direction);
     _aniFrames = idle;
+    frame = _aniFrames.framesData.first;
     debugPrint("onLoad => $_aniFrames");
     add(
       RectangleHitbox()
@@ -47,8 +48,8 @@ class Player extends SpriteComponent
     final skillKey = List<LocalGameKey>.from(KeyStore().keys).where((key) =>
         SkillStore().skills.containsKey(key.key) && KeyStore().isDown(key.key));
 
+    // 技能攻击
     if (skillKey.isNotEmpty) {
-      // 技能攻击
       speedRate = 0;
       skill = SkillStore().skills[skillKey.last.key]!;
 
