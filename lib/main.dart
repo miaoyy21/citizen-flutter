@@ -1,3 +1,5 @@
+import 'package:citizen/overlays/bag.dart';
+
 import 'index.dart';
 
 void main() async {
@@ -6,14 +8,25 @@ void main() async {
   Flame.device.setLandscape();
   Flame.device.fullScreen();
 
-  // final List<String> ss = ["111", "222", "333"];
-  // debugPrint(jsonEncode(ss));
-  //
-  // final String js = jsonEncode(ss);
-  // final as = json.decode(js);
-  // debugPrint("${(as as List).map((s) => (s as String)).toList()}");
+  final game = CitizenGame();
 
-  runApp(GameWidget(game: CitizenGame()));
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          GameWidget(
+            game: game,
+            overlayBuilderMap: {
+              "BagPage": (context, game) => BagPage(),
+            },
+          ),
+          MenuOverlay(game: game)
+        ],
+      ),
+    ),
+  ));
 }
 
 class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
@@ -47,10 +60,6 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
             maintainState: false,
             () => Stage("stage01"),
           ),
-          // 'level-selector': Route(LevelSelectorPage.new),
-          // 'settings': Route(SettingsPage.new, transparent: true),
-          // 'pause': PauseRoute(),
-          // 'confirm-dialog': OverlayRoute.existing(),
         },
       ),
     );
