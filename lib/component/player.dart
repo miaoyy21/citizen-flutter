@@ -138,6 +138,21 @@ class Player extends SpriteComponent
 
     onTime = 0;
     _aniFrames = newFrames;
+
+    /*** TODO 释放技能判定
+     * 在玩家释放技能处于Finished阶段，
+     * 可在接触地面的前一帧刷新时检测是否可释放新的技能，
+     * 释放新的技能如果帧数小于9帧，直接进入新技能的Preprare阶段 ***/
+
+    /*** TODO 攻击判定
+     * 在释放技能的Start、Prepare和Finished阶段，可以收到敌方单位的攻击中断，
+     * 在释放技能的Hit阶段，无法被敌方单位的技能中断，
+     * 在被攻击过程中，可以被其他敌方单位再次攻击，
+     ***/
+
+    /*** TODO 被攻击判定
+     * 在被攻击结束后，如果玩家躺在地上（玩家尺寸的Y轴坐标点小于或等于55），那么进入倒地站起来动画
+     ***/
   }
 
   @override
