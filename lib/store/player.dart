@@ -7,11 +7,26 @@ class PlayerStore {
 
   PlayerStore._internal();
 
-  late PlayerData data;
+  late String id;
+  late String name;
+  late int gold;
+  late int exp;
+
+  late int unread;
+
+  late Map<AttributeCategory, int> attributes;
+  late List<Item> items;
+  late List<Skill> skills;
 
   load() async {
+    id = "player1"; /* 玩家ID */
+    name = "雨晴"; /* 玩家名 */
+    gold = 358931020; /* 金币 */
+    exp = 56328601294; /* 经验值 */
+    unread = 12; /* 未读邮件数量 */
+
     // 玩家属性
-    final Map<AttributeCategory, int> attributes = {
+    attributes = {
       AttributeCategory.health: 24745,
       AttributeCategory.energy: 398,
       AttributeCategory.attack: 2343,
@@ -24,12 +39,9 @@ class PlayerStore {
     };
 
     // 物品
-    final List<Item> items = [];
+    items = [];
 
     // 技能
-    final List<Skill> skills = [];
-
-    data =
-        PlayerData("player1", 35891020, 56328601294, attributes, items, skills);
+    skills = [];
   }
 }

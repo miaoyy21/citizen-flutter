@@ -28,22 +28,3 @@ class Skill {
 
   Skill(this.id, this.protoId, this.level);
 }
-
-class PlayerData {
-  final String id;
-  final int gold;
-  final int exp;
-
-  Map<AttributeCategory, int> attributes;
-  List<Item> items;
-  List<Skill> skills;
-
-  PlayerData(
-    this.id,
-    this.gold,
-    this.exp,
-    this.attributes,
-    this.items,
-    this.skills,
-  );
-}
