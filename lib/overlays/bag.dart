@@ -21,6 +21,7 @@ class BagItem {
 }
 
 class _StateBagPage extends State<BagPage> {
+  final String title = "背包";
   final List<BagItem> items = [
     BagItem(1, "装备"),
     BagItem(2, "卡片"),
@@ -29,7 +30,6 @@ class _StateBagPage extends State<BagPage> {
   ];
 
   late BagItem selected = items.first;
-  static const style = TextStyle(fontFamily: "Z2");
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +65,8 @@ class _StateBagPage extends State<BagPage> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 4),
                   child: Text(
-                    "背包",
-                    style: style.copyWith(
+                    title,
+                    style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
@@ -79,10 +79,7 @@ class _StateBagPage extends State<BagPage> {
                     dividerColor: Colors.transparent,
                     tabs: items
                         .map(
-                          (src) => Tab(
-                            height: 24,
-                            child: Text(src.name, style: style),
-                          ),
+                          (src) => Tab(height: 24, child: Text(src.name)),
                         )
                         .toList(),
                     indicator: UnderlineTabIndicator(
@@ -119,81 +116,111 @@ class _StateBagPage extends State<BagPage> {
       crossAxisCount: 10,
       children: List.generate(
         25 + Random.secure().nextInt(100),
-        (index) => HoverShowWidget("$index"),
+        (index) {
+          final child = Container(
+            margin: const EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              border: Border.all(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(4),
+              shape: BoxShape.rectangle,
+            ),
+            child: Center(
+                child:
+                    Text("$index", style: const TextStyle(fontFamily: "Z2"))),
+          );
+
+          const hover = Center(
+            child: Text(
+              'Hovered!',
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+
+          return HoverShowOverlay(
+            width: 180,
+            height: 320,
+            hover: hover,
+            child: child,
+          );
+        },
       ),
     );
   }
 }
 
-class HoverShowWidget extends StatelessWidget {
-  final String text;
+class HoverShowOverlay extends StatelessWidget {
+  final Widget child;
+  final double width;
+  final double height;
+  final Widget hover;
 
-  HoverShowWidget(this.text);
+  const HoverShowOverlay({
+    required this.child,
+    required this.width,
+    required this.height,
+    required this.hover,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    late OverlayEntry? overlayEntry;
+
     return MouseRegion(
       onEnter: (event) {
-        debugPrint("onEnter ${event.toStringFull()}");
-        onOverlayShow(context, event);
+        overlayEntry = onOverlayShow(context);
       },
-      onExit: (event) {
-        debugPrint("onExit ${event.toStringFull()}");
-        onOverlayRemove();
-      },
-      child: Container(
-        margin: const EdgeInsets.all(1),
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          border: Border.all(color: Colors.black, width: 2),
-          borderRadius: BorderRadius.circular(4),
-          shape: BoxShape.rectangle,
-        ),
-        child:
-            Center(child: Text(text, style: const TextStyle(fontFamily: "Z2"))),
-      ),
+      onExit: (event) => onOverlayRemove(overlayEntry),
+      child: child,
     );
   }
 
-  late OverlayEntry? _overlayEntry;
-
-  void onOverlayShow(BuildContext context, PointerEnterEvent event) {
+  OverlayEntry? onOverlayShow(BuildContext context) {
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
 
-    _overlayEntry = OverlayEntry(
+    late double? top, bottom;
+    if (offset.dy + renderBox.size.height / 2 + height >
+        MediaQuery.of(context).size.height) {
+      top = null;
+      bottom = MediaQuery.of(context).size.height -
+          offset.dy -
+          renderBox.size.height / 2;
+    } else {
+      top = offset.dy + renderBox.size.height / 2;
+      bottom = null;
+    }
+
+    final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        left:
-            renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width + 2,
-        top:
-            renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2,
+        left: offset.dx + renderBox.size.width,
+        top: top,
+        bottom: bottom,
         child: Material(
           color: Colors.transparent,
           child: Container(
-            width: 200,
-            height: 300,
+            width: width,
+            height: height,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.75),
+              color: Colors.black.withOpacity(0.8),
               border: Border.all(color: Colors.black, width: 2),
               borderRadius: BorderRadius.circular(4),
-              shape: BoxShape.rectangle,
             ),
-            child: const Center(
-              child: Text(
-                'Hovered!',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            child: hover,
           ),
         ),
       ),
     );
 
     final overlay = Overlay.of(context);
-    overlay.insert(_overlayEntry!);
+    overlay.insert(overlayEntry);
+
+    return overlayEntry;
   }
 
-  onOverlayRemove() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+  onOverlayRemove(OverlayEntry? overlayEntry) {
+    overlayEntry?.remove();
+    overlayEntry = null;
   }
 }

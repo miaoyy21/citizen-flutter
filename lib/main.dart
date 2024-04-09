@@ -25,6 +25,9 @@ void main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     scrollBehavior: GameCustomScrollBehavior(),
+    theme: ThemeData(
+      fontFamily: "Z2",
+    ),
     home: Scaffold(
       body: Stack(
         fit: StackFit.expand,
