@@ -9,6 +9,7 @@ class PlayerStore {
 
   late String id;
   late String name;
+  late PlayerColor color;
   late int gold;
   late int exp;
 
@@ -24,6 +25,7 @@ class PlayerStore {
   load() async {
     id = "player1"; /* 玩家ID */
     name = "雨晴"; /* 玩家名 */
+    color = PlayerColor.red; /*玩家颜色*/
     gold = 358931020; /* 金币 */
     exp = 56328601294; /* 经验值 */
     unread = 12; /* 未读邮件数量 */
@@ -34,11 +36,12 @@ class PlayerStore {
       AttributeCategory.energy: 398,
       AttributeCategory.attack: 2343,
       AttributeCategory.defense: 1201,
-      AttributeCategory.penetration: 1402,
+      AttributeCategory.penetration: 6321,
+      AttributeCategory.armor: 3478,
       AttributeCategory.critical: 6501,
       AttributeCategory.resistCritical: 2334,
-      AttributeCategory.dodge: 3404,
-      AttributeCategory.resistDodge: 5543,
+      AttributeCategory.accuracy: 5543,
+      AttributeCategory.resistAccuracy: 3404,
     };
 
     // 装备
