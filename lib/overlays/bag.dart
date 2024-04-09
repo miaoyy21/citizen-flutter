@@ -37,7 +37,7 @@ class _StateBagPage extends State<BagPage> {
 
     return Center(
       child: Container(
-        width: 400,
+        width: 420,
         height: 360,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -103,7 +103,7 @@ class _StateBagPage extends State<BagPage> {
                       borderRadius: BorderRadius.circular(4),
                       shape: BoxShape.rectangle,
                     ),
-                    child: onBuildGridView(),
+                    child: onBuildGridView(context),
                   ),
                 ),
               ],
@@ -114,22 +114,86 @@ class _StateBagPage extends State<BagPage> {
     );
   }
 
-  Widget onBuildGridView() {
+  Widget onBuildGridView(BuildContext context) {
     return GridView.count(
       crossAxisCount: 10,
       children: List.generate(
         25 + Random.secure().nextInt(100),
-        (index) => Container(
-          margin: const EdgeInsets.all(1),
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            border: Border.all(color: Colors.black, width: 2),
-            borderRadius: BorderRadius.circular(4),
-            shape: BoxShape.rectangle,
+        (index) => HoverShowWidget("$index"),
+      ),
+    );
+  }
+}
+
+class HoverShowWidget extends StatelessWidget {
+  final String text;
+
+  HoverShowWidget(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (event) {
+        debugPrint("onEnter ${event.toStringFull()}");
+        onOverlayShow(context, event);
+      },
+      onExit: (event) {
+        debugPrint("onExit ${event.toStringFull()}");
+        onOverlayRemove();
+      },
+      child: Container(
+        margin: const EdgeInsets.all(1),
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          border: Border.all(color: Colors.black, width: 2),
+          borderRadius: BorderRadius.circular(4),
+          shape: BoxShape.rectangle,
+        ),
+        child:
+            Center(child: Text(text, style: const TextStyle(fontFamily: "Z2"))),
+      ),
+    );
+  }
+
+  late OverlayEntry? _overlayEntry;
+
+  void onOverlayShow(BuildContext context, PointerEnterEvent event) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left:
+            renderBox.localToGlobal(Offset.zero).dx + renderBox.size.width + 2,
+        top:
+            renderBox.localToGlobal(Offset.zero).dy + renderBox.size.height / 2,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: 200,
+            height: 300,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.75),
+              border: Border.all(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(4),
+              shape: BoxShape.rectangle,
+            ),
+            child: const Center(
+              child: Text(
+                'Hovered!',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ),
-          child: Center(child: Text("$index", style: style)),
         ),
       ),
     );
+
+    final overlay = Overlay.of(context);
+    overlay.insert(_overlayEntry!);
+  }
+
+  onOverlayRemove() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
   }
 }
