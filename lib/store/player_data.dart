@@ -10,17 +10,6 @@ enum AttributeCategory {
   resistDodge /* 命中 5543 -> 55.43% */,
 }
 
-enum ItemCategory { equip, card, prop, material }
-
-class Item {
-  final String id;
-  final int protoId;
-  final ItemCategory category;
-  final int qty;
-
-  Item(this.id, this.protoId, this.category, this.qty);
-}
-
 class Skill {
   final String id;
   final int protoId;

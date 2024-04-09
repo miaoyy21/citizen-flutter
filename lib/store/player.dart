@@ -15,7 +15,10 @@ class PlayerStore {
   late int unread;
 
   late Map<AttributeCategory, int> attributes;
-  late List<Item> items;
+  late List<EquipItem> equips;
+  late List<CardItem> cards;
+  late List<PropItem> props;
+  late List<MateItem> mates;
   late List<Skill> skills;
 
   load() async {
@@ -38,8 +41,17 @@ class PlayerStore {
       AttributeCategory.resistDodge: 5543,
     };
 
-    // 物品
-    items = [];
+    // 装备
+    equips = [];
+
+    // 卡片
+    cards = [];
+
+    // 道具
+    props = [];
+
+    // 材料
+    mates = [];
 
     // 技能
     skills = [];

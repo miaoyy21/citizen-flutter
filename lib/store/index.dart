@@ -8,3 +8,4 @@ export 'attacks.dart';
 export 'extension.dart';
 export 'player.dart';
 export 'player_data.dart';
+export 'player_data_item.dart';
