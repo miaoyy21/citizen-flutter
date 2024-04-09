@@ -142,7 +142,7 @@ class Player extends SpriteComponent
     /*** TODO 释放技能判定
      * 在玩家释放技能处于Finished阶段，
      * 可在接触地面的前一帧刷新时检测是否可释放新的技能，
-     * 释放新的技能如果帧数小于9帧，直接进入新技能的Preprare阶段 ***/
+     * 释放新的技能如果帧数小于9帧，直接进入新技能的Prepare阶段 ***/
 
     /*** TODO 攻击判定
      * 在释放技能的Start、Prepare和Finished阶段，可以收到敌方单位的攻击中断，
