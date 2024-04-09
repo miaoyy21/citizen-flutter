@@ -105,7 +105,9 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
   }
 
   @override
-  void update(double dt) {}
+  void update(double dt) {
+    debugPrint("Stage");
+  }
 
   @override
   bool containsLocalPoint(Vector2 point) => true;

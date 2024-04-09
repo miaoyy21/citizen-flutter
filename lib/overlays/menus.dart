@@ -1,4 +1,8 @@
+import 'dart:ffi';
+
+import 'package:citizen/overlays/index.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'text_button.dart';
@@ -6,7 +10,15 @@ import 'text_button.dart';
 class MenuOverlay extends StatelessWidget {
   final Game game;
 
-  const MenuOverlay({super.key, required this.game});
+  MenuOverlay({super.key, required this.game});
+
+  final List<StringProperty> overlays = [
+    StringProperty("角色", OverlayMenus.role.name),
+    StringProperty("背包", OverlayMenus.bag.name),
+    StringProperty("秘技", OverlayMenus.skill.name),
+    StringProperty("邮件", OverlayMenus.mail.name),
+    StringProperty("帮助", OverlayMenus.help.name),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -16,39 +28,16 @@ class MenuOverlay extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: Row(
-          children: [
-            GameTextButton(
-              text: "角色",
-              onTap: () {
-                debugPrint("打开 【角色】");
-              },
-            ),
-            GameTextButton(
-              text: "背包",
-              onTap: () {
-                game.overlays.add("BagPage");
-              },
-            ),
-            GameTextButton(
-              text: "秘技",
-              onTap: () {
-                debugPrint("打开 【秘技】");
-              },
-            ),
-            GameTextButton(
-              text: "邮件",
-              onTap: () {
-                debugPrint("打开 【邮件】");
-              },
-            ),
-            GameTextButton(
-              text: "帮助",
-              onTap: () {
-                debugPrint("打开 【帮助】");
-              },
-            ),
-          ],
-        ),
+            children: overlays
+                .map((property) => GameTextButton(
+                      text: property.name!,
+                      onTap: () {
+                        game.overlays.add(property.value!)
+                            ? game.pauseEngine()
+                            : Void;
+                      },
+                    ))
+                .toList()),
       ),
     );
   }

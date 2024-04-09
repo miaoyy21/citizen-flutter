@@ -1,16 +1,13 @@
 import 'dart:math';
 
+import 'package:citizen/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
-
-Widget onBagPage(BuildContext context, Game game) {
-  return BagPage(game);
-}
 
 class BagPage extends StatefulWidget {
   final Game game;
+  final Function(String) onClose;
 
-  const BagPage(this.game, {super.key});
+  const BagPage(this.game, this.onClose, {super.key});
 
   @override
   State<StatefulWidget> createState() => _StateBagPage();
@@ -60,9 +57,7 @@ class _StateBagPage extends State<BagPage> {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),
                 icon: const Icon(Icons.close),
-                onPressed: () {
-                  widget.game.overlays.remove("BagPage");
-                },
+                onPressed: () => widget.onClose(OverlayMenus.bag.name),
               ),
             ),
             Column(

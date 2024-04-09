@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:citizen/overlays/bag.dart';
@@ -12,6 +13,15 @@ void main() async {
 
   final game = CitizenGame();
 
+  // 关闭遮罩层
+  onOverlayClose(page) {
+    game.overlays.remove(page);
+    OverlayMenus.values.every((menu) => game.overlays.activeOverlays
+            .every((overlay) => overlay != menu.name))
+        ? game.resumeEngine()
+        : Void;
+  }
+
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     scrollBehavior: GameCustomScrollBehavior(),
@@ -22,7 +32,8 @@ void main() async {
           GameWidget(
             game: game,
             overlayBuilderMap: {
-              "BagPage": (context, _) => BagPage(game),
+              OverlayMenus.bag.name: (context, _) =>
+                  BagPage(game, onOverlayClose),
             },
           ),
           MenuOverlay(game: game)
