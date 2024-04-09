@@ -33,7 +33,8 @@ class _StateGameTextButton extends State<GameTextButton> {
         border: Border.all(color: Colors.black, width: 2),
         borderRadius: BorderRadius.circular(4),
         boxShadow: const [
-          BoxShadow(color: Colors.lightGreen, blurRadius: 4, offset: Offset(1, 2)),
+          BoxShadow(
+              color: Colors.lightGreen, blurRadius: 4, offset: Offset(1, 2)),
         ],
         shape: BoxShape.rectangle,
       ),
@@ -48,7 +49,7 @@ class _StateGameTextButton extends State<GameTextButton> {
             style: TextStyle(
               color: Colors.black,
               fontSize: fontSize,
-              fontFamily: "AaKuangPaiShouShu",
+              fontFamily: "Z1",
             ),
           ),
         ),

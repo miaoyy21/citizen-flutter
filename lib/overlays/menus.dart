@@ -14,6 +14,7 @@ class MenuOverlay extends StatelessWidget {
       left: 128,
       bottom: 8,
       child: Material(
+        color: Colors.transparent,
         child: Row(
           children: [
             GameTextButton(

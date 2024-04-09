@@ -93,12 +93,12 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   fonts:
-    - family: AaKuangPaiShouShu
+    - family: Z1
       fonts:
         - asset: assets/fonts/AaKuangPaiShouShu-2.ttf
-    - family: YeZiGongChangYouLongXingKai
+    - family: Z2
       fonts:
-        - asset: assets/fonts/YeZiGongChangYouLongXingKai-2.ttf
+        - asset: assets/fonts/SanJiKaiShu-2.ttf
 
   assets:
     - assets/

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 
@@ -25,26 +27,27 @@ class _StateBagPage extends State<BagPage> {
   final List<BagItem> items = [
     BagItem(1, "装备"),
     BagItem(2, "卡片"),
-    BagItem(3, "道具")
+    BagItem(3, "道具"),
+    BagItem(4, "材料")
   ];
 
   late BagItem selected = items.first;
+  static const style = TextStyle(fontFamily: "Z2");
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(fontFamily: "YeZiGongChangYouLongXingKai");
     final primary = Theme.of(context).primaryColor;
 
     return Center(
       child: Container(
         width: 400,
-        height: 480,
-        padding: const EdgeInsets.all(12),
+        height: 360,
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(4),
-          boxShadow: [BoxShadow(color: primary, blurRadius: 4)],
+          boxShadow: [BoxShadow(color: primary, blurRadius: 8)],
           shape: BoxShape.rectangle,
         ),
         child: Stack(
@@ -65,28 +68,25 @@ class _StateBagPage extends State<BagPage> {
             Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  margin: const EdgeInsets.only(bottom: 4),
                   child: Text(
                     "背包",
-                    style: style.copyWith(fontSize: 30),
-                    strutStyle: const StrutStyle(fontWeight: FontWeight.bold),
+                    style: style.copyWith(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                const Divider(height: 0, indent: 20, endIndent: 20),
+                const Divider(height: 0, indent: 48, endIndent: 48),
                 DefaultTabController(
                   length: items.length,
                   child: TabBar(
-                    padding: const EdgeInsets.only(top: 12),
                     dividerColor: Colors.transparent,
                     tabs: items
                         .map(
                           (src) => Tab(
                             height: 24,
-                            iconMargin: EdgeInsets.zero,
-                            child: Text(
-                              src.name,
-                              style: style.copyWith(fontSize: 18),
-                            ),
+                            child: Text(src.name, style: style),
                           ),
                         )
                         .toList(),
@@ -121,22 +121,18 @@ class _StateBagPage extends State<BagPage> {
 
   Widget onBuildGridView() {
     return GridView.count(
-      crossAxisCount: 5,
+      crossAxisCount: 10,
       children: List.generate(
-        selected.id == 1
-            ? 12
-            : selected.id == 2
-                ? 48
-                : 40,
+        25 + Random.secure().nextInt(100),
         (index) => Container(
-          margin: const EdgeInsets.all(2),
+          margin: const EdgeInsets.all(1),
           decoration: BoxDecoration(
-            color: Colors.lightGreen,
+            color: Colors.grey,
             border: Border.all(color: Colors.black, width: 2),
             borderRadius: BorderRadius.circular(4),
             shape: BoxShape.rectangle,
           ),
-          child: Center(child: Text("$index")),
+          child: Center(child: Text("$index", style: style)),
         ),
       ),
     );

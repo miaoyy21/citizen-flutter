@@ -49,8 +49,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              /* 1024 * 768 */
-              resolution: Vector2(32 * 32, 24 * 32)..scale(0.75),
+              resolution: Vector2(960, 640),
             ),
             viewfinder: Viewfinder(),
           ),
@@ -63,6 +62,8 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     // await SkillStore().load();
     // await SoundStore().load();
     debugPrint("222 ${DateTime.now().toIso8601String()}");
+
+    await PlayerStore().load();
 
     add(
       router = RouterComponent(
