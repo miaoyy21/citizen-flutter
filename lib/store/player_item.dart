@@ -31,16 +31,20 @@ class EquipAttribute {
 
 // 装备
 class EquipItem {
-  final String id;
-  final int protoId;
+  final String id; // 装备ID
+  final int protoId; // 装备模版ID
 
-  final EquipColor color;
-  final EquipQuality quality;
+  final EquipColor color; // 装备颜色
+  final EquipQuality quality; // 装备品质
 
   /* 根据属性数量显示装备颜色：[0]白、[1]绿、[2]蓝、[3]紫、[4]橙、[5]红 */
   final List<EquipAttribute> attributes;
 
-  EquipItem(this.id, this.protoId, this.color, this.quality, this.attributes);
+  final String playerId; // 产出的玩家ID
+  final int createAt; // 产出时间
+
+  EquipItem(this.id, this.protoId, this.color, this.quality, this.attributes,
+      this.playerId, this.createAt);
 }
 
 // 卡片
