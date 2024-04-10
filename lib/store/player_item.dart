@@ -3,12 +3,12 @@ import 'index.dart';
 enum EquipColor { black, red, green, blue }
 
 enum EquipQuality {
-  common /*普通 白*/,
-  excellent /*精良 绿*/,
-  outstanding /*卓越 蓝*/,
-  epic /*史诗 紫*/,
-  legendary /*传说 橙*/,
-  mythical /*神话 红*/
+  common /*[0] 普通 白*/,
+  excellent /*[1] 精良 绿*/,
+  outstanding /*[2] 卓越 蓝*/,
+  epic /*[3] 史诗 紫*/,
+  legendary /*[4] 传说 橙*/,
+  mythical /*[5] 神话 红*/
 }
 
 class EquipAttribute {
