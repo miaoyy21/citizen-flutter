@@ -3,11 +3,12 @@ import 'index.dart';
 enum EquipColor { black, red, green, blue }
 
 enum EquipQuality {
-  defective /*残品*/,
-  substandard /*次品*/,
-  ordinary /*凡品*/,
-  fine /*精品*/,
-  rare /*珍品*/
+  common /*普通 白*/,
+  excellent /*精良 绿*/,
+  outstanding /*卓越 蓝*/,
+  epic /*史诗 紫*/,
+  legendary /*传说 橙*/,
+  mythical /*神话 红*/
 }
 
 class EquipAttribute {
@@ -37,14 +38,13 @@ class EquipItem {
   final EquipColor color; // 装备颜色
   final EquipQuality quality; // 装备品质
 
-  /* 根据属性数量显示装备颜色：[0]白、[1]绿、[2]蓝、[3]紫、[4]橙、[5]红 */
+  /* 根据属性数量显示装备颜色：[1]绿、[2]蓝、[3]紫、[4]橙、[5]红 */
   final List<EquipAttribute> attributes;
 
-  final String playerId; // 产出的玩家ID
   final int createAt; // 产出时间
 
   EquipItem(this.id, this.protoId, this.color, this.quality, this.attributes,
-      this.playerId, this.createAt);
+      this.createAt);
 }
 
 // 卡片
