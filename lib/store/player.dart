@@ -10,6 +10,8 @@ class PlayerStore {
   late String id;
   late String name;
   late PlayerColor color;
+  late int health;
+  late int energy;
   late int gold;
   late int exp;
 
@@ -25,7 +27,9 @@ class PlayerStore {
   load() async {
     id = "player1"; /* 玩家ID */
     name = "雨晴"; /* 玩家名 */
-    color = PlayerColor.red; /*玩家颜色*/
+    color = PlayerColor.red; /* 玩家颜色 */
+    health = 3127; /* 当前生命值 */
+    energy = 596; /* 当前精力值 */
     gold = 358931020; /* 金币 */
     exp = 56328601294; /* 经验值 */
     unread = 12; /* 未读邮件数量 */
@@ -40,7 +44,7 @@ class PlayerStore {
       AttributeCategory.armor: 3478,
       AttributeCategory.critical: 6501,
       AttributeCategory.resistCritical: 2334,
-      AttributeCategory.accuracy: 5543,
+      AttributeCategory.accuracy: 12543,
       AttributeCategory.resistAccuracy: 3404,
     };
 

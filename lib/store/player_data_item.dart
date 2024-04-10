@@ -1,3 +1,5 @@
+import 'index.dart';
+
 enum EquipColor { black, red, green, blue }
 
 enum EquipQuality {
@@ -11,26 +13,21 @@ enum EquipQuality {
 class EquipAttribute {
   final bool isNatural;
 
+  /*
+    非天然属性时，代表镶嵌的卡片模版ID
+    当卡片模版ID为0时，表示尚未镶嵌卡片；
+    当卡片模版ID非0时，表示已镶嵌对应的卡片；
+    不同的非天然属性，不允许镶嵌相同模版ID的卡片
+  */
   final int protoId;
 
-  /* 非天然：镶嵌的卡片模版ID */
-  final
+  // 天然属性值
+  final AttributeCategory naturalAttribute;
+  final int naturalValue;
 
-
-  EquipAttribute
-
-  (
-
-  this
-
-      .
-
-  isNatural
-
-  );
+  EquipAttribute(
+      this.isNatural, this.protoId, this.naturalAttribute, this.naturalValue);
 }
-
-/* 白、绿、蓝、紫、橙、红 */
 
 // 装备
 class EquipItem {
@@ -40,17 +37,10 @@ class EquipItem {
   final EquipColor color;
   final EquipQuality quality;
 
-  EquipItem(this.id, this.protoId, this.color, this.quality);
-}
+  /* 根据属性数量显示装备颜色：[0]白、[1]绿、[2]蓝、[3]紫、[4]橙、[5]红 */
+  final List<EquipAttribute> attributes;
 
-enum CardAttributeCategory {
-  maxHealth,
-  maxEnergy,
-  attack,
-  defense,
-  penetration,
-  armor,
-  critical,
+  EquipItem(this.id, this.protoId, this.color, this.quality, this.attributes);
 }
 
 // 卡片

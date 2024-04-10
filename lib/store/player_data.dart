@@ -1,8 +1,8 @@
 enum PlayerColor { black, red, blue, green }
 
 enum AttributeCategory {
-  health /* 生命 */,
-  energy /* 精力 */,
+  health /* 生命上限 */,
+  energy /* 精力上限 */,
   /*
     当攻击值比防御值高时，相减后为实际攻击伤害；
     当攻击值比防御值低时，强制造成1点攻击伤害。
@@ -27,7 +27,7 @@ enum AttributeCategory {
     当命中率比闪避率高时，相减后为实际命中率；
     不会出现命中率比闪避率低的情况。
   */
-  accuracy /* 命中 5543 -> 55.43% */,
+  accuracy /* 命中 12543 -> 125.43% */,
   resistAccuracy /* 闪避 3404 -> 23.04% */,
 }
 
