@@ -1,6 +1,6 @@
 import 'index.dart';
 
-enum EquipColor { black, red, green, blue }
+enum EquipColor { _, red, orange, yellow, green, cyan, blue, purple }
 
 enum EquipQuality {
   common /*[0] 普通 白*/,

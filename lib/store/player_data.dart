@@ -1,4 +1,4 @@
-enum PlayerColor { black, red, blue, green }
+enum PlayerColor { black, red, orange, yellow, green, cyan, blue, purple }
 
 enum AttributeCategory {
   _,
