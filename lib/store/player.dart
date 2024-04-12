@@ -29,7 +29,7 @@ class PlayerStore {
     name = "雨晴"; /* 玩家名 */
     color = PlayerColor.red; /* 玩家颜色 */
     health = 3127; /* 当前生命值 */
-    energy = 596; /* 当前精力值 */
+    energy = 596; /* 当前精气值 */
     gold = 358931020; /* 金币 */
     exp = 56328601294; /* 经验值 */
     unread = 12; /* 未读邮件数量 */

@@ -3,7 +3,7 @@ enum PlayerColor { black, red, orange, yellow, green, cyan, blue, purple }
 enum AttributeCategory {
   _,
   health /* 1 生命上限 */,
-  energy /* 2 精力上限 */,
+  energy /* 2 精气上限 */,
   /*
     当攻击值比防御值高时，相减后为实际攻击伤害；
     当攻击值比防御值低时，强制造成1点攻击伤害。
