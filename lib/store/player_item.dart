@@ -2,6 +2,8 @@ import 'index.dart';
 
 enum EquipColor { _, red, orange, yellow, green, cyan, blue, purple }
 
+enum MateCategory { _, mineralOriginal, mineralSemi, mineralFinished }
+
 enum EquipQuality {
   common /*[0] 普通 白*/,
   excellent /*[1] 精良 绿*/,
