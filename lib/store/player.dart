@@ -49,7 +49,17 @@ class PlayerStore {
     };
 
     // 装备
-    equips = [];
+    equips = [
+      EquipItem("1111", 1001, EquipColor.red, EquipQuality.excellent,
+          [EquipAttribute(false), EquipAttribute(false)], 1882223334),
+      EquipItem(
+          "2222",
+          2003,
+          EquipColor.purple,
+          EquipQuality.mythical,
+          [EquipAttribute(false), EquipAttribute(false), EquipAttribute(false)],
+          1577737733),
+    ];
 
     // 卡片
     cards = [];

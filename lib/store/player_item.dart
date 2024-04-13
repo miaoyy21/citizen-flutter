@@ -22,14 +22,14 @@ class EquipAttribute {
     当卡片模版ID非0时，表示已镶嵌对应的卡片；
     不同的非天然属性，不允许镶嵌相同模版ID的卡片
   */
-  final int protoId;
+  final int? protoId;
 
   // 天然属性值
-  final AttributeCategory naturalAttribute;
-  final int naturalValue;
+  final AttributeCategory? naturalAttribute;
+  final int? naturalValue;
 
-  EquipAttribute(
-      this.isNatural, this.protoId, this.naturalAttribute, this.naturalValue);
+  EquipAttribute(this.isNatural,
+      {this.protoId, this.naturalAttribute, this.naturalValue});
 }
 
 // 装备

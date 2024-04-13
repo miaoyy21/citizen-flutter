@@ -10,7 +10,8 @@ class ProtoStore {
   ProtoStore._internal();
 
   late ProtoLanguage language;
-  late Map<EquipColor, Image> equipAssets;
+
+  late Map<EquipColor, Uint8List> equipAssets = {};
 
   late ProtoPlayer player;
   late List<ProtoEquip> equips;
@@ -27,12 +28,18 @@ class ProtoStore {
     // 装备颜色对应的图片资源
     final equipImage = await Flame.images.load("items/equips.png");
     final equipSheet = SpriteSheet(image: equipImage, srcSize: Vector2.all(32));
-    equipAssets = (js["equip_assets"] as Map)
+    (js["equip_assets"] as Map)
         .map((key, value) =>
             MapEntry(int.parse(key), value.split("_").map((v) => int.parse(v))))
         .map((key, value) => MapEntry(
             EquipColor.values.firstWhere((color) => color.index == key),
-            equipSheet.getSprite(value.first, value.last).image));
+            equipSheet
+                .getSprite(value.first, value.last)
+                .image
+                .pixelsInUint8()))
+        .forEach((key, value) async {
+      equipAssets[key] = await value;
+    });
 
     // 玩家
     player = ProtoPlayer.fromJson(js["player"]);

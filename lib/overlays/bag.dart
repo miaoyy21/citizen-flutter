@@ -114,20 +114,17 @@ class _StateBagPage extends State<BagPage> {
   Widget onBuildGridView(BuildContext context) {
     return GridView.count(
       crossAxisCount: 10,
-      children: List.generate(
-        25 + Random.secure().nextInt(100),
-        (index) {
+      children: PlayerStore().equips.map(
+        (equip) {
           final child = Container(
             margin: const EdgeInsets.all(1),
             decoration: BoxDecoration(
               color: Colors.grey,
               border: Border.all(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(2),
               shape: BoxShape.rectangle,
             ),
-            child: Center(
-                child:
-                    Text("$index", style: const TextStyle(fontFamily: "Z2"))),
+            child: Image.memory(ProtoStore().equipAssets[equip.color]!),
           );
 
           const hover = Center(
@@ -144,7 +141,7 @@ class _StateBagPage extends State<BagPage> {
             child: child,
           );
         },
-      ),
+      ).toList(),
     );
   }
 }
