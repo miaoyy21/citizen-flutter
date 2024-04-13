@@ -39,8 +39,8 @@ class ProtoPlayer {
   factory ProtoPlayer.fromJson(Map<String, dynamic> js) => ProtoPlayer(
         grow: (js["grow"] as Map).map((key, value) => MapEntry(
             AttributeCategory.values
-                .firstWhere((category) => category.index == key as int),
-            value as double)),
+                .firstWhere((category) => category.index == int.parse(key)),
+            value is int ? value.toDouble() : value)),
       );
 
   @override
@@ -156,7 +156,7 @@ class ProtoMate {
         description: ProtoLang.fromJson(js["description"]),
         assets: js["assets"],
         price: js["price"],
-        next: ProtoMateNext.fromJson(js["next"]),
+        next: js["next"] != null ? ProtoMateNext.fromJson(js["next"]) : null,
       );
 
   @override

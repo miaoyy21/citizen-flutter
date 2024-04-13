@@ -75,6 +75,8 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     // await AnimationStore().load();
     // await SkillStore().load();
     // await SoundStore().load();
+
+    await ProtoStore().load();
     debugPrint("222 ${DateTime.now().toIso8601String()}");
 
     await PlayerStore().load();

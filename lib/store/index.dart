@@ -9,5 +9,5 @@ export 'extension.dart';
 export 'player.dart';
 export 'player_data.dart';
 export 'player_item.dart';
-export 'configuration.dart';
-export 'configuration_data.dart';
+export 'proto.dart';
+export 'proto_data.dart';
