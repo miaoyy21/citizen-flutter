@@ -10,7 +10,7 @@ class ProtoStore {
   ProtoStore._internal();
 
   late ProtoLanguage language;
-  late Map<EquipColor, String> equipAssets;
+  late Map<EquipColor, Image> equipAssets;
 
   late ProtoPlayer player;
   late List<ProtoEquip> equips;
@@ -21,21 +21,36 @@ class ProtoStore {
   load() async {
     final js = jsonDecode(await rootBundle.loadString("assets/proto.json"));
 
+    // 多语言
     language = ProtoLanguage.fromJson(js["language"]);
-    equipAssets = (js["equip_assets"] as Map).map(
-      (key, value) => MapEntry(
-          EquipColor.values
-              .firstWhere((color) => color.index == int.parse(key)),
-          value),
-    );
+
+    // 装备颜色对应的图片资源
+    final equipImage = await Flame.images.load("items/equips.png");
+    final equipSheet = SpriteSheet(image: equipImage, srcSize: Vector2.all(32));
+    equipAssets = (js["equip_assets"] as Map)
+        .map((key, value) =>
+            MapEntry(int.parse(key), value.split("_").map((v) => int.parse(v))))
+        .map((key, value) => MapEntry(
+            EquipColor.values.firstWhere((color) => color.index == key),
+            equipSheet.getSprite(value.first, value.last).image));
+
+    // 玩家
     player = ProtoPlayer.fromJson(js["player"]);
+
+    // 装备
     equips = (js["equips"] as List)
         .map((equip) => ProtoEquip.fromJson(equip))
         .toList();
+
+    // 卡片
     cards =
         (js["cards"] as List).map((card) => ProtoCard.fromJson(card)).toList();
+
+    // 道具
     props =
         (js["props"] as List).map((prop) => ProtoProp.fromJson(prop)).toList();
+
+    // 材料
     mates =
         (js["mates"] as List).map((mate) => ProtoMate.fromJson(mate)).toList();
 
