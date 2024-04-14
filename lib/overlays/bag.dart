@@ -72,7 +72,7 @@ class _StateBagPage extends State<BagPage> {
                     ),
                   ),
                 ),
-                const Divider(height: 0, indent: 48, endIndent: 48),
+                const Divider(height: 0, indent: 8, endIndent: 8),
                 DefaultTabController(
                   length: items.length,
                   child: TabBar(
@@ -85,9 +85,7 @@ class _StateBagPage extends State<BagPage> {
                     indicator: UnderlineTabIndicator(
                       borderSide: BorderSide(width: 2, color: primary),
                     ),
-                    onTap: (index) => setState(() {
-                      selected = items[index];
-                    }),
+                    onTap: (index) => setState(() => selected = items[index]),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -95,8 +93,8 @@ class _StateBagPage extends State<BagPage> {
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      border: Border.all(color: Colors.grey.shade200, width: 2),
+                      color: Colors.grey.shade200,
+                      border: Border.all(color: Colors.grey.shade400, width: 0),
                       borderRadius: BorderRadius.circular(4),
                       shape: BoxShape.rectangle,
                     ),
@@ -117,14 +115,13 @@ class _StateBagPage extends State<BagPage> {
       children: PlayerStore().equips.map(
         (equip) {
           final child = Container(
-            margin: const EdgeInsets.all(1),
+            margin: const EdgeInsets.all(2),
             decoration: BoxDecoration(
-              color: Colors.grey,
-              border: Border.all(color: Colors.black, width: 2),
+              border: Border.all(color: Colors.grey, width: 0),
               borderRadius: BorderRadius.circular(2),
               shape: BoxShape.rectangle,
+              image: ProtoStore().equipAssets[equip.color],
             ),
-            child: Image.memory(ProtoStore().equipAssets[equip.color]!),
           );
 
           const hover = Center(
@@ -189,6 +186,7 @@ class HoverShowOverlay extends StatelessWidget {
       bottom = null;
     }
 
+    debugPrint("Render Box size is (${renderBox.size})");
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         left: offset.dx + renderBox.size.width,
