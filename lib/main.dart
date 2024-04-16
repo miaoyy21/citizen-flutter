@@ -30,7 +30,6 @@ void main() async {
     ),
     home: Scaffold(
       body: Stack(
-        fit: StackFit.expand,
         children: [
           GameWidget(
             game: game,
@@ -63,7 +62,7 @@ class CitizenGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       : super(
           camera: CameraComponent(
             viewport: FixedResolutionViewport(
-              resolution: Vector2(960, 640),
+              resolution: Vector2(960, 640)..scale(0.5),
             ),
             viewfinder: Viewfinder(),
           ),

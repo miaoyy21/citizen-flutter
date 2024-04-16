@@ -69,6 +69,12 @@ class Stage extends Component with TapCallbacks, HasGameReference<CitizenGame> {
     // world.add(playerEffect);
 
     // game.overlays.add("Menus");
+
+    final xxx = SpriteComponent.fromImage(
+        await Flame.images.load("items/equips_1_5.png"),
+        anchor: Anchor.bottomLeft,
+        position: Vector2(180, -240));
+    world.add(xxx);
   }
 
   // 寻找最近的可攻击目标

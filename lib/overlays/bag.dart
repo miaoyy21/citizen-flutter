@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:citizen/index.dart';
 import 'package:flutter/material.dart';
 

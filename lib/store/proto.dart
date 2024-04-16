@@ -32,6 +32,7 @@ class ProtoStore {
               EquipColor.values.firstWhere((color) => color.index == key),
               DecorationImage(
                 image: AssetImage("assets/images/items/equips_$value.png"),
+                filterQuality: FilterQuality.high,
               ),
             ));
 
